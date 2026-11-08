@@ -21,415 +21,323 @@ namespace LookScan
 
         private void InitializeComponent()
         {
-            pnlScroll = new Panel();
-            tlpTarjetas = new TableLayoutPanel();
-            grpTarjeta1 = new GroupBox();
-            lblTarjeta1 = new Label();
-            grpTarjeta2 = new GroupBox();
-            lblTarjeta2 = new Label();
-            grpTarjeta3 = new GroupBox();
-            lblTarjeta3 = new Label();
-            grpTarjeta4 = new GroupBox();
-            lblTarjeta4 = new Label();
-            grpTarjeta5 = new GroupBox();
-            lblTarjeta5 = new Label();
-            grpTarjeta6 = new GroupBox();
-            lblTarjeta6 = new Label();
-            grpTarjeta7 = new GroupBox();
-            lblTarjeta7 = new Label();
-            grpTarjeta8 = new GroupBox();
-            lblTarjeta8 = new Label();
-            grpTarjeta9 = new GroupBox();
-            lblTarjeta9 = new Label();
-            pnlHeader = new Panel();
-            lblTitulo = new Label();
-            lblDescripcion = new Label();
-            btnIniciar = new Button();
-            btnPortalEducativo = new Button();
-            btnComingSoon = new Button();
-            pnlToolbar = new Panel();
-            pnlBody = new Panel();
-            pnlScroll.SuspendLayout();
-            tlpTarjetas.SuspendLayout();
-            grpTarjeta1.SuspendLayout();
-            grpTarjeta2.SuspendLayout();
-            grpTarjeta3.SuspendLayout();
-            grpTarjeta4.SuspendLayout();
-            grpTarjeta5.SuspendLayout();
-            grpTarjeta6.SuspendLayout();
-            grpTarjeta7.SuspendLayout();
-            grpTarjeta8.SuspendLayout();
-            grpTarjeta9.SuspendLayout();
-            pnlHeader.SuspendLayout();
-            pnlToolbar.SuspendLayout();
-            pnlBody.SuspendLayout();
-            SuspendLayout();
+            this.pnlScroll = new System.Windows.Forms.Panel();
+            this.pnlHeader = new System.Windows.Forms.Panel();
+            this.lblTitulo = new System.Windows.Forms.Label();
+            this.lblDescripcion = new System.Windows.Forms.Label();
+            this.btnIniciar = new System.Windows.Forms.Button();
+            this.btnPortalEducativo = new System.Windows.Forms.Button();
+            this.btnComingSoon = new System.Windows.Forms.Button();
+            this.pnlToolbar = new System.Windows.Forms.Panel();
+            this.pnlBody = new System.Windows.Forms.Panel();
+            this.grpTarjeta6 = new System.Windows.Forms.GroupBox();
+            this.lblObjetivos = new System.Windows.Forms.Label();
+            this.grpTarjeta5 = new System.Windows.Forms.GroupBox();
+            this.lblValores = new System.Windows.Forms.Label();
+            this.grpTarjeta4 = new System.Windows.Forms.GroupBox();
+            this.lblVision = new System.Windows.Forms.Label();
+            this.grpTarjeta3 = new System.Windows.Forms.GroupBox();
+            this.lblMision = new System.Windows.Forms.Label();
+            this.grpTarjeta2 = new System.Windows.Forms.GroupBox();
+            this.lblPorqueLookScan = new System.Windows.Forms.Label();
+            this.grpTarjeta1 = new System.Windows.Forms.GroupBox();
+            this.lblHistoria = new System.Windows.Forms.Label();
+            this.tlpTarjetas = new System.Windows.Forms.TableLayoutPanel();
+            this.pnlScroll.SuspendLayout();
+            this.pnlHeader.SuspendLayout();
+            this.pnlToolbar.SuspendLayout();
+            this.pnlBody.SuspendLayout();
+            this.grpTarjeta6.SuspendLayout();
+            this.grpTarjeta5.SuspendLayout();
+            this.grpTarjeta4.SuspendLayout();
+            this.grpTarjeta3.SuspendLayout();
+            this.grpTarjeta2.SuspendLayout();
+            this.grpTarjeta1.SuspendLayout();
+            this.tlpTarjetas.SuspendLayout();
+            this.SuspendLayout();
             // 
             // pnlScroll
             // 
-            pnlScroll.AutoScroll = true;
-            pnlScroll.Controls.Add(tlpTarjetas);
-            pnlScroll.Dock = DockStyle.Fill;
-            pnlScroll.Location = new Point(10, 4);
-            pnlScroll.Name = "pnlScroll";
-            pnlScroll.Size = new Size(980, 458);
-            pnlScroll.TabIndex = 0;
-            // 
-            // tlpTarjetas
-            // 
-            tlpTarjetas.ColumnCount = 2;
-            tlpTarjetas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tlpTarjetas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tlpTarjetas.Controls.Add(grpTarjeta1, 0, 0);
-            tlpTarjetas.Controls.Add(grpTarjeta2, 1, 0);
-            tlpTarjetas.Controls.Add(grpTarjeta3, 0, 1);
-            tlpTarjetas.Controls.Add(grpTarjeta4, 1, 1);
-            tlpTarjetas.Controls.Add(grpTarjeta5, 0, 2);
-            tlpTarjetas.Controls.Add(grpTarjeta6, 1, 2);
-            tlpTarjetas.Controls.Add(grpTarjeta7, 0, 3);
-            tlpTarjetas.Controls.Add(grpTarjeta8, 1, 3);
-            tlpTarjetas.Controls.Add(grpTarjeta9, 0, 4);
-            tlpTarjetas.Dock = DockStyle.Top;
-            tlpTarjetas.Location = new Point(0, 0);
-            tlpTarjetas.Name = "tlpTarjetas";
-            tlpTarjetas.RowCount = 5;
-            tlpTarjetas.RowStyles.Add(new RowStyle(SizeType.Absolute, 150F));
-            tlpTarjetas.RowStyles.Add(new RowStyle(SizeType.Absolute, 150F));
-            tlpTarjetas.RowStyles.Add(new RowStyle(SizeType.Absolute, 150F));
-            tlpTarjetas.RowStyles.Add(new RowStyle(SizeType.Absolute, 150F));
-            tlpTarjetas.RowStyles.Add(new RowStyle(SizeType.Absolute, 150F));
-            tlpTarjetas.Size = new Size(959, 750);
-            tlpTarjetas.TabIndex = 0;
-            // 
-            // grpTarjeta1
-            // 
-            grpTarjeta1.Controls.Add(lblTarjeta1);
-            grpTarjeta1.Dock = DockStyle.Fill;
-            grpTarjeta1.Location = new Point(3, 3);
-            grpTarjeta1.Name = "grpTarjeta1";
-            grpTarjeta1.Padding = new Padding(10, 6, 10, 6);
-            grpTarjeta1.Size = new Size(473, 144);
-            grpTarjeta1.TabIndex = 0;
-            grpTarjeta1.TabStop = false;
-            grpTarjeta1.Text = "Nuestra historia";
-            // 
-            // lblTarjeta1
-            // 
-            lblTarjeta1.Dock = DockStyle.Fill;
-            lblTarjeta1.Location = new Point(10, 28);
-            lblTarjeta1.Name = "lblTarjeta1";
-            lblTarjeta1.Size = new Size(453, 110);
-            lblTarjeta1.TabIndex = 0;
-            // 
-            // grpTarjeta2
-            // 
-            grpTarjeta2.Controls.Add(lblTarjeta2);
-            grpTarjeta2.Dock = DockStyle.Fill;
-            grpTarjeta2.Location = new Point(482, 3);
-            grpTarjeta2.Name = "grpTarjeta2";
-            grpTarjeta2.Padding = new Padding(10, 6, 10, 6);
-            grpTarjeta2.Size = new Size(474, 144);
-            grpTarjeta2.TabIndex = 1;
-            grpTarjeta2.TabStop = false;
-            grpTarjeta2.Text = "Propuesta de valor";
-            // 
-            // lblTarjeta2
-            // 
-            lblTarjeta2.Dock = DockStyle.Fill;
-            lblTarjeta2.Location = new Point(10, 28);
-            lblTarjeta2.Name = "lblTarjeta2";
-            lblTarjeta2.Size = new Size(454, 110);
-            lblTarjeta2.TabIndex = 0;
-            // 
-            // grpTarjeta3
-            // 
-            grpTarjeta3.Controls.Add(lblTarjeta3);
-            grpTarjeta3.Dock = DockStyle.Fill;
-            grpTarjeta3.Location = new Point(3, 153);
-            grpTarjeta3.Name = "grpTarjeta3";
-            grpTarjeta3.Padding = new Padding(10, 6, 10, 6);
-            grpTarjeta3.Size = new Size(473, 144);
-            grpTarjeta3.TabIndex = 2;
-            grpTarjeta3.TabStop = false;
-            grpTarjeta3.Text = "Misión";
-            // 
-            // lblTarjeta3
-            // 
-            lblTarjeta3.Dock = DockStyle.Fill;
-            lblTarjeta3.Location = new Point(10, 28);
-            lblTarjeta3.Name = "lblTarjeta3";
-            lblTarjeta3.Size = new Size(453, 110);
-            lblTarjeta3.TabIndex = 0;
-            // 
-            // grpTarjeta4
-            // 
-            grpTarjeta4.Controls.Add(lblTarjeta4);
-            grpTarjeta4.Dock = DockStyle.Fill;
-            grpTarjeta4.Location = new Point(482, 153);
-            grpTarjeta4.Name = "grpTarjeta4";
-            grpTarjeta4.Padding = new Padding(10, 6, 10, 6);
-            grpTarjeta4.Size = new Size(474, 144);
-            grpTarjeta4.TabIndex = 3;
-            grpTarjeta4.TabStop = false;
-            grpTarjeta4.Text = "Visión 2028";
-            // 
-            // lblTarjeta4
-            // 
-            lblTarjeta4.Dock = DockStyle.Fill;
-            lblTarjeta4.Location = new Point(10, 28);
-            lblTarjeta4.Name = "lblTarjeta4";
-            lblTarjeta4.Size = new Size(454, 110);
-            lblTarjeta4.TabIndex = 0;
-            // 
-            // grpTarjeta5
-            // 
-            grpTarjeta5.Controls.Add(lblTarjeta5);
-            grpTarjeta5.Dock = DockStyle.Fill;
-            grpTarjeta5.Location = new Point(3, 303);
-            grpTarjeta5.Name = "grpTarjeta5";
-            grpTarjeta5.Padding = new Padding(10, 6, 10, 6);
-            grpTarjeta5.Size = new Size(473, 144);
-            grpTarjeta5.TabIndex = 4;
-            grpTarjeta5.TabStop = false;
-            grpTarjeta5.Text = "Valores";
-            // 
-            // lblTarjeta5
-            // 
-            lblTarjeta5.Dock = DockStyle.Fill;
-            lblTarjeta5.Location = new Point(10, 28);
-            lblTarjeta5.Name = "lblTarjeta5";
-            lblTarjeta5.Size = new Size(453, 110);
-            lblTarjeta5.TabIndex = 0;
-            // 
-            // grpTarjeta6
-            // 
-            grpTarjeta6.Controls.Add(lblTarjeta6);
-            grpTarjeta6.Dock = DockStyle.Fill;
-            grpTarjeta6.Location = new Point(482, 303);
-            grpTarjeta6.Name = "grpTarjeta6";
-            grpTarjeta6.Padding = new Padding(10, 6, 10, 6);
-            grpTarjeta6.Size = new Size(474, 144);
-            grpTarjeta6.TabIndex = 5;
-            grpTarjeta6.TabStop = false;
-            grpTarjeta6.Text = "Objetivos";
-            // 
-            // lblTarjeta6
-            // 
-            lblTarjeta6.Dock = DockStyle.Fill;
-            lblTarjeta6.Location = new Point(10, 28);
-            lblTarjeta6.Name = "lblTarjeta6";
-            lblTarjeta6.Size = new Size(454, 110);
-            lblTarjeta6.TabIndex = 0;
-            // 
-            // grpTarjeta7
-            // 
-            grpTarjeta7.Controls.Add(lblTarjeta7);
-            grpTarjeta7.Dock = DockStyle.Fill;
-            grpTarjeta7.Location = new Point(3, 453);
-            grpTarjeta7.Name = "grpTarjeta7";
-            grpTarjeta7.Padding = new Padding(10, 6, 10, 6);
-            grpTarjeta7.Size = new Size(473, 144);
-            grpTarjeta7.TabIndex = 6;
-            grpTarjeta7.TabStop = false;
-            grpTarjeta7.Text = "Indicadores de éxito";
-            // 
-            // lblTarjeta7
-            // 
-            lblTarjeta7.Dock = DockStyle.Fill;
-            lblTarjeta7.Location = new Point(10, 28);
-            lblTarjeta7.Name = "lblTarjeta7";
-            lblTarjeta7.Size = new Size(453, 110);
-            lblTarjeta7.TabIndex = 0;
-            // 
-            // grpTarjeta8
-            // 
-            grpTarjeta8.Controls.Add(lblTarjeta8);
-            grpTarjeta8.Dock = DockStyle.Fill;
-            grpTarjeta8.Location = new Point(482, 453);
-            grpTarjeta8.Name = "grpTarjeta8";
-            grpTarjeta8.Padding = new Padding(10, 6, 10, 6);
-            grpTarjeta8.Size = new Size(474, 144);
-            grpTarjeta8.TabIndex = 7;
-            grpTarjeta8.TabStop = false;
-            grpTarjeta8.Text = "Política de datos y ética";
-            // 
-            // lblTarjeta8
-            // 
-            lblTarjeta8.Dock = DockStyle.Fill;
-            lblTarjeta8.Location = new Point(10, 28);
-            lblTarjeta8.Name = "lblTarjeta8";
-            lblTarjeta8.Size = new Size(454, 110);
-            lblTarjeta8.TabIndex = 0;
-            // 
-            // grpTarjeta9
-            // 
-            grpTarjeta9.Controls.Add(lblTarjeta9);
-            grpTarjeta9.Dock = DockStyle.Fill;
-            grpTarjeta9.Location = new Point(3, 603);
-            grpTarjeta9.Name = "grpTarjeta9";
-            grpTarjeta9.Padding = new Padding(10, 6, 10, 6);
-            grpTarjeta9.Size = new Size(473, 144);
-            grpTarjeta9.TabIndex = 8;
-            grpTarjeta9.TabStop = false;
-            grpTarjeta9.Text = "Conócenos";
-            // 
-            // lblTarjeta9
-            // 
-            lblTarjeta9.Dock = DockStyle.Fill;
-            lblTarjeta9.Location = new Point(10, 28);
-            lblTarjeta9.Name = "lblTarjeta9";
-            lblTarjeta9.Size = new Size(453, 110);
-            lblTarjeta9.TabIndex = 0;
+            this.pnlScroll.AutoScroll = true;
+            this.pnlScroll.Controls.Add(this.tlpTarjetas);
+            this.pnlScroll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlScroll.Location = new System.Drawing.Point(10, 4);
+            this.pnlScroll.Name = "pnlScroll";
+            this.pnlScroll.Size = new System.Drawing.Size(980, 458);
+            this.pnlScroll.TabIndex = 0;
             // 
             // pnlHeader
             // 
-            pnlHeader.Controls.Add(lblTitulo);
-            pnlHeader.Controls.Add(lblDescripcion);
-            pnlHeader.Dock = DockStyle.Top;
-            pnlHeader.Location = new Point(0, 0);
-            pnlHeader.Name = "pnlHeader";
-            pnlHeader.Size = new Size(1000, 66);
-            pnlHeader.TabIndex = 2;
+            this.pnlHeader.Controls.Add(this.lblTitulo);
+            this.pnlHeader.Controls.Add(this.lblDescripcion);
+            this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlHeader.Location = new System.Drawing.Point(0, 0);
+            this.pnlHeader.Name = "pnlHeader";
+            this.pnlHeader.Size = new System.Drawing.Size(1000, 66);
+            this.pnlHeader.TabIndex = 2;
             // 
             // lblTitulo
             // 
-            lblTitulo.AutoSize = true;
-            lblTitulo.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
-            lblTitulo.ForeColor = Color.FromArgb(24, 72, 140);
-            lblTitulo.Location = new Point(14, 8);
-            lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(134, 37);
-            lblTitulo.TabIndex = 0;
-            lblTitulo.Text = "LookScan";
+            this.lblTitulo.AutoSize = true;
+            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI Semibold", 16F, System.Drawing.FontStyle.Bold);
+            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.lblTitulo.Location = new System.Drawing.Point(14, 8);
+            this.lblTitulo.Name = "lblTitulo";
+            this.lblTitulo.Size = new System.Drawing.Size(134, 37);
+            this.lblTitulo.TabIndex = 0;
+            this.lblTitulo.Text = "LookScan";
             // 
             // lblDescripcion
             // 
-            lblDescripcion.AutoSize = true;
-            lblDescripcion.ForeColor = Color.FromArgb(105, 105, 105);
-            lblDescripcion.Location = new Point(16, 42);
-            lblDescripcion.Name = "lblDescripcion";
-            lblDescripcion.Size = new Size(181, 21);
-            lblDescripcion.TabIndex = 1;
-            lblDescripcion.Text = "Datos. Cálculo. Decisión. ";
+            this.lblDescripcion.AutoSize = true;
+            this.lblDescripcion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(105)))), ((int)(((byte)(105)))));
+            this.lblDescripcion.Location = new System.Drawing.Point(16, 42);
+            this.lblDescripcion.Name = "lblDescripcion";
+            this.lblDescripcion.Size = new System.Drawing.Size(181, 21);
+            this.lblDescripcion.TabIndex = 1;
+            this.lblDescripcion.Text = "Datos. Cálculo. Decisión. ";
             // 
             // btnIniciar
             // 
-            btnIniciar.BackColor = Color.FromArgb(24, 72, 140);
-            btnIniciar.Cursor = Cursors.Hand;
-            btnIniciar.FlatAppearance.BorderColor = Color.FromArgb(24, 72, 140);
-            btnIniciar.FlatStyle = FlatStyle.Flat;
-            btnIniciar.ForeColor = Color.FromArgb(255, 255, 255);
-            btnIniciar.Location = new Point(10, 24);
-            btnIniciar.Name = "btnIniciar";
-            btnIniciar.Size = new Size(190, 30);
-            btnIniciar.TabIndex = 0;
-            btnIniciar.Text = "INICIAR";
-            btnIniciar.UseVisualStyleBackColor = false;
-            btnIniciar.Click += btnIniciar_Click;
+            this.btnIniciar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnIniciar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnIniciar.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnIniciar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnIniciar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnIniciar.Location = new System.Drawing.Point(10, 24);
+            this.btnIniciar.Name = "btnIniciar";
+            this.btnIniciar.Size = new System.Drawing.Size(190, 30);
+            this.btnIniciar.TabIndex = 0;
+            this.btnIniciar.Text = "INICIAR";
+            this.btnIniciar.UseVisualStyleBackColor = false;
+            this.btnIniciar.Click += new System.EventHandler(this.btnIniciar_Click_1);
             // 
             // btnPortalEducativo
             // 
-            btnPortalEducativo.BackColor = Color.FromArgb(255, 255, 255);
-            btnPortalEducativo.Cursor = Cursors.Hand;
-            btnPortalEducativo.FlatAppearance.BorderColor = Color.FromArgb(24, 72, 140);
-            btnPortalEducativo.FlatStyle = FlatStyle.Flat;
-            btnPortalEducativo.ForeColor = Color.FromArgb(24, 72, 140);
-            btnPortalEducativo.Location = new Point(212, 24);
-            btnPortalEducativo.Name = "btnPortalEducativo";
-            btnPortalEducativo.Size = new Size(300, 30);
-            btnPortalEducativo.TabIndex = 1;
-            btnPortalEducativo.Text = "PORTAL EDUCATIVO";
-            btnPortalEducativo.UseVisualStyleBackColor = false;
-            btnPortalEducativo.Click += btnPortalEducativo_Click_1;
+            this.btnPortalEducativo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnPortalEducativo.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPortalEducativo.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnPortalEducativo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPortalEducativo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnPortalEducativo.Location = new System.Drawing.Point(212, 24);
+            this.btnPortalEducativo.Name = "btnPortalEducativo";
+            this.btnPortalEducativo.Size = new System.Drawing.Size(300, 30);
+            this.btnPortalEducativo.TabIndex = 1;
+            this.btnPortalEducativo.Text = "PORTAL EDUCATIVO";
+            this.btnPortalEducativo.UseVisualStyleBackColor = false;
+            this.btnPortalEducativo.Click += new System.EventHandler(this.btnPortalEducativo_Click);
             // 
             // btnComingSoon
             // 
-            btnComingSoon.BackColor = Color.FromArgb(255, 255, 255);
-            btnComingSoon.Cursor = Cursors.Hand;
-            btnComingSoon.FlatAppearance.BorderColor = Color.FromArgb(24, 72, 140);
-            btnComingSoon.FlatStyle = FlatStyle.Flat;
-            btnComingSoon.ForeColor = Color.FromArgb(24, 72, 140);
-            btnComingSoon.Location = new Point(518, 24);
-            btnComingSoon.Name = "btnComingSoon";
-            btnComingSoon.Size = new Size(240, 30);
-            btnComingSoon.TabIndex = 2;
-            btnComingSoon.Text = "Coming Soon";
-            btnComingSoon.UseVisualStyleBackColor = false;
-            btnComingSoon.Click += btnComingSoon_Click;
+            this.btnComingSoon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnComingSoon.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnComingSoon.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnComingSoon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnComingSoon.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnComingSoon.Location = new System.Drawing.Point(518, 24);
+            this.btnComingSoon.Name = "btnComingSoon";
+            this.btnComingSoon.Size = new System.Drawing.Size(240, 30);
+            this.btnComingSoon.TabIndex = 2;
+            this.btnComingSoon.Text = "Coming Soon";
+            this.btnComingSoon.UseVisualStyleBackColor = false;
+            this.btnComingSoon.Click += new System.EventHandler(this.btnComingSoon_Click_1);
             // 
             // pnlToolbar
             // 
-            pnlToolbar.AutoScroll = true;
-            pnlToolbar.Controls.Add(btnIniciar);
-            pnlToolbar.Controls.Add(btnPortalEducativo);
-            pnlToolbar.Controls.Add(btnComingSoon);
-            pnlToolbar.Dock = DockStyle.Top;
-            pnlToolbar.Location = new Point(0, 66);
-            pnlToolbar.Name = "pnlToolbar";
-            pnlToolbar.Size = new Size(1000, 62);
-            pnlToolbar.TabIndex = 1;
+            this.pnlToolbar.AutoScroll = true;
+            this.pnlToolbar.Controls.Add(this.btnIniciar);
+            this.pnlToolbar.Controls.Add(this.btnPortalEducativo);
+            this.pnlToolbar.Controls.Add(this.btnComingSoon);
+            this.pnlToolbar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlToolbar.Location = new System.Drawing.Point(0, 66);
+            this.pnlToolbar.Name = "pnlToolbar";
+            this.pnlToolbar.Size = new System.Drawing.Size(1000, 62);
+            this.pnlToolbar.TabIndex = 1;
             // 
             // pnlBody
             // 
-            pnlBody.Controls.Add(pnlScroll);
-            pnlBody.Dock = DockStyle.Fill;
-            pnlBody.Location = new Point(0, 128);
-            pnlBody.Name = "pnlBody";
-            pnlBody.Padding = new Padding(10, 4, 10, 10);
-            pnlBody.Size = new Size(1000, 472);
-            pnlBody.TabIndex = 0;
+            this.pnlBody.Controls.Add(this.pnlScroll);
+            this.pnlBody.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlBody.Location = new System.Drawing.Point(0, 128);
+            this.pnlBody.Name = "pnlBody";
+            this.pnlBody.Padding = new System.Windows.Forms.Padding(10, 4, 10, 10);
+            this.pnlBody.Size = new System.Drawing.Size(1000, 472);
+            this.pnlBody.TabIndex = 0;
+            // 
+            // grpTarjeta6
+            // 
+            this.grpTarjeta6.Controls.Add(this.lblObjetivos);
+            this.grpTarjeta6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpTarjeta6.Location = new System.Drawing.Point(491, 303);
+            this.grpTarjeta6.Name = "grpTarjeta6";
+            this.grpTarjeta6.Padding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.grpTarjeta6.Size = new System.Drawing.Size(486, 144);
+            this.grpTarjeta6.TabIndex = 5;
+            this.grpTarjeta6.TabStop = false;
+            this.grpTarjeta6.Text = "Objetivos";
+            // 
+            // lblObjetivos
+            // 
+            this.lblObjetivos.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblObjetivos.Location = new System.Drawing.Point(10, 28);
+            this.lblObjetivos.Name = "lblObjetivos";
+            this.lblObjetivos.Size = new System.Drawing.Size(466, 110);
+            this.lblObjetivos.TabIndex = 0;
+            // 
+            // grpTarjeta5
+            // 
+            this.grpTarjeta5.Controls.Add(this.lblValores);
+            this.grpTarjeta5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpTarjeta5.Location = new System.Drawing.Point(3, 303);
+            this.grpTarjeta5.Name = "grpTarjeta5";
+            this.grpTarjeta5.Padding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.grpTarjeta5.Size = new System.Drawing.Size(482, 144);
+            this.grpTarjeta5.TabIndex = 4;
+            this.grpTarjeta5.TabStop = false;
+            this.grpTarjeta5.Text = "Valores";
+            // 
+            // lblValores
+            // 
+            this.lblValores.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblValores.Location = new System.Drawing.Point(10, 28);
+            this.lblValores.Name = "lblValores";
+            this.lblValores.Size = new System.Drawing.Size(462, 110);
+            this.lblValores.TabIndex = 0;
+            // 
+            // grpTarjeta4
+            // 
+            this.grpTarjeta4.Controls.Add(this.lblVision);
+            this.grpTarjeta4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpTarjeta4.Location = new System.Drawing.Point(491, 153);
+            this.grpTarjeta4.Name = "grpTarjeta4";
+            this.grpTarjeta4.Padding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.grpTarjeta4.Size = new System.Drawing.Size(486, 144);
+            this.grpTarjeta4.TabIndex = 3;
+            this.grpTarjeta4.TabStop = false;
+            this.grpTarjeta4.Text = "Visión ";
+            // 
+            // lblVision
+            // 
+            this.lblVision.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblVision.Location = new System.Drawing.Point(10, 28);
+            this.lblVision.Name = "lblVision";
+            this.lblVision.Size = new System.Drawing.Size(466, 110);
+            this.lblVision.TabIndex = 0;
+            // 
+            // grpTarjeta3
+            // 
+            this.grpTarjeta3.Controls.Add(this.lblMision);
+            this.grpTarjeta3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpTarjeta3.Location = new System.Drawing.Point(3, 153);
+            this.grpTarjeta3.Name = "grpTarjeta3";
+            this.grpTarjeta3.Padding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.grpTarjeta3.Size = new System.Drawing.Size(482, 144);
+            this.grpTarjeta3.TabIndex = 2;
+            this.grpTarjeta3.TabStop = false;
+            this.grpTarjeta3.Text = "Misión";
+            // 
+            // lblMision
+            // 
+            this.lblMision.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblMision.Location = new System.Drawing.Point(10, 28);
+            this.lblMision.Name = "lblMision";
+            this.lblMision.Size = new System.Drawing.Size(462, 110);
+            this.lblMision.TabIndex = 0;
+            // 
+            // grpTarjeta2
+            // 
+            this.grpTarjeta2.Controls.Add(this.lblPorqueLookScan);
+            this.grpTarjeta2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpTarjeta2.Location = new System.Drawing.Point(491, 3);
+            this.grpTarjeta2.Name = "grpTarjeta2";
+            this.grpTarjeta2.Padding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.grpTarjeta2.Size = new System.Drawing.Size(486, 144);
+            this.grpTarjeta2.TabIndex = 1;
+            this.grpTarjeta2.TabStop = false;
+            this.grpTarjeta2.Text = "¿Por qué LookScan?";
+            // 
+            // lblPorqueLookScan
+            // 
+            this.lblPorqueLookScan.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblPorqueLookScan.Location = new System.Drawing.Point(10, 28);
+            this.lblPorqueLookScan.Name = "lblPorqueLookScan";
+            this.lblPorqueLookScan.Size = new System.Drawing.Size(466, 110);
+            this.lblPorqueLookScan.TabIndex = 0;
+            // 
+            // grpTarjeta1
+            // 
+            this.grpTarjeta1.Controls.Add(this.lblHistoria);
+            this.grpTarjeta1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpTarjeta1.Location = new System.Drawing.Point(3, 3);
+            this.grpTarjeta1.Name = "grpTarjeta1";
+            this.grpTarjeta1.Padding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.grpTarjeta1.Size = new System.Drawing.Size(482, 144);
+            this.grpTarjeta1.TabIndex = 0;
+            this.grpTarjeta1.TabStop = false;
+            this.grpTarjeta1.Text = "Nuestra historia";
+            // 
+            // lblHistoria
+            // 
+            this.lblHistoria.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblHistoria.Location = new System.Drawing.Point(10, 28);
+            this.lblHistoria.Name = "lblHistoria";
+            this.lblHistoria.Size = new System.Drawing.Size(462, 110);
+            this.lblHistoria.TabIndex = 0;
+            // 
+            // tlpTarjetas
+            // 
+            this.tlpTarjetas.AutoSize = true;
+            this.tlpTarjetas.ColumnCount = 2;
+            this.tlpTarjetas.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.84359F));
+            this.tlpTarjetas.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.15641F));
+            this.tlpTarjetas.Controls.Add(this.grpTarjeta1, 0, 0);
+            this.tlpTarjetas.Controls.Add(this.grpTarjeta2, 1, 0);
+            this.tlpTarjetas.Controls.Add(this.grpTarjeta3, 0, 1);
+            this.tlpTarjetas.Controls.Add(this.grpTarjeta4, 1, 1);
+            this.tlpTarjetas.Controls.Add(this.grpTarjeta5, 0, 2);
+            this.tlpTarjetas.Controls.Add(this.grpTarjeta6, 1, 2);
+            this.tlpTarjetas.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tlpTarjetas.Location = new System.Drawing.Point(0, 0);
+            this.tlpTarjetas.Name = "tlpTarjetas";
+            this.tlpTarjetas.RowCount = 3;
+            this.tlpTarjetas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpTarjetas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpTarjetas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpTarjetas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpTarjetas.Size = new System.Drawing.Size(980, 450);
+            this.tlpTarjetas.TabIndex = 0;
             // 
             // InicioControl
             // 
-            AutoScaleDimensions = new SizeF(9F, 21F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(244, 246, 250);
-            Controls.Add(pnlBody);
-            Controls.Add(pnlToolbar);
-            Controls.Add(pnlHeader);
-            Font = new Font("Segoe UI", 9.5F);
-            Name = "InicioControl";
-            Size = new Size(1000, 600);
-            pnlScroll.ResumeLayout(false);
-            tlpTarjetas.ResumeLayout(false);
-            grpTarjeta1.ResumeLayout(false);
-            grpTarjeta2.ResumeLayout(false);
-            grpTarjeta3.ResumeLayout(false);
-            grpTarjeta4.ResumeLayout(false);
-            grpTarjeta5.ResumeLayout(false);
-            grpTarjeta6.ResumeLayout(false);
-            grpTarjeta7.ResumeLayout(false);
-            grpTarjeta8.ResumeLayout(false);
-            grpTarjeta9.ResumeLayout(false);
-            pnlHeader.ResumeLayout(false);
-            pnlHeader.PerformLayout();
-            pnlToolbar.ResumeLayout(false);
-            pnlBody.ResumeLayout(false);
-            ResumeLayout(false);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(246)))), ((int)(((byte)(250)))));
+            this.Controls.Add(this.pnlBody);
+            this.Controls.Add(this.pnlToolbar);
+            this.Controls.Add(this.pnlHeader);
+            this.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.Name = "InicioControl";
+            this.Size = new System.Drawing.Size(1000, 600);
+            this.pnlScroll.ResumeLayout(false);
+            this.pnlScroll.PerformLayout();
+            this.pnlHeader.ResumeLayout(false);
+            this.pnlHeader.PerformLayout();
+            this.pnlToolbar.ResumeLayout(false);
+            this.pnlBody.ResumeLayout(false);
+            this.grpTarjeta6.ResumeLayout(false);
+            this.grpTarjeta5.ResumeLayout(false);
+            this.grpTarjeta4.ResumeLayout(false);
+            this.grpTarjeta3.ResumeLayout(false);
+            this.grpTarjeta2.ResumeLayout(false);
+            this.grpTarjeta1.ResumeLayout(false);
+            this.tlpTarjetas.ResumeLayout(false);
+            this.ResumeLayout(false);
+
         }
 
         #endregion
 
         private System.Windows.Forms.Panel pnlScroll;
-        private System.Windows.Forms.TableLayoutPanel tlpTarjetas;
-        private System.Windows.Forms.GroupBox grpTarjeta1;
-        private System.Windows.Forms.Label lblTarjeta1;
-        private System.Windows.Forms.GroupBox grpTarjeta2;
-        private System.Windows.Forms.Label lblTarjeta2;
-        private System.Windows.Forms.GroupBox grpTarjeta3;
-        private System.Windows.Forms.Label lblTarjeta3;
-        private System.Windows.Forms.GroupBox grpTarjeta4;
-        private System.Windows.Forms.Label lblTarjeta4;
-        private System.Windows.Forms.GroupBox grpTarjeta5;
-        private System.Windows.Forms.Label lblTarjeta5;
-        private System.Windows.Forms.GroupBox grpTarjeta6;
-        private System.Windows.Forms.Label lblTarjeta6;
-        private System.Windows.Forms.GroupBox grpTarjeta7;
-        private System.Windows.Forms.Label lblTarjeta7;
-        private System.Windows.Forms.GroupBox grpTarjeta8;
-        private System.Windows.Forms.Label lblTarjeta8;
-        private System.Windows.Forms.GroupBox grpTarjeta9;
-        private System.Windows.Forms.Label lblTarjeta9;
         private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.Label lblTitulo;
         private System.Windows.Forms.Label lblDescripcion;
@@ -438,5 +346,18 @@ namespace LookScan
         private System.Windows.Forms.Button btnComingSoon;
         private System.Windows.Forms.Panel pnlToolbar;
         private System.Windows.Forms.Panel pnlBody;
+        private TableLayoutPanel tlpTarjetas;
+        private GroupBox grpTarjeta1;
+        private Label lblHistoria;
+        private GroupBox grpTarjeta2;
+        private Label lblPorqueLookScan;
+        private GroupBox grpTarjeta3;
+        private Label lblMision;
+        private GroupBox grpTarjeta4;
+        private Label lblVision;
+        private GroupBox grpTarjeta5;
+        private Label lblValores;
+        private GroupBox grpTarjeta6;
+        private Label lblObjetivos;
     }
 }

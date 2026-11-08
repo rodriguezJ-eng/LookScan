@@ -21,513 +21,549 @@ namespace LookScan
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
-            dgvBalance = new DataGridView();
-            dgvBalanceCol0 = new DataGridViewTextBoxColumn();
-            dgvBalanceCol1 = new DataGridViewTextBoxColumn();
-            dgvBalanceCol2 = new DataGridViewTextBoxColumn();
-            dgvBalanceCol3 = new DataGridViewTextBoxColumn();
-            dgvBalanceCol4 = new DataGridViewButtonColumn();
-            grpBalance = new GroupBox();
-            dgvResultados = new DataGridView();
-            dgvResultadosCol0 = new DataGridViewTextBoxColumn();
-            dgvResultadosCol1 = new DataGridViewTextBoxColumn();
-            dgvResultadosCol2 = new DataGridViewTextBoxColumn();
-            dgvResultadosCol3 = new DataGridViewTextBoxColumn();
-            dgvResultadosCol4 = new DataGridViewButtonColumn();
-            grpResultados = new GroupBox();
-            tlpDatos = new TableLayoutPanel();
-            pnlHeader = new Panel();
-            lblTitulo = new Label();
-            lblDescripcion = new Label();
-            label1 = new Label();
-            cmbTipoEstado = new ComboBox();
-            label2 = new Label();
-            txtNombreCuenta = new TextBox();
-            label3 = new Label();
-            numMonto = new NumericUpDown();
-            label4 = new Label();
-            cmbClasificacion = new ComboBox();
-            rbOperativa1 = new RadioButton();
-            rbOperativa2 = new RadioButton();
-            rbOperativa = new Panel();
-            label5 = new Label();
-            btnAgregar = new Button();
-            grpAgregarCuenta = new GroupBox();
-            btnExportarJson = new Button();
-            btnImportarJson = new Button();
-            btnCargarDemo = new Button();
-            grpAccionesDatos = new GroupBox();
-            pnlToolbar = new Panel();
-            pnlBody = new Panel();
-            ((System.ComponentModel.ISupportInitialize)dgvBalance).BeginInit();
-            grpBalance.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvResultados).BeginInit();
-            grpResultados.SuspendLayout();
-            tlpDatos.SuspendLayout();
-            pnlHeader.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numMonto).BeginInit();
-            rbOperativa.SuspendLayout();
-            grpAgregarCuenta.SuspendLayout();
-            grpAccionesDatos.SuspendLayout();
-            pnlToolbar.SuspendLayout();
-            pnlBody.SuspendLayout();
-            SuspendLayout();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.dgvBalance = new System.Windows.Forms.DataGridView();
+            this.dgvBalanceCol0 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvBalanceCol1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvBalanceCol2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvBalanceCol3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvBalanceCol4 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.grpBalance = new System.Windows.Forms.GroupBox();
+            this.dgvResultados = new System.Windows.Forms.DataGridView();
+            this.dgvResultadosCol0 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvResultadosCol1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvResultadosCol2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvResultadosCol3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvResultadosCol4 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.grpResultados = new System.Windows.Forms.GroupBox();
+            this.tlpDatos = new System.Windows.Forms.TableLayoutPanel();
+            this.pnlHeaderDatos = new System.Windows.Forms.Panel();
+            this.lblTitulo = new System.Windows.Forms.Label();
+            this.lblDescripcion = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cmbTipoEstado = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtNombreCuenta = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.numMonto = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
+            this.cmbClasificacion = new System.Windows.Forms.ComboBox();
+            this.rbOperativa1 = new System.Windows.Forms.RadioButton();
+            this.rbOperativa2 = new System.Windows.Forms.RadioButton();
+            this.rbOperativa = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.btnAgregar = new System.Windows.Forms.Button();
+            this.grpAgregarCuenta = new System.Windows.Forms.GroupBox();
+            this.btnExportarJson = new System.Windows.Forms.Button();
+            this.btnImportarJson = new System.Windows.Forms.Button();
+            this.btnCargarDemo = new System.Windows.Forms.Button();
+            this.grpAccionesDatos = new System.Windows.Forms.GroupBox();
+            this.pnlToolbar = new System.Windows.Forms.Panel();
+            this.pnlBody = new System.Windows.Forms.Panel();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBalance)).BeginInit();
+            this.grpBalance.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvResultados)).BeginInit();
+            this.grpResultados.SuspendLayout();
+            this.tlpDatos.SuspendLayout();
+            this.pnlHeaderDatos.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMonto)).BeginInit();
+            this.rbOperativa.SuspendLayout();
+            this.grpAgregarCuenta.SuspendLayout();
+            this.grpAccionesDatos.SuspendLayout();
+            this.pnlToolbar.SuspendLayout();
+            this.pnlBody.SuspendLayout();
+            this.SuspendLayout();
             // 
             // dgvBalance
             // 
-            dgvBalance.AllowUserToAddRows = false;
-            dgvBalance.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle5.BackColor = Color.FromArgb(247, 249, 252);
-            dgvBalance.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
-            dgvBalance.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvBalance.BackgroundColor = Color.FromArgb(255, 255, 255);
-            dgvBalance.BorderStyle = BorderStyle.None;
-            dataGridViewCellStyle6.BackColor = Color.FromArgb(24, 72, 140);
-            dataGridViewCellStyle6.ForeColor = Color.FromArgb(255, 255, 255);
-            dgvBalance.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
-            dgvBalance.ColumnHeadersHeight = 32;
-            dgvBalance.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dgvBalance.Columns.AddRange(new DataGridViewColumn[] { dgvBalanceCol0, dgvBalanceCol1, dgvBalanceCol2, dgvBalanceCol3, dgvBalanceCol4 });
-            dgvBalance.Dock = DockStyle.Fill;
-            dgvBalance.EnableHeadersVisualStyles = false;
-            dgvBalance.Location = new Point(8, 28);
-            dgvBalance.Name = "dgvBalance";
-            dgvBalance.ReadOnly = true;
-            dgvBalance.RowHeadersVisible = false;
-            dgvBalance.RowHeadersWidth = 51;
-            dgvBalance.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvBalance.Size = new Size(643, 355);
-            dgvBalance.TabIndex = 0;
+            this.dgvBalance.AllowUserToAddRows = false;
+            this.dgvBalance.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(249)))), ((int)(((byte)(252)))));
+            this.dgvBalance.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
+            this.dgvBalance.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvBalance.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.dgvBalance.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.dgvBalance.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            this.dgvBalance.ColumnHeadersHeight = 32;
+            this.dgvBalance.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvBalance.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvBalanceCol0,
+            this.dgvBalanceCol1,
+            this.dgvBalanceCol2,
+            this.dgvBalanceCol3,
+            this.dgvBalanceCol4});
+            this.dgvBalance.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvBalance.EnableHeadersVisualStyles = false;
+            this.dgvBalance.Location = new System.Drawing.Point(8, 28);
+            this.dgvBalance.Name = "dgvBalance";
+            this.dgvBalance.ReadOnly = true;
+            this.dgvBalance.RowHeadersVisible = false;
+            this.dgvBalance.RowHeadersWidth = 51;
+            this.dgvBalance.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvBalance.Size = new System.Drawing.Size(643, 355);
+            this.dgvBalance.TabIndex = 0;
+            this.dgvBalance.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBalance_CellDoubleClick);
             // 
             // dgvBalanceCol0
             // 
-            dgvBalanceCol0.HeaderText = "Cuenta";
-            dgvBalanceCol0.MinimumWidth = 6;
-            dgvBalanceCol0.Name = "dgvBalanceCol0";
-            dgvBalanceCol0.ReadOnly = true;
+            this.dgvBalanceCol0.HeaderText = "Cuenta";
+            this.dgvBalanceCol0.MinimumWidth = 6;
+            this.dgvBalanceCol0.Name = "dgvBalanceCol0";
+            this.dgvBalanceCol0.ReadOnly = true;
             // 
             // dgvBalanceCol1
             // 
-            dgvBalanceCol1.HeaderText = "Clasif.";
-            dgvBalanceCol1.MinimumWidth = 6;
-            dgvBalanceCol1.Name = "dgvBalanceCol1";
-            dgvBalanceCol1.ReadOnly = true;
+            this.dgvBalanceCol1.HeaderText = "Clasif.";
+            this.dgvBalanceCol1.MinimumWidth = 6;
+            this.dgvBalanceCol1.Name = "dgvBalanceCol1";
+            this.dgvBalanceCol1.ReadOnly = true;
             // 
             // dgvBalanceCol2
             // 
-            dgvBalanceCol2.HeaderText = "Oper.";
-            dgvBalanceCol2.MinimumWidth = 6;
-            dgvBalanceCol2.Name = "dgvBalanceCol2";
-            dgvBalanceCol2.ReadOnly = true;
+            this.dgvBalanceCol2.HeaderText = "Oper.";
+            this.dgvBalanceCol2.MinimumWidth = 6;
+            this.dgvBalanceCol2.Name = "dgvBalanceCol2";
+            this.dgvBalanceCol2.ReadOnly = true;
             // 
             // dgvBalanceCol3
             // 
-            dgvBalanceCol3.HeaderText = "Monto";
-            dgvBalanceCol3.MinimumWidth = 6;
-            dgvBalanceCol3.Name = "dgvBalanceCol3";
-            dgvBalanceCol3.ReadOnly = true;
+            this.dgvBalanceCol3.HeaderText = "Monto";
+            this.dgvBalanceCol3.MinimumWidth = 6;
+            this.dgvBalanceCol3.Name = "dgvBalanceCol3";
+            this.dgvBalanceCol3.ReadOnly = true;
             // 
             // dgvBalanceCol4
             // 
-            dgvBalanceCol4.FillWeight = 40F;
-            dgvBalanceCol4.HeaderText = "";
-            dgvBalanceCol4.MinimumWidth = 6;
-            dgvBalanceCol4.Name = "dgvBalanceCol4";
-            dgvBalanceCol4.ReadOnly = true;
-            dgvBalanceCol4.Text = "Eliminar";
-            dgvBalanceCol4.UseColumnTextForButtonValue = true;
+            this.dgvBalanceCol4.FillWeight = 40F;
+            this.dgvBalanceCol4.HeaderText = "";
+            this.dgvBalanceCol4.MinimumWidth = 6;
+            this.dgvBalanceCol4.Name = "dgvBalanceCol4";
+            this.dgvBalanceCol4.ReadOnly = true;
+            this.dgvBalanceCol4.Text = "Eliminar";
+            this.dgvBalanceCol4.UseColumnTextForButtonValue = true;
             // 
             // grpBalance
             // 
-            grpBalance.Controls.Add(dgvBalance);
-            grpBalance.Dock = DockStyle.Fill;
-            grpBalance.Location = new Point(3, 3);
-            grpBalance.Name = "grpBalance";
-            grpBalance.Padding = new Padding(8, 6, 8, 8);
-            grpBalance.Size = new Size(659, 391);
-            grpBalance.TabIndex = 0;
-            grpBalance.TabStop = false;
-            grpBalance.Text = "Balance General (Periodo activo)";
+            this.grpBalance.Controls.Add(this.dgvBalance);
+            this.grpBalance.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpBalance.Location = new System.Drawing.Point(3, 3);
+            this.grpBalance.Name = "grpBalance";
+            this.grpBalance.Padding = new System.Windows.Forms.Padding(8, 6, 8, 8);
+            this.grpBalance.Size = new System.Drawing.Size(659, 391);
+            this.grpBalance.TabIndex = 0;
+            this.grpBalance.TabStop = false;
+            this.grpBalance.Text = "Balance General (Periodo activo)";
             // 
             // dgvResultados
             // 
-            dgvResultados.AllowUserToAddRows = false;
-            dgvResultados.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle7.BackColor = Color.FromArgb(247, 249, 252);
-            dgvResultados.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
-            dgvResultados.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvResultados.BackgroundColor = Color.FromArgb(255, 255, 255);
-            dgvResultados.BorderStyle = BorderStyle.None;
-            dataGridViewCellStyle8.BackColor = Color.FromArgb(24, 72, 140);
-            dataGridViewCellStyle8.ForeColor = Color.FromArgb(255, 255, 255);
-            dgvResultados.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
-            dgvResultados.ColumnHeadersHeight = 32;
-            dgvResultados.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dgvResultados.Columns.AddRange(new DataGridViewColumn[] { dgvResultadosCol0, dgvResultadosCol1, dgvResultadosCol2, dgvResultadosCol3, dgvResultadosCol4 });
-            dgvResultados.Dock = DockStyle.Fill;
-            dgvResultados.EnableHeadersVisualStyles = false;
-            dgvResultados.Location = new Point(8, 28);
-            dgvResultados.Name = "dgvResultados";
-            dgvResultados.ReadOnly = true;
-            dgvResultados.RowHeadersVisible = false;
-            dgvResultados.RowHeadersWidth = 51;
-            dgvResultados.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvResultados.Size = new Size(644, 355);
-            dgvResultados.TabIndex = 0;
+            this.dgvResultados.AllowUserToAddRows = false;
+            this.dgvResultados.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(249)))), ((int)(((byte)(252)))));
+            this.dgvResultados.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle11;
+            this.dgvResultados.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvResultados.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.dgvResultados.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dataGridViewCellStyle12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.dgvResultados.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            this.dgvResultados.ColumnHeadersHeight = 32;
+            this.dgvResultados.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvResultados.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvResultadosCol0,
+            this.dgvResultadosCol1,
+            this.dgvResultadosCol2,
+            this.dgvResultadosCol3,
+            this.dgvResultadosCol4});
+            this.dgvResultados.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvResultados.EnableHeadersVisualStyles = false;
+            this.dgvResultados.Location = new System.Drawing.Point(8, 28);
+            this.dgvResultados.Name = "dgvResultados";
+            this.dgvResultados.ReadOnly = true;
+            this.dgvResultados.RowHeadersVisible = false;
+            this.dgvResultados.RowHeadersWidth = 51;
+            this.dgvResultados.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvResultados.Size = new System.Drawing.Size(644, 355);
+            this.dgvResultados.TabIndex = 0;
             // 
             // dgvResultadosCol0
             // 
-            dgvResultadosCol0.HeaderText = "Cuenta";
-            dgvResultadosCol0.MinimumWidth = 6;
-            dgvResultadosCol0.Name = "dgvResultadosCol0";
-            dgvResultadosCol0.ReadOnly = true;
+            this.dgvResultadosCol0.HeaderText = "Cuenta";
+            this.dgvResultadosCol0.MinimumWidth = 6;
+            this.dgvResultadosCol0.Name = "dgvResultadosCol0";
+            this.dgvResultadosCol0.ReadOnly = true;
             // 
             // dgvResultadosCol1
             // 
-            dgvResultadosCol1.HeaderText = "Clasif.";
-            dgvResultadosCol1.MinimumWidth = 6;
-            dgvResultadosCol1.Name = "dgvResultadosCol1";
-            dgvResultadosCol1.ReadOnly = true;
+            this.dgvResultadosCol1.HeaderText = "Clasif.";
+            this.dgvResultadosCol1.MinimumWidth = 6;
+            this.dgvResultadosCol1.Name = "dgvResultadosCol1";
+            this.dgvResultadosCol1.ReadOnly = true;
             // 
             // dgvResultadosCol2
             // 
-            dgvResultadosCol2.HeaderText = "Oper.";
-            dgvResultadosCol2.MinimumWidth = 6;
-            dgvResultadosCol2.Name = "dgvResultadosCol2";
-            dgvResultadosCol2.ReadOnly = true;
+            this.dgvResultadosCol2.HeaderText = "Oper.";
+            this.dgvResultadosCol2.MinimumWidth = 6;
+            this.dgvResultadosCol2.Name = "dgvResultadosCol2";
+            this.dgvResultadosCol2.ReadOnly = true;
             // 
             // dgvResultadosCol3
             // 
-            dgvResultadosCol3.HeaderText = "Monto";
-            dgvResultadosCol3.MinimumWidth = 6;
-            dgvResultadosCol3.Name = "dgvResultadosCol3";
-            dgvResultadosCol3.ReadOnly = true;
+            this.dgvResultadosCol3.HeaderText = "Monto";
+            this.dgvResultadosCol3.MinimumWidth = 6;
+            this.dgvResultadosCol3.Name = "dgvResultadosCol3";
+            this.dgvResultadosCol3.ReadOnly = true;
             // 
             // dgvResultadosCol4
             // 
-            dgvResultadosCol4.FillWeight = 40F;
-            dgvResultadosCol4.HeaderText = "";
-            dgvResultadosCol4.MinimumWidth = 6;
-            dgvResultadosCol4.Name = "dgvResultadosCol4";
-            dgvResultadosCol4.ReadOnly = true;
-            dgvResultadosCol4.Text = "Eliminar";
-            dgvResultadosCol4.UseColumnTextForButtonValue = true;
+            this.dgvResultadosCol4.FillWeight = 40F;
+            this.dgvResultadosCol4.HeaderText = "";
+            this.dgvResultadosCol4.MinimumWidth = 6;
+            this.dgvResultadosCol4.Name = "dgvResultadosCol4";
+            this.dgvResultadosCol4.ReadOnly = true;
+            this.dgvResultadosCol4.Text = "Eliminar";
+            this.dgvResultadosCol4.UseColumnTextForButtonValue = true;
             // 
             // grpResultados
             // 
-            grpResultados.Controls.Add(dgvResultados);
-            grpResultados.Dock = DockStyle.Fill;
-            grpResultados.Location = new Point(668, 3);
-            grpResultados.Name = "grpResultados";
-            grpResultados.Padding = new Padding(8, 6, 8, 8);
-            grpResultados.Size = new Size(660, 391);
-            grpResultados.TabIndex = 1;
-            grpResultados.TabStop = false;
-            grpResultados.Text = "Estado de Resultados (Periodo activo)";
+            this.grpResultados.Controls.Add(this.dgvResultados);
+            this.grpResultados.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpResultados.Location = new System.Drawing.Point(668, 3);
+            this.grpResultados.Name = "grpResultados";
+            this.grpResultados.Padding = new System.Windows.Forms.Padding(8, 6, 8, 8);
+            this.grpResultados.Size = new System.Drawing.Size(660, 391);
+            this.grpResultados.TabIndex = 1;
+            this.grpResultados.TabStop = false;
+            this.grpResultados.Text = "Estado de Resultados (Periodo activo)";
             // 
             // tlpDatos
             // 
-            tlpDatos.ColumnCount = 2;
-            tlpDatos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tlpDatos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tlpDatos.Controls.Add(grpBalance, 0, 0);
-            tlpDatos.Controls.Add(grpResultados, 1, 0);
-            tlpDatos.Dock = DockStyle.Fill;
-            tlpDatos.Location = new Point(10, 4);
-            tlpDatos.Name = "tlpDatos";
-            tlpDatos.RowCount = 1;
-            tlpDatos.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tlpDatos.Size = new Size(1331, 397);
-            tlpDatos.TabIndex = 0;
+            this.tlpDatos.ColumnCount = 2;
+            this.tlpDatos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpDatos.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpDatos.Controls.Add(this.grpBalance, 0, 0);
+            this.tlpDatos.Controls.Add(this.grpResultados, 1, 0);
+            this.tlpDatos.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpDatos.Location = new System.Drawing.Point(10, 4);
+            this.tlpDatos.Name = "tlpDatos";
+            this.tlpDatos.RowCount = 1;
+            this.tlpDatos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpDatos.Size = new System.Drawing.Size(1331, 397);
+            this.tlpDatos.TabIndex = 0;
             // 
-            // pnlHeader
+            // pnlHeaderDatos
             // 
-            pnlHeader.Controls.Add(lblTitulo);
-            pnlHeader.Controls.Add(lblDescripcion);
-            pnlHeader.Dock = DockStyle.Top;
-            pnlHeader.Location = new Point(0, 0);
-            pnlHeader.Name = "pnlHeader";
-            pnlHeader.Size = new Size(1351, 66);
-            pnlHeader.TabIndex = 2;
+            this.pnlHeaderDatos.Controls.Add(this.lblTitulo);
+            this.pnlHeaderDatos.Controls.Add(this.lblDescripcion);
+            this.pnlHeaderDatos.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlHeaderDatos.Location = new System.Drawing.Point(0, 0);
+            this.pnlHeaderDatos.Name = "pnlHeaderDatos";
+            this.pnlHeaderDatos.Size = new System.Drawing.Size(1351, 66);
+            this.pnlHeaderDatos.TabIndex = 2;
             // 
             // lblTitulo
             // 
-            lblTitulo.AutoSize = true;
-            lblTitulo.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
-            lblTitulo.ForeColor = Color.FromArgb(24, 72, 140);
-            lblTitulo.Location = new Point(14, 8);
-            lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(88, 37);
-            lblTitulo.TabIndex = 0;
-            lblTitulo.Text = "Datos";
+            this.lblTitulo.AutoSize = true;
+            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI Semibold", 16F, System.Drawing.FontStyle.Bold);
+            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.lblTitulo.Location = new System.Drawing.Point(14, 8);
+            this.lblTitulo.Name = "lblTitulo";
+            this.lblTitulo.Size = new System.Drawing.Size(88, 37);
+            this.lblTitulo.TabIndex = 0;
+            this.lblTitulo.Text = "Datos";
             // 
             // lblDescripcion
             // 
-            lblDescripcion.AutoSize = true;
-            lblDescripcion.ForeColor = Color.FromArgb(105, 105, 105);
-            lblDescripcion.Location = new Point(16, 42);
-            lblDescripcion.Name = "lblDescripcion";
-            lblDescripcion.Size = new Size(532, 21);
-            lblDescripcion.TabIndex = 1;
-            lblDescripcion.Text = "Captura de cuentas del Balance General y Estado de Resultados por periodo";
+            this.lblDescripcion.AutoSize = true;
+            this.lblDescripcion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(105)))), ((int)(((byte)(105)))));
+            this.lblDescripcion.Location = new System.Drawing.Point(16, 42);
+            this.lblDescripcion.Name = "lblDescripcion";
+            this.lblDescripcion.Size = new System.Drawing.Size(532, 21);
+            this.lblDescripcion.TabIndex = 1;
+            this.lblDescripcion.Text = "Captura de cuentas del Balance General y Estado de Resultados por periodo";
             // 
             // label1
             // 
-            label1.AutoSize = true;
-            label1.ForeColor = Color.FromArgb(70, 80, 100);
-            label1.Location = new Point(10, 20);
-            label1.Name = "label1";
-            label1.Size = new Size(111, 21);
-            label1.TabIndex = 0;
-            label1.Text = "Tipo de estado";
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(100)))));
+            this.label1.Location = new System.Drawing.Point(10, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(111, 21);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Tipo de estado";
             // 
             // cmbTipoEstado
             // 
-            cmbTipoEstado.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbTipoEstado.FormattingEnabled = true;
-            cmbTipoEstado.Items.AddRange(new object[] { "BG", "ER" });
-            cmbTipoEstado.Location = new Point(10, 40);
-            cmbTipoEstado.Name = "cmbTipoEstado";
-            cmbTipoEstado.Size = new Size(90, 29);
-            cmbTipoEstado.TabIndex = 1;
+            this.cmbTipoEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTipoEstado.FormattingEnabled = true;
+            this.cmbTipoEstado.Items.AddRange(new object[] {
+            "BG",
+            "ER"});
+            this.cmbTipoEstado.Location = new System.Drawing.Point(10, 40);
+            this.cmbTipoEstado.Name = "cmbTipoEstado";
+            this.cmbTipoEstado.Size = new System.Drawing.Size(90, 29);
+            this.cmbTipoEstado.TabIndex = 1;
             // 
             // label2
             // 
-            label2.AutoSize = true;
-            label2.ForeColor = Color.FromArgb(70, 80, 100);
-            label2.Location = new Point(117, 20);
-            label2.Name = "label2";
-            label2.Size = new Size(139, 21);
-            label2.TabIndex = 2;
-            label2.Text = "Nombre de cuenta";
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(100)))));
+            this.label2.Location = new System.Drawing.Point(117, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(139, 21);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Nombre de cuenta";
             // 
             // txtNombreCuenta
             // 
-            txtNombreCuenta.Location = new Point(117, 40);
-            txtNombreCuenta.Name = "txtNombreCuenta";
-            txtNombreCuenta.Size = new Size(200, 29);
-            txtNombreCuenta.TabIndex = 3;
+            this.txtNombreCuenta.Location = new System.Drawing.Point(117, 40);
+            this.txtNombreCuenta.Name = "txtNombreCuenta";
+            this.txtNombreCuenta.Size = new System.Drawing.Size(200, 29);
+            this.txtNombreCuenta.TabIndex = 3;
             // 
             // label3
             // 
-            label3.AutoSize = true;
-            label3.ForeColor = Color.FromArgb(70, 80, 100);
-            label3.Location = new Point(329, 16);
-            label3.Name = "label3";
-            label3.Size = new Size(56, 21);
-            label3.TabIndex = 4;
-            label3.Text = "Monto";
+            this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(100)))));
+            this.label3.Location = new System.Drawing.Point(329, 16);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(56, 21);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Monto";
             // 
             // numMonto
             // 
-            numMonto.DecimalPlaces = 2;
-            numMonto.Location = new Point(329, 40);
-            numMonto.Maximum = new decimal(new int[] { 276447132, 23283, 0, 131072 });
-            numMonto.Minimum = new decimal(new int[] { 276447132, 23283, 0, -2147352576 });
-            numMonto.Name = "numMonto";
-            numMonto.Size = new Size(130, 29);
-            numMonto.TabIndex = 5;
+            this.numMonto.DecimalPlaces = 2;
+            this.numMonto.Location = new System.Drawing.Point(329, 40);
+            this.numMonto.Maximum = new decimal(new int[] {
+            276447132,
+            23283,
+            0,
+            131072});
+            this.numMonto.Minimum = new decimal(new int[] {
+            276447132,
+            23283,
+            0,
+            -2147352576});
+            this.numMonto.Name = "numMonto";
+            this.numMonto.Size = new System.Drawing.Size(130, 29);
+            this.numMonto.TabIndex = 5;
             // 
             // label4
             // 
-            label4.AutoSize = true;
-            label4.ForeColor = Color.FromArgb(70, 80, 100);
-            label4.Location = new Point(471, 16);
-            label4.Name = "label4";
-            label4.Size = new Size(96, 21);
-            label4.TabIndex = 6;
-            label4.Text = "Clasificación";
+            this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(100)))));
+            this.label4.Location = new System.Drawing.Point(471, 16);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(96, 21);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Clasificación";
             // 
             // cmbClasificacion
             // 
-            cmbClasificacion.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbClasificacion.FormattingEnabled = true;
-            cmbClasificacion.Items.AddRange(new object[] { "Activo corriente", "Activo no corriente", "Pasivo corriente", "Pasivo no corriente", "Patrimonio", "Ventas", "Costo de ventas", "Gastos operativos", "Otros ingresos/gastos", "Impuestos" });
-            cmbClasificacion.Location = new Point(471, 40);
-            cmbClasificacion.Name = "cmbClasificacion";
-            cmbClasificacion.Size = new Size(170, 29);
-            cmbClasificacion.TabIndex = 7;
+            this.cmbClasificacion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbClasificacion.FormattingEnabled = true;
+            this.cmbClasificacion.Items.AddRange(new object[] {
+            "Activo corriente",
+            "Activo no corriente",
+            "Pasivo corriente",
+            "Pasivo no corriente",
+            "Patrimonio",
+            "Ventas",
+            "Costo de ventas",
+            "Gastos operativos",
+            "Gastos Financieros",
+            "Otros ingresos",
+            "Impuestos"});
+            this.cmbClasificacion.Location = new System.Drawing.Point(471, 40);
+            this.cmbClasificacion.Name = "cmbClasificacion";
+            this.cmbClasificacion.Size = new System.Drawing.Size(170, 29);
+            this.cmbClasificacion.TabIndex = 7;
             // 
             // rbOperativa1
             // 
-            rbOperativa1.AutoSize = true;
-            rbOperativa1.Checked = true;
-            rbOperativa1.Location = new Point(4, 4);
-            rbOperativa1.Name = "rbOperativa1";
-            rbOperativa1.Size = new Size(44, 25);
-            rbOperativa1.TabIndex = 0;
-            rbOperativa1.TabStop = true;
-            rbOperativa1.Text = "Sí";
+            this.rbOperativa1.AutoSize = true;
+            this.rbOperativa1.Checked = true;
+            this.rbOperativa1.Location = new System.Drawing.Point(4, 4);
+            this.rbOperativa1.Name = "rbOperativa1";
+            this.rbOperativa1.Size = new System.Drawing.Size(44, 25);
+            this.rbOperativa1.TabIndex = 0;
+            this.rbOperativa1.TabStop = true;
+            this.rbOperativa1.Text = "Sí";
             // 
             // rbOperativa2
             // 
-            rbOperativa2.AutoSize = true;
-            rbOperativa2.Location = new Point(54, 2);
-            rbOperativa2.Name = "rbOperativa2";
-            rbOperativa2.Size = new Size(52, 25);
-            rbOperativa2.TabIndex = 1;
-            rbOperativa2.TabStop = true;
-            rbOperativa2.Text = "No";
+            this.rbOperativa2.AutoSize = true;
+            this.rbOperativa2.Location = new System.Drawing.Point(54, 2);
+            this.rbOperativa2.Name = "rbOperativa2";
+            this.rbOperativa2.Size = new System.Drawing.Size(52, 25);
+            this.rbOperativa2.TabIndex = 1;
+            this.rbOperativa2.TabStop = true;
+            this.rbOperativa2.Text = "No";
             // 
             // rbOperativa
             // 
-            rbOperativa.Controls.Add(rbOperativa1);
-            rbOperativa.Controls.Add(rbOperativa2);
-            rbOperativa.Location = new Point(653, 38);
-            rbOperativa.Name = "rbOperativa";
-            rbOperativa.Size = new Size(104, 28);
-            rbOperativa.TabIndex = 9;
+            this.rbOperativa.Controls.Add(this.rbOperativa1);
+            this.rbOperativa.Controls.Add(this.rbOperativa2);
+            this.rbOperativa.Location = new System.Drawing.Point(653, 38);
+            this.rbOperativa.Name = "rbOperativa";
+            this.rbOperativa.Size = new System.Drawing.Size(104, 28);
+            this.rbOperativa.TabIndex = 9;
             // 
             // label5
             // 
-            label5.AutoSize = true;
-            label5.ForeColor = Color.FromArgb(70, 80, 100);
-            label5.Location = new Point(653, 14);
-            label5.Name = "label5";
-            label5.Size = new Size(92, 21);
-            label5.TabIndex = 8;
-            label5.Text = "¿Operativa?";
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(100)))));
+            this.label5.Location = new System.Drawing.Point(653, 14);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(92, 21);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "¿Operativa?";
             // 
             // btnAgregar
             // 
-            btnAgregar.BackColor = Color.FromArgb(24, 72, 140);
-            btnAgregar.Cursor = Cursors.Hand;
-            btnAgregar.FlatAppearance.BorderColor = Color.FromArgb(24, 72, 140);
-            btnAgregar.FlatStyle = FlatStyle.Flat;
-            btnAgregar.ForeColor = Color.FromArgb(255, 255, 255);
-            btnAgregar.Location = new Point(769, 38);
-            btnAgregar.Name = "btnAgregar";
-            btnAgregar.Size = new Size(100, 30);
-            btnAgregar.TabIndex = 10;
-            btnAgregar.Text = "Agregar";
-            btnAgregar.UseVisualStyleBackColor = false;
+            this.btnAgregar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnAgregar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAgregar.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnAgregar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAgregar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnAgregar.Location = new System.Drawing.Point(769, 38);
+            this.btnAgregar.Name = "btnAgregar";
+            this.btnAgregar.Size = new System.Drawing.Size(100, 30);
+            this.btnAgregar.TabIndex = 10;
+            this.btnAgregar.Text = "Agregar";
+            this.btnAgregar.UseVisualStyleBackColor = false;
+            this.btnAgregar.Click += new System.EventHandler(this.btnAgregar_Click);
             // 
             // grpAgregarCuenta
             // 
-            grpAgregarCuenta.Controls.Add(label1);
-            grpAgregarCuenta.Controls.Add(cmbTipoEstado);
-            grpAgregarCuenta.Controls.Add(label2);
-            grpAgregarCuenta.Controls.Add(txtNombreCuenta);
-            grpAgregarCuenta.Controls.Add(label3);
-            grpAgregarCuenta.Controls.Add(numMonto);
-            grpAgregarCuenta.Controls.Add(label4);
-            grpAgregarCuenta.Controls.Add(cmbClasificacion);
-            grpAgregarCuenta.Controls.Add(label5);
-            grpAgregarCuenta.Controls.Add(rbOperativa);
-            grpAgregarCuenta.Controls.Add(btnAgregar);
-            grpAgregarCuenta.Location = new Point(10, 6);
-            grpAgregarCuenta.Name = "grpAgregarCuenta";
-            grpAgregarCuenta.Size = new Size(879, 91);
-            grpAgregarCuenta.TabIndex = 0;
-            grpAgregarCuenta.TabStop = false;
-            grpAgregarCuenta.Text = "Agregar cuenta";
+            this.grpAgregarCuenta.Controls.Add(this.label1);
+            this.grpAgregarCuenta.Controls.Add(this.cmbTipoEstado);
+            this.grpAgregarCuenta.Controls.Add(this.label2);
+            this.grpAgregarCuenta.Controls.Add(this.txtNombreCuenta);
+            this.grpAgregarCuenta.Controls.Add(this.label3);
+            this.grpAgregarCuenta.Controls.Add(this.numMonto);
+            this.grpAgregarCuenta.Controls.Add(this.label4);
+            this.grpAgregarCuenta.Controls.Add(this.cmbClasificacion);
+            this.grpAgregarCuenta.Controls.Add(this.label5);
+            this.grpAgregarCuenta.Controls.Add(this.rbOperativa);
+            this.grpAgregarCuenta.Controls.Add(this.btnAgregar);
+            this.grpAgregarCuenta.Location = new System.Drawing.Point(10, 6);
+            this.grpAgregarCuenta.Name = "grpAgregarCuenta";
+            this.grpAgregarCuenta.Size = new System.Drawing.Size(879, 91);
+            this.grpAgregarCuenta.TabIndex = 0;
+            this.grpAgregarCuenta.TabStop = false;
+            this.grpAgregarCuenta.Text = "Agregar cuenta";
             // 
             // btnExportarJson
             // 
-            btnExportarJson.BackColor = Color.FromArgb(255, 255, 255);
-            btnExportarJson.Cursor = Cursors.Hand;
-            btnExportarJson.FlatAppearance.BorderColor = Color.FromArgb(24, 72, 140);
-            btnExportarJson.FlatStyle = FlatStyle.Flat;
-            btnExportarJson.ForeColor = Color.FromArgb(24, 72, 140);
-            btnExportarJson.Location = new Point(10, 38);
-            btnExportarJson.Name = "btnExportarJson";
-            btnExportarJson.Size = new Size(120, 30);
-            btnExportarJson.TabIndex = 0;
-            btnExportarJson.Text = "Exportar JSON";
-            btnExportarJson.UseVisualStyleBackColor = false;
+            this.btnExportarJson.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnExportarJson.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnExportarJson.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnExportarJson.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExportarJson.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnExportarJson.Location = new System.Drawing.Point(10, 38);
+            this.btnExportarJson.Name = "btnExportarJson";
+            this.btnExportarJson.Size = new System.Drawing.Size(120, 30);
+            this.btnExportarJson.TabIndex = 0;
+            this.btnExportarJson.Text = "Exportar JSON";
+            this.btnExportarJson.UseVisualStyleBackColor = false;
             // 
             // btnImportarJson
             // 
-            btnImportarJson.BackColor = Color.FromArgb(255, 255, 255);
-            btnImportarJson.Cursor = Cursors.Hand;
-            btnImportarJson.FlatAppearance.BorderColor = Color.FromArgb(24, 72, 140);
-            btnImportarJson.FlatStyle = FlatStyle.Flat;
-            btnImportarJson.ForeColor = Color.FromArgb(24, 72, 140);
-            btnImportarJson.Location = new Point(142, 38);
-            btnImportarJson.Name = "btnImportarJson";
-            btnImportarJson.Size = new Size(120, 30);
-            btnImportarJson.TabIndex = 1;
-            btnImportarJson.Text = "Importar JSON";
-            btnImportarJson.UseVisualStyleBackColor = false;
+            this.btnImportarJson.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnImportarJson.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnImportarJson.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnImportarJson.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnImportarJson.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnImportarJson.Location = new System.Drawing.Point(142, 38);
+            this.btnImportarJson.Name = "btnImportarJson";
+            this.btnImportarJson.Size = new System.Drawing.Size(120, 30);
+            this.btnImportarJson.TabIndex = 1;
+            this.btnImportarJson.Text = "Importar JSON";
+            this.btnImportarJson.UseVisualStyleBackColor = false;
             // 
             // btnCargarDemo
             // 
-            btnCargarDemo.BackColor = Color.FromArgb(255, 255, 255);
-            btnCargarDemo.Cursor = Cursors.Hand;
-            btnCargarDemo.FlatAppearance.BorderColor = Color.FromArgb(24, 72, 140);
-            btnCargarDemo.FlatStyle = FlatStyle.Flat;
-            btnCargarDemo.ForeColor = Color.FromArgb(24, 72, 140);
-            btnCargarDemo.Location = new Point(274, 38);
-            btnCargarDemo.Name = "btnCargarDemo";
-            btnCargarDemo.Size = new Size(120, 30);
-            btnCargarDemo.TabIndex = 2;
-            btnCargarDemo.Text = "Cargar Demo";
-            btnCargarDemo.UseVisualStyleBackColor = false;
+            this.btnCargarDemo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnCargarDemo.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCargarDemo.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnCargarDemo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCargarDemo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnCargarDemo.Location = new System.Drawing.Point(274, 38);
+            this.btnCargarDemo.Name = "btnCargarDemo";
+            this.btnCargarDemo.Size = new System.Drawing.Size(120, 30);
+            this.btnCargarDemo.TabIndex = 2;
+            this.btnCargarDemo.Text = "Cargar Demo";
+            this.btnCargarDemo.UseVisualStyleBackColor = false;
             // 
             // grpAccionesDatos
             // 
-            grpAccionesDatos.Controls.Add(btnExportarJson);
-            grpAccionesDatos.Controls.Add(btnImportarJson);
-            grpAccionesDatos.Controls.Add(btnCargarDemo);
-            grpAccionesDatos.Location = new Point(901, 6);
-            grpAccionesDatos.Name = "grpAccionesDatos";
-            grpAccionesDatos.Size = new Size(404, 80);
-            grpAccionesDatos.TabIndex = 1;
-            grpAccionesDatos.TabStop = false;
-            grpAccionesDatos.Text = "Acciones de datos";
+            this.grpAccionesDatos.Controls.Add(this.btnExportarJson);
+            this.grpAccionesDatos.Controls.Add(this.btnImportarJson);
+            this.grpAccionesDatos.Controls.Add(this.btnCargarDemo);
+            this.grpAccionesDatos.Location = new System.Drawing.Point(901, 6);
+            this.grpAccionesDatos.Name = "grpAccionesDatos";
+            this.grpAccionesDatos.Size = new System.Drawing.Size(404, 80);
+            this.grpAccionesDatos.TabIndex = 1;
+            this.grpAccionesDatos.TabStop = false;
+            this.grpAccionesDatos.Text = "Acciones de datos";
             // 
             // pnlToolbar
             // 
-            pnlToolbar.AutoScroll = true;
-            pnlToolbar.Controls.Add(grpAgregarCuenta);
-            pnlToolbar.Controls.Add(grpAccionesDatos);
-            pnlToolbar.Dock = DockStyle.Top;
-            pnlToolbar.Location = new Point(0, 66);
-            pnlToolbar.Name = "pnlToolbar";
-            pnlToolbar.Size = new Size(1351, 123);
-            pnlToolbar.TabIndex = 1;
+            this.pnlToolbar.AutoScroll = true;
+            this.pnlToolbar.Controls.Add(this.grpAgregarCuenta);
+            this.pnlToolbar.Controls.Add(this.grpAccionesDatos);
+            this.pnlToolbar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlToolbar.Location = new System.Drawing.Point(0, 66);
+            this.pnlToolbar.Name = "pnlToolbar";
+            this.pnlToolbar.Size = new System.Drawing.Size(1351, 123);
+            this.pnlToolbar.TabIndex = 1;
             // 
             // pnlBody
             // 
-            pnlBody.Controls.Add(tlpDatos);
-            pnlBody.Dock = DockStyle.Fill;
-            pnlBody.Location = new Point(0, 189);
-            pnlBody.Name = "pnlBody";
-            pnlBody.Padding = new Padding(10, 4, 10, 10);
-            pnlBody.Size = new Size(1351, 411);
-            pnlBody.TabIndex = 0;
+            this.pnlBody.Controls.Add(this.tlpDatos);
+            this.pnlBody.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlBody.Location = new System.Drawing.Point(0, 189);
+            this.pnlBody.Name = "pnlBody";
+            this.pnlBody.Padding = new System.Windows.Forms.Padding(10, 4, 10, 10);
+            this.pnlBody.Size = new System.Drawing.Size(1351, 411);
+            this.pnlBody.TabIndex = 0;
             // 
             // DatosControl
             // 
-            AutoScaleDimensions = new SizeF(9F, 21F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(244, 246, 250);
-            Controls.Add(pnlBody);
-            Controls.Add(pnlToolbar);
-            Controls.Add(pnlHeader);
-            Font = new Font("Segoe UI", 9.5F);
-            Name = "DatosControl";
-            Size = new Size(1351, 600);
-            ((System.ComponentModel.ISupportInitialize)dgvBalance).EndInit();
-            grpBalance.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgvResultados).EndInit();
-            grpResultados.ResumeLayout(false);
-            tlpDatos.ResumeLayout(false);
-            pnlHeader.ResumeLayout(false);
-            pnlHeader.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numMonto).EndInit();
-            rbOperativa.ResumeLayout(false);
-            rbOperativa.PerformLayout();
-            grpAgregarCuenta.ResumeLayout(false);
-            grpAgregarCuenta.PerformLayout();
-            grpAccionesDatos.ResumeLayout(false);
-            pnlToolbar.ResumeLayout(false);
-            pnlBody.ResumeLayout(false);
-            ResumeLayout(false);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(246)))), ((int)(((byte)(250)))));
+            this.Controls.Add(this.pnlBody);
+            this.Controls.Add(this.pnlToolbar);
+            this.Controls.Add(this.pnlHeaderDatos);
+            this.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.Name = "DatosControl";
+            this.Size = new System.Drawing.Size(1351, 600);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBalance)).EndInit();
+            this.grpBalance.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvResultados)).EndInit();
+            this.grpResultados.ResumeLayout(false);
+            this.tlpDatos.ResumeLayout(false);
+            this.pnlHeaderDatos.ResumeLayout(false);
+            this.pnlHeaderDatos.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMonto)).EndInit();
+            this.rbOperativa.ResumeLayout(false);
+            this.rbOperativa.PerformLayout();
+            this.grpAgregarCuenta.ResumeLayout(false);
+            this.grpAgregarCuenta.PerformLayout();
+            this.grpAccionesDatos.ResumeLayout(false);
+            this.pnlToolbar.ResumeLayout(false);
+            this.pnlBody.ResumeLayout(false);
+            this.ResumeLayout(false);
+
         }
 
         #endregion
@@ -551,7 +587,7 @@ namespace LookScan
         private System.Windows.Forms.DataGridViewButtonColumn dgvResultadosCol4;
         private System.Windows.Forms.GroupBox grpResultados;
         private System.Windows.Forms.TableLayoutPanel tlpDatos;
-        private System.Windows.Forms.Panel pnlHeader;
+        private System.Windows.Forms.Panel pnlHeaderDatos;
         private System.Windows.Forms.Label lblTitulo;
         private System.Windows.Forms.Label lblDescripcion;
         private System.Windows.Forms.Label label1;

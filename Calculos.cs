@@ -72,9 +72,13 @@ namespace LookScan
             return Suma(p, TipoEstado.ER, Clasif.GastosOperativos);
         }
 
-        public static decimal OtrosIngresosGastos(Periodo p)
+        public static decimal GastosFinancieros(Periodo p)
         {
-            return Suma(p, TipoEstado.ER, Clasif.OtrosIngresosGastos);
+            return Suma(p, TipoEstado.ER, Clasif.GastosFinancieros);
+        }
+        public static decimal OtrosIngresos(Periodo p)
+        {
+            return Suma(p, TipoEstado.ER, Clasif.OtrosIngresos);
         }
 
         public static decimal Impuestos(Periodo p)
@@ -94,7 +98,7 @@ namespace LookScan
 
         public static decimal UtilidadAntesImpuestos(Periodo p)
         {
-            return UtilidadOperativa(p) + OtrosIngresosGastos(p);
+            return UtilidadOperativa(p) - GastosFinancieros(p) + OtrosIngresos(p);
         }
 
         public static decimal UtilidadNeta(Periodo p)
@@ -259,115 +263,184 @@ namespace LookScan
 
         // ── Razones financieras ──────────────────────────────────────────────
 
-        public static IEnumerable<Razon> Razones(Periodo p)
+         public static IEnumerable<Razon> Razones(Periodo p)
+         {
+             var resultado = new List<Razon>();
+             if (p == null) return resultado;
+
+             decimal activoCorriente = ActivoCorriente(p);
+             decimal pasivoCorriente = PasivoCorriente(p);
+             decimal inventario = Inventario(p);
+             decimal efectivo = Efectivo(p);
+             decimal cuentasPorCobrar = CuentasPorCobrar(p);
+             decimal cuentasPorPagar = CuentasPorPagar(p);
+             decimal activo = ActivoTotal(p);
+             decimal pasivo = PasivoTotal(p);
+             decimal patrimonio = Patrimonio(p);
+             decimal ventas = Ventas(p);
+             decimal costo = CostoVentas(p);
+             decimal gastosFinancieros = GastosFinancieros(p);
+
+            
+             // Liquidez
+             AgregarRazon(resultado, "Liquidez", "Razón corriente",
+                 activoCorriente, pasivoCorriente, FormatoRazon.Veces,
+                 "Soles de activo corriente por cada sol de pasivo corriente. Se espera mayor a 1.");
+
+             AgregarRazon(resultado, "Liquidez", "Prueba ácida",
+                 activoCorriente - inventario, pasivoCorriente, FormatoRazon.Veces,
+                 "Capacidad de cubrir el pasivo corriente sin vender inventarios. Se espera mayor a 1.");
+
+             AgregarRazon(resultado, "Liquidez", "Prueba defensiva",
+                 efectivo, pasivoCorriente, FormatoRazon.Veces,
+                 "Cobertura del pasivo corriente usando únicamente efectivo y equivalentes.");
+
+             // Actividad
+             AgregarRazon(resultado, "Actividad", "Rotación de inventarios",
+                 costo, inventario, FormatoRazon.Veces,
+                 "Veces que se renueva el inventario durante el periodo.");
+
+             AgregarRazon(resultado, "Actividad", "Periodo promedio de cobro",
+                 cuentasPorCobrar, ventas, FormatoRazon.Dias,
+                 "Días promedio que tarda la empresa en recuperar sus cuentas por cobrar.");
+
+             AgregarRazon(resultado, "Actividad", "Periodo promedio de pago",
+                 cuentasPorPagar, costo, FormatoRazon.Dias,
+                 "Días promedio que tarda la empresa en pagar a sus proveedores.");
+
+             AgregarRazon(resultado, "Actividad", "Rotación de activos",
+                 ventas, activo, FormatoRazon.Veces,
+                 "Ventas generadas por cada unidad monetaria invertida en activos.");
+
+             // Endeudamiento
+             AgregarRazon(resultado, "Endeudamiento", "Deuda sobre activo",
+                 pasivo, activo, FormatoRazon.Porcentaje,
+                 "Proporción del activo total financiada con deuda.");
+
+             AgregarRazon(resultado, "Endeudamiento", "Deuda sobre patrimonio",
+                 pasivo, patrimonio, FormatoRazon.Veces,
+                 "Soles de deuda por cada sol de patrimonio. Se espera un valor moderado.");
+
+             AgregarRazon(resultado, "Endeudamiento", "Cobertura de intereses",
+                 UtilidadOperativa(p), gastosFinancieros, FormatoRazon.Veces,
+                 "Veces que la utilidad operativa cubre los gastos financieros.");
+
+             // Rentabilidad
+             AgregarRazon(resultado, "Rentabilidad", "Margen bruto",
+                 UtilidadBruta(p), ventas, FormatoRazon.Porcentaje,
+                 "Porcentaje de las ventas que queda después del costo de ventas.");
+
+             AgregarRazon(resultado, "Rentabilidad", "Margen operativo",
+                 UtilidadOperativa(p), ventas, FormatoRazon.Porcentaje,
+                 "Porcentaje de las ventas que queda después de los gastos operativos.");
+
+             AgregarRazon(resultado, "Rentabilidad", "Margen neto",
+                 UtilidadNeta(p), ventas, FormatoRazon.Porcentaje,
+                 "Porcentaje de las ventas que se convierte en utilidad neta.");
+
+             AgregarRazon(resultado, "Rentabilidad", "ROA",
+                 UtilidadNeta(p), activo, FormatoRazon.Porcentaje,
+                 "Rentabilidad generada sobre el activo total.");
+
+             AgregarRazon(resultado, "Rentabilidad", "ROE",
+                 UtilidadNeta(p), patrimonio, FormatoRazon.Porcentaje,
+                 "Rentabilidad generada sobre el patrimonio de los accionistas.");
+
+             // Mercado
+             resultado.Add(new Razon
+             {
+                 Nombre = "Utilidad por acción (EPS)",
+                 Grupo = "Mercado",
+                 ValorTexto = "N/D",
+                 Interpretacion = "Requiere el número de acciones en circulación."
+             });
+
+             resultado.Add(new Razon
+             {
+                 Nombre = "Relación precio/utilidad (P/E)",
+                 Grupo = "Mercado",
+                 ValorTexto = "N/D",
+                 Interpretacion = "Requiere el precio de mercado de la acción."
+             });
+
+             resultado.Add(new Razon
+             {
+                 Nombre = "Rendimiento por dividendo",
+                 Grupo = "Mercado",
+                 ValorTexto = "N/D",
+                 Interpretacion = "Requiere el dividendo por acción y su precio de mercado."
+             });
+
+             return resultado;
+         }
+        
+
+        private static string GenerarInterpretacion(string nombre, decimal valor)
         {
-            var resultado = new List<Razon>();
-            if (p == null) return resultado;
-
-            decimal activoCorriente = ActivoCorriente(p);
-            decimal pasivoCorriente = PasivoCorriente(p);
-            decimal inventario = Inventario(p);
-            decimal efectivo = Efectivo(p);
-            decimal cuentasPorCobrar = CuentasPorCobrar(p);
-            decimal cuentasPorPagar = CuentasPorPagar(p);
-            decimal activo = ActivoTotal(p);
-            decimal pasivo = PasivoTotal(p);
-            decimal patrimonio = Patrimonio(p);
-            decimal ventas = Ventas(p);
-            decimal costo = CostoVentas(p);
-            decimal gastosFinancieros = GastosFinancieros(p);
-
-            // Liquidez
-            AgregarRazon(resultado, "Liquidez", "Razón corriente",
-                activoCorriente, pasivoCorriente, FormatoRazon.Veces,
-                "Soles de activo corriente por cada sol de pasivo corriente. Se espera mayor a 1.");
-
-            AgregarRazon(resultado, "Liquidez", "Prueba ácida",
-                activoCorriente - inventario, pasivoCorriente, FormatoRazon.Veces,
-                "Capacidad de cubrir el pasivo corriente sin vender inventarios. Se espera mayor a 1.");
-
-            AgregarRazon(resultado, "Liquidez", "Prueba defensiva",
-                efectivo, pasivoCorriente, FormatoRazon.Veces,
-                "Cobertura del pasivo corriente usando únicamente efectivo y equivalentes.");
-
-            // Actividad
-            AgregarRazon(resultado, "Actividad", "Rotación de inventarios",
-                costo, inventario, FormatoRazon.Veces,
-                "Veces que se renueva el inventario durante el periodo.");
-
-            AgregarRazon(resultado, "Actividad", "Periodo promedio de cobro",
-                cuentasPorCobrar, ventas, FormatoRazon.Dias,
-                "Días promedio que tarda la empresa en recuperar sus cuentas por cobrar.");
-
-            AgregarRazon(resultado, "Actividad", "Periodo promedio de pago",
-                cuentasPorPagar, costo, FormatoRazon.Dias,
-                "Días promedio que tarda la empresa en pagar a sus proveedores.");
-
-            AgregarRazon(resultado, "Actividad", "Rotación de activos",
-                ventas, activo, FormatoRazon.Veces,
-                "Ventas generadas por cada unidad monetaria invertida en activos.");
-
-            // Endeudamiento
-            AgregarRazon(resultado, "Endeudamiento", "Deuda sobre activo",
-                pasivo, activo, FormatoRazon.Porcentaje,
-                "Proporción del activo total financiada con deuda.");
-
-            AgregarRazon(resultado, "Endeudamiento", "Deuda sobre patrimonio",
-                pasivo, patrimonio, FormatoRazon.Veces,
-                "Soles de deuda por cada sol de patrimonio. Se espera un valor moderado.");
-
-            AgregarRazon(resultado, "Endeudamiento", "Cobertura de intereses",
-                UtilidadOperativa(p), gastosFinancieros, FormatoRazon.Veces,
-                "Veces que la utilidad operativa cubre los gastos financieros.");
-
-            // Rentabilidad
-            AgregarRazon(resultado, "Rentabilidad", "Margen bruto",
-                UtilidadBruta(p), ventas, FormatoRazon.Porcentaje,
-                "Porcentaje de las ventas que queda después del costo de ventas.");
-
-            AgregarRazon(resultado, "Rentabilidad", "Margen operativo",
-                UtilidadOperativa(p), ventas, FormatoRazon.Porcentaje,
-                "Porcentaje de las ventas que queda después de los gastos operativos.");
-
-            AgregarRazon(resultado, "Rentabilidad", "Margen neto",
-                UtilidadNeta(p), ventas, FormatoRazon.Porcentaje,
-                "Porcentaje de las ventas que se convierte en utilidad neta.");
-
-            AgregarRazon(resultado, "Rentabilidad", "ROA",
-                UtilidadNeta(p), activo, FormatoRazon.Porcentaje,
-                "Rentabilidad generada sobre el activo total.");
-
-            AgregarRazon(resultado, "Rentabilidad", "ROE",
-                UtilidadNeta(p), patrimonio, FormatoRazon.Porcentaje,
-                "Rentabilidad generada sobre el patrimonio de los accionistas.");
-
-            // Mercado
-            resultado.Add(new Razon
+            switch (nombre)
             {
-                Nombre = "Utilidad por acción (EPS)",
-                Grupo = "Mercado",
-                ValorTexto = "N/D",
-                Interpretacion = "Requiere el número de acciones en circulación."
-            });
+                // --- LIQUIDEZ ---
+                case "Razón corriente":
+                    if (valor < 1.0m) return $"Alerta: Con {valor:N2}x, los pasivos superan a los activos líquidos; riesgo de iliquidez a corto plazo.";
+                    if (valor <= 2.0m) return $"Saludable: Con {valor:N2}x, la empresa cubre adecuadamente sus deudas a corto plazo.";
+                    return $"Precaución: {valor:N2}x indica buena liquidez, pero podría reflejar activos ociosos.";
 
-            resultado.Add(new Razon
-            {
-                Nombre = "Relación precio/utilidad (P/E)",
-                Grupo = "Mercado",
-                ValorTexto = "N/D",
-                Interpretacion = "Requiere el precio de mercado de la acción."
-            });
+                case "Prueba ácida":
+                    if (valor < 1.0m) return $"Riesgo: Con {valor:N2}x, la empresa no podría pagar sus deudas inmediatas sin liquidar inventarios.";
+                    return $"Óptimo: Con {valor:N2}x, la empresa posee alta capacidad de pago inmediato sin depender de inventarios.";
 
-            resultado.Add(new Razon
-            {
-                Nombre = "Rendimiento por dividendo",
-                Grupo = "Mercado",
-                ValorTexto = "N/D",
-                Interpretacion = "Requiere el dividendo por acción y su precio de mercado."
-            });
+                case "Prueba defensiva":
+                    if (valor < 0.20m) return $"Baja cobertura: Con {valor:N2}x, el efectivo disponible es bajo frente a las deudas inmediatas.";
+                    return $"Adecuada: Con {valor:N2}x, se cuenta con suficiente efectivo para compromisos inminentes.";
 
-            return resultado;
+                // --- ACTIVIDAD ---
+                case "Rotación de inventarios":
+                    return $"Eficiencia: El inventario rota {valor:N2} veces en el periodo; indica la velocidad de venta y abastecimiento.";
+
+                case "Periodo promedio de cobro":
+                    return $"Gestión de cobro: La empresa tarda en promedio {valor:N2} días en recaudar las cuentas por cobrar de sus clientes.";
+
+                case "Periodo promedio de pago":
+                    return $"Política de pagos: Se tardan unos {valor:N2} días en liquidar las obligaciones con proveedores.";
+
+                case "Rotación de activos":
+                    return $"Utilización: Cada unidad invertida en activos genera {valor:N2}x en ventas para el periodo.";
+
+                // --- ENDEUDAMIENTO ---
+                case "Deuda sobre activo":
+                    if (valor > 0.60m) return $"Alto riesgo: El {valor * 100:N1}% de los activos está financiado por acreedores externos.";
+                    return $"Estable: El {valor * 100:N1}% de endeudamiento muestra un nivel moderado y seguro.";
+
+                case "Deuda sobre patrimonio":
+                    return $"Apalancamiento: Existe un nivel de {valor:N2}x de deuda por cada sol aportado por los accionistas.";
+
+                case "Cobertura de intereses":
+                    if (valor < 1.0m) return $"Alerta crítica: La utilidad operativa no alcanza para cubrir los gastos financieros ({valor:N2}x).";
+                    return $"Solvente: La utilidad operativa cubre {valor:N2} veces los intereses de la deuda.";
+
+                // --- RENTABILIDAD ---
+                case "Margen bruto":
+                    return $"Rentabilidad de ventas: Queda un margen bruto del {valor * 100:N1}% después del costo de ventas.";
+
+                case "Margen operativo":
+                    return $"Eficiencia operativa: El {valor * 100:N1}% de las ventas representa la ganancia antes de intereses e impuestos.";
+
+                case "Margen neto":
+                    if (valor < 0.05m) return $"Margen bajo ({valor * 100:N1}%): La utilidad neta sobre las ventas es reducida.";
+                    return $"Buen rendimiento: El {valor * 100:N1}% de las ventas se convierte en ganancia neta para la empresa.";
+
+                case "ROA":
+                    return $"Rendimiento de activos: Se generó un {valor * 100:N1}% de utilidad neta en relación con el total de activos.";
+
+                case "ROE":
+                    return $"Rentabilidad patrimonial: Los accionistas obtienen un rendimiento del {valor * 100:N1}% sobre su inversión.";
+
+                default:
+                    return "Indicador financiero analizado para el periodo actual.";
+            }
         }
+
+
 
         // ── Capital de trabajo ───────────────────────────────────────────────
 
@@ -494,33 +567,26 @@ namespace LookScan
             };
         }
 
-        private static void AgregarRazon(List<Razon> resultado, string grupo, string nombre,
-                                         decimal numerador, decimal denominador,
-                                         FormatoRazon formato, string interpretacion)
+        private static void AgregarRazon(List<Razon> lista, string grupo, string nombre, decimal numerador, decimal denominador, FormatoRazon formato, string descripcionTeorica)
         {
-            decimal? valor = denominador != 0m ? (decimal?)(numerador / denominador) : null;
-            string texto;
+            decimal valor = denominador != 0 ? numerador / denominador : 0;
 
-            switch (formato)
-            {
-                case FormatoRazon.Porcentaje:
-                    texto = Util.Pct(valor);
-                    break;
-                case FormatoRazon.Dias:
-                    texto = Util.Dias(valor.HasValue ? valor.Value * 360m : (decimal?)null);
-                    break;
-                default:
-                    texto = Util.Veces(valor);
-                    break;
-            }
+            string interpretacionDinamica = GenerarInterpretacion(nombre, valor);
 
-            resultado.Add(new Razon
+            
+            string sufijo = "";
+            if (formato == FormatoRazon.Porcentaje) sufijo = "%";
+            else if (formato == FormatoRazon.Veces) sufijo = "x";
+            else if (formato == FormatoRazon.Dias) sufijo = " días";
+
+            lista.Add(new Razon
             {
                 Nombre = nombre,
                 Grupo = grupo,
-                ValorTexto = texto,
-                Interpretacion = interpretacion
+                ValorTexto = valor.ToString("N2") + sufijo,
+                Interpretacion = interpretacionDinamica
             });
+        
         }
 
         private static decimal Inventario(Periodo p)
@@ -544,11 +610,7 @@ namespace LookScan
                 "efectivo", "caja", "banco");
         }
 
-        private static decimal GastosFinancieros(Periodo p)
-        {
-            return Math.Abs(PorNombre(p, TipoEstado.ER, null, "financier", "interes"));
-        }
-
+     
         private static decimal PorNombre(Periodo p, TipoEstado tipo, string[] clasificaciones,
                                          params string[] claves)
         {

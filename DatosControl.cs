@@ -21,8 +21,10 @@ namespace LookScan
             Almacen.ActivoCambio += Redibujar;
             Almacen.DatosCambiaron += Redibujar;
             Redibujar();
+
         }
 
+        private string cuentaEnEdicion = null;
         void AgregarCuenta()
         {
             string nombre = txtNombreCuenta.Text.Trim();
@@ -57,7 +59,7 @@ namespace LookScan
         void CargarDemo()
         {
             if (Almacen.HayDatos &&
-                MessageBox.Show("Se reemplazarán las cuentas de los periodos 2023, 2024 y 2025 por los datos de ejemplo. ¿Continuar?",
+                MessageBox.Show("Se reemplazarán las cuentas de los periodos 2020, 2019 y 2018 por los datos de ejemplo. ¿Continuar?",
                     "FINBOT", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
             Almacen.CargarDemo();
         }
@@ -84,5 +86,72 @@ namespace LookScan
             int i = g.Rows.Add(c.Nombre, c.Clasificacion, c.Operativa ? "Sí" : "No", Util.Monto(c.Monto), null);
             g.Rows[i].Tag = c;
         }
-    }
+   
+        private void dgvBalance_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = dgvBalance.Rows[e.RowIndex];
+
+                // Cargamos los datos en los controles de arriba
+                txtNombreCuenta.Text = row.Cells[0].Value?.ToString();
+
+                if (decimal.TryParse(row.Cells[3].Value?.ToString(), out decimal montoValor))
+                {
+                    numMonto.Value = montoValor;
+                }
+
+                cmbClasificacion.Text = row.Cells[1].Value?.ToString();
+
+                // 
+                cuentaEnEdicion = txtNombreCuenta.Text.Trim();
+            }
+        }
+        
+
+
+private void btnAgregar_Click(object sender, EventArgs e)
+        {
+            string nombreIngresado = txtNombreCuenta.Text.Trim();
+
+            if (string.IsNullOrEmpty(cuentaEnEdicion))
+            {
+                // ==========================================
+                // MODO 1: AGREGAR NUEVA CUENTA
+                // ==========================================
+                // Aquí mantienes la validación de duplicados que ya tenías 
+                // y el código donde agregas la cuenta nueva a Almacen.Activo.
+
+                // Ejemplo de lo que ya tenías:
+                // if (ExisteCuenta(nombreIngresado)) 
+                // {
+                //     MessageBox.Show("La cuenta ya existe...");
+                //     return;
+                // }
+                // Almacen.Activo.Cuentas.Add(...);
+            }
+            else
+            {
+                // ==========================================
+                // MODO 2: ACTUALIZAR / EDITAR CUENTA EXISTENTE
+                // ==========================================
+                // Buscamos la cuenta dentro de Almacen.Activo usando el nombre que guardamos al hacer doble clic
+                var cuentaAModificar = Almacen.Activo.Cuentas.FirstOrDefault(c => c.Nombre == cuentaEnEdicion);
+
+                if (cuentaAModificar != null)
+                {
+                    // Actualizamos los datos con los valores de las cajas y del NumericUpDown
+                    cuentaAModificar.Nombre = nombreIngresado;
+                    cuentaAModificar.Monto = numMonto.Value; // Asignamos el valor directo del NumericUpDown
+                    cuentaAModificar.Clasificacion = cmbClasificacion.Text;
+                    // Actualiza aquí los demás campos si los tienes (como si es operativa, etc.)
+                }
+
+                // Limpiamos la memoria de edición para que el botón regrese a su modo normal
+                cuentaEnEdicion = null;
+            }
+        }
+     }
 }
+
+

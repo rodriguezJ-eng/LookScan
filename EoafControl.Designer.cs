@@ -21,249 +21,265 @@ namespace LookScan
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            dgvEoaf = new DataGridView();
-            dgvEoafCol0 = new DataGridViewTextBoxColumn();
-            dgvEoafCol1 = new DataGridViewTextBoxColumn();
-            dgvEoafCol2 = new DataGridViewTextBoxColumn();
-            dgvEoafCol3 = new DataGridViewTextBoxColumn();
-            dgvEoafCol4 = new DataGridViewTextBoxColumn();
-            dgvEoafCol5 = new DataGridViewTextBoxColumn();
-            dgvEoafCol6 = new DataGridViewTextBoxColumn();
-            grpEoaf = new GroupBox();
-            pnlHeader = new Panel();
-            lblTitulo = new Label();
-            lblDescripcion = new Label();
-            label1 = new Label();
-            cmbPeriodoBaseEoaf = new ComboBox();
-            label2 = new Label();
-            cmbPeriodoCompEoaf = new ComboBox();
-            btnCalcularEoaf = new Button();
-            pnlToolbar = new Panel();
-            pnlBody = new Panel();
-            ((System.ComponentModel.ISupportInitialize)dgvEoaf).BeginInit();
-            grpEoaf.SuspendLayout();
-            pnlHeader.SuspendLayout();
-            pnlToolbar.SuspendLayout();
-            pnlBody.SuspendLayout();
-            SuspendLayout();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.dgvEoaf = new System.Windows.Forms.DataGridView();
+            this.dgvEoafCol0 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvEoafCol1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvEoafCol2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvEoafCol3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvEoafCol4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvEoafCol5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvEoafCol6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.grpEoaf = new System.Windows.Forms.GroupBox();
+            this.pnlHeader = new System.Windows.Forms.Panel();
+            this.lblTitulo = new System.Windows.Forms.Label();
+            this.lblDescripcion = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cmbPeriodoBaseEoaf = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cmbPeriodoCompEoaf = new System.Windows.Forms.ComboBox();
+            this.btnCalcularEoaf = new System.Windows.Forms.Button();
+            this.pnlToolbar = new System.Windows.Forms.Panel();
+            this.pnlBody = new System.Windows.Forms.Panel();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvEoaf)).BeginInit();
+            this.grpEoaf.SuspendLayout();
+            this.pnlHeader.SuspendLayout();
+            this.pnlToolbar.SuspendLayout();
+            this.pnlBody.SuspendLayout();
+            this.SuspendLayout();
             // 
             // dgvEoaf
             // 
-            dgvEoaf.AllowUserToAddRows = false;
-            dgvEoaf.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(247, 249, 252);
-            dgvEoaf.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            dgvEoaf.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvEoaf.BackgroundColor = Color.FromArgb(255, 255, 255);
-            dgvEoaf.BorderStyle = BorderStyle.None;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(24, 72, 140);
-            dataGridViewCellStyle2.ForeColor = Color.FromArgb(255, 255, 255);
-            dgvEoaf.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            dgvEoaf.ColumnHeadersHeight = 32;
-            dgvEoaf.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dgvEoaf.Columns.AddRange(new DataGridViewColumn[] { dgvEoafCol0, dgvEoafCol1, dgvEoafCol2, dgvEoafCol3, dgvEoafCol4, dgvEoafCol5, dgvEoafCol6 });
-            dgvEoaf.Dock = DockStyle.Fill;
-            dgvEoaf.EnableHeadersVisualStyles = false;
-            dgvEoaf.Location = new Point(8, 28);
-            dgvEoaf.Name = "dgvEoaf";
-            dgvEoaf.ReadOnly = true;
-            dgvEoaf.RowHeadersVisible = false;
-            dgvEoaf.RowHeadersWidth = 51;
-            dgvEoaf.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvEoaf.Size = new Size(964, 422);
-            dgvEoaf.TabIndex = 0;
+            this.dgvEoaf.AllowUserToAddRows = false;
+            this.dgvEoaf.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(249)))), ((int)(((byte)(252)))));
+            this.dgvEoaf.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvEoaf.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvEoaf.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.dgvEoaf.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.dgvEoaf.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvEoaf.ColumnHeadersHeight = 32;
+            this.dgvEoaf.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvEoaf.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvEoafCol0,
+            this.dgvEoafCol1,
+            this.dgvEoafCol2,
+            this.dgvEoafCol3,
+            this.dgvEoafCol4,
+            this.dgvEoafCol5,
+            this.dgvEoafCol6});
+            this.dgvEoaf.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvEoaf.EnableHeadersVisualStyles = false;
+            this.dgvEoaf.Location = new System.Drawing.Point(8, 28);
+            this.dgvEoaf.Name = "dgvEoaf";
+            this.dgvEoaf.ReadOnly = true;
+            this.dgvEoaf.RowHeadersVisible = false;
+            this.dgvEoaf.RowHeadersWidth = 51;
+            this.dgvEoaf.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvEoaf.Size = new System.Drawing.Size(964, 422);
+            this.dgvEoaf.TabIndex = 0;
             // 
             // dgvEoafCol0
             // 
-            dgvEoafCol0.HeaderText = "Cuenta";
-            dgvEoafCol0.MinimumWidth = 6;
-            dgvEoafCol0.Name = "dgvEoafCol0";
-            dgvEoafCol0.ReadOnly = true;
+            this.dgvEoafCol0.HeaderText = "Cuenta";
+            this.dgvEoafCol0.MinimumWidth = 6;
+            this.dgvEoafCol0.Name = "dgvEoafCol0";
+            this.dgvEoafCol0.ReadOnly = true;
             // 
             // dgvEoafCol1
             // 
-            dgvEoafCol1.HeaderText = "Clasif.";
-            dgvEoafCol1.MinimumWidth = 6;
-            dgvEoafCol1.Name = "dgvEoafCol1";
-            dgvEoafCol1.ReadOnly = true;
+            this.dgvEoafCol1.HeaderText = "Clasif.";
+            this.dgvEoafCol1.MinimumWidth = 6;
+            this.dgvEoafCol1.Name = "dgvEoafCol1";
+            this.dgvEoafCol1.ReadOnly = true;
             // 
             // dgvEoafCol2
             // 
-            dgvEoafCol2.HeaderText = "Año 1";
-            dgvEoafCol2.MinimumWidth = 6;
-            dgvEoafCol2.Name = "dgvEoafCol2";
-            dgvEoafCol2.ReadOnly = true;
+            this.dgvEoafCol2.HeaderText = "Año 1";
+            this.dgvEoafCol2.MinimumWidth = 6;
+            this.dgvEoafCol2.Name = "dgvEoafCol2";
+            this.dgvEoafCol2.ReadOnly = true;
             // 
             // dgvEoafCol3
             // 
-            dgvEoafCol3.HeaderText = "Año 2";
-            dgvEoafCol3.MinimumWidth = 6;
-            dgvEoafCol3.Name = "dgvEoafCol3";
-            dgvEoafCol3.ReadOnly = true;
+            this.dgvEoafCol3.HeaderText = "Año 2";
+            this.dgvEoafCol3.MinimumWidth = 6;
+            this.dgvEoafCol3.Name = "dgvEoafCol3";
+            this.dgvEoafCol3.ReadOnly = true;
             // 
             // dgvEoafCol4
             // 
-            dgvEoafCol4.HeaderText = "Cambios";
-            dgvEoafCol4.MinimumWidth = 6;
-            dgvEoafCol4.Name = "dgvEoafCol4";
-            dgvEoafCol4.ReadOnly = true;
+            this.dgvEoafCol4.HeaderText = "Cambios";
+            this.dgvEoafCol4.MinimumWidth = 6;
+            this.dgvEoafCol4.Name = "dgvEoafCol4";
+            this.dgvEoafCol4.ReadOnly = true;
             // 
             // dgvEoafCol5
             // 
-            dgvEoafCol5.HeaderText = "Origen";
-            dgvEoafCol5.MinimumWidth = 6;
-            dgvEoafCol5.Name = "dgvEoafCol5";
-            dgvEoafCol5.ReadOnly = true;
+            this.dgvEoafCol5.HeaderText = "Origen";
+            this.dgvEoafCol5.MinimumWidth = 6;
+            this.dgvEoafCol5.Name = "dgvEoafCol5";
+            this.dgvEoafCol5.ReadOnly = true;
             // 
             // dgvEoafCol6
             // 
-            dgvEoafCol6.HeaderText = "Aplicación";
-            dgvEoafCol6.MinimumWidth = 6;
-            dgvEoafCol6.Name = "dgvEoafCol6";
-            dgvEoafCol6.ReadOnly = true;
+            this.dgvEoafCol6.HeaderText = "Aplicación";
+            this.dgvEoafCol6.MinimumWidth = 6;
+            this.dgvEoafCol6.Name = "dgvEoafCol6";
+            this.dgvEoafCol6.ReadOnly = true;
             // 
             // grpEoaf
             // 
-            grpEoaf.Controls.Add(dgvEoaf);
-            grpEoaf.Dock = DockStyle.Fill;
-            grpEoaf.Location = new Point(10, 4);
-            grpEoaf.Name = "grpEoaf";
-            grpEoaf.Padding = new Padding(8, 6, 8, 8);
-            grpEoaf.Size = new Size(980, 458);
-            grpEoaf.TabIndex = 0;
-            grpEoaf.TabStop = false;
-            grpEoaf.Text = "Resultado EOAF";
+            this.grpEoaf.Controls.Add(this.dgvEoaf);
+            this.grpEoaf.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpEoaf.Location = new System.Drawing.Point(10, 4);
+            this.grpEoaf.Name = "grpEoaf";
+            this.grpEoaf.Padding = new System.Windows.Forms.Padding(8, 6, 8, 8);
+            this.grpEoaf.Size = new System.Drawing.Size(980, 458);
+            this.grpEoaf.TabIndex = 0;
+            this.grpEoaf.TabStop = false;
+            this.grpEoaf.Text = "Resultado EOAF";
             // 
             // pnlHeader
             // 
-            pnlHeader.Controls.Add(lblTitulo);
-            pnlHeader.Controls.Add(lblDescripcion);
-            pnlHeader.Dock = DockStyle.Top;
-            pnlHeader.Location = new Point(0, 0);
-            pnlHeader.Name = "pnlHeader";
-            pnlHeader.Size = new Size(1000, 66);
-            pnlHeader.TabIndex = 2;
+            this.pnlHeader.Controls.Add(this.lblTitulo);
+            this.pnlHeader.Controls.Add(this.lblDescripcion);
+            this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlHeader.Location = new System.Drawing.Point(0, 0);
+            this.pnlHeader.Name = "pnlHeader";
+            this.pnlHeader.Size = new System.Drawing.Size(1000, 66);
+            this.pnlHeader.TabIndex = 2;
             // 
             // lblTitulo
             // 
-            lblTitulo.AutoSize = true;
-            lblTitulo.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
-            lblTitulo.ForeColor = Color.FromArgb(24, 72, 140);
-            lblTitulo.Location = new Point(14, 8);
-            lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(83, 37);
-            lblTitulo.TabIndex = 0;
-            lblTitulo.Text = "EOAF";
+            this.lblTitulo.AutoSize = true;
+            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI Semibold", 16F, System.Drawing.FontStyle.Bold);
+            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.lblTitulo.Location = new System.Drawing.Point(14, 8);
+            this.lblTitulo.Name = "lblTitulo";
+            this.lblTitulo.Size = new System.Drawing.Size(83, 37);
+            this.lblTitulo.TabIndex = 0;
+            this.lblTitulo.Text = "EOAF";
             // 
             // lblDescripcion
             // 
-            lblDescripcion.AutoSize = true;
-            lblDescripcion.ForeColor = Color.FromArgb(105, 105, 105);
-            lblDescripcion.Location = new Point(16, 42);
-            lblDescripcion.Name = "lblDescripcion";
-            lblDescripcion.Size = new Size(292, 21);
-            lblDescripcion.TabIndex = 1;
-            lblDescripcion.Text = "Estado de Origen y Aplicación de Fondos";
+            this.lblDescripcion.AutoSize = true;
+            this.lblDescripcion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(105)))), ((int)(((byte)(105)))));
+            this.lblDescripcion.Location = new System.Drawing.Point(16, 42);
+            this.lblDescripcion.Name = "lblDescripcion";
+            this.lblDescripcion.Size = new System.Drawing.Size(292, 21);
+            this.lblDescripcion.TabIndex = 1;
+            this.lblDescripcion.Text = "Estado de Origen y Aplicación de Fondos";
             // 
             // label1
             // 
-            label1.AutoSize = true;
-            label1.ForeColor = Color.FromArgb(70, 80, 100);
-            label1.Location = new Point(10, 3);
-            label1.Name = "label1";
-            label1.Size = new Size(99, 21);
-            label1.TabIndex = 0;
-            label1.Text = "Periodo base";
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(100)))));
+            this.label1.Location = new System.Drawing.Point(10, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(99, 21);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Periodo base";
             // 
             // cmbPeriodoBaseEoaf
             // 
-            cmbPeriodoBaseEoaf.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbPeriodoBaseEoaf.FormattingEnabled = true;
-            cmbPeriodoBaseEoaf.Items.AddRange(new object[] { "2023", "2024", "2025" });
-            cmbPeriodoBaseEoaf.Location = new Point(10, 27);
-            cmbPeriodoBaseEoaf.Name = "cmbPeriodoBaseEoaf";
-            cmbPeriodoBaseEoaf.Size = new Size(110, 29);
-            cmbPeriodoBaseEoaf.TabIndex = 1;
+            this.cmbPeriodoBaseEoaf.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbPeriodoBaseEoaf.FormattingEnabled = true;
+            this.cmbPeriodoBaseEoaf.Items.AddRange(new object[] {
+            "2023",
+            "2024",
+            "2025"});
+            this.cmbPeriodoBaseEoaf.Location = new System.Drawing.Point(10, 27);
+            this.cmbPeriodoBaseEoaf.Name = "cmbPeriodoBaseEoaf";
+            this.cmbPeriodoBaseEoaf.Size = new System.Drawing.Size(110, 29);
+            this.cmbPeriodoBaseEoaf.TabIndex = 1;
             // 
             // label2
             // 
-            label2.AutoSize = true;
-            label2.ForeColor = Color.FromArgb(70, 80, 100);
-            label2.Location = new Point(144, 6);
-            label2.Name = "label2";
-            label2.Size = new Size(146, 21);
-            label2.TabIndex = 2;
-            label2.Text = "Periodo comparado";
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(100)))));
+            this.label2.Location = new System.Drawing.Point(144, 6);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(146, 21);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Periodo comparado";
             // 
             // cmbPeriodoCompEoaf
             // 
-            cmbPeriodoCompEoaf.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbPeriodoCompEoaf.FormattingEnabled = true;
-            cmbPeriodoCompEoaf.Items.AddRange(new object[] { "2023", "2024", "2025" });
-            cmbPeriodoCompEoaf.Location = new Point(144, 27);
-            cmbPeriodoCompEoaf.Name = "cmbPeriodoCompEoaf";
-            cmbPeriodoCompEoaf.Size = new Size(110, 29);
-            cmbPeriodoCompEoaf.TabIndex = 3;
+            this.cmbPeriodoCompEoaf.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbPeriodoCompEoaf.FormattingEnabled = true;
+            this.cmbPeriodoCompEoaf.Items.AddRange(new object[] {
+            "2023",
+            "2024",
+            "2025"});
+            this.cmbPeriodoCompEoaf.Location = new System.Drawing.Point(144, 27);
+            this.cmbPeriodoCompEoaf.Name = "cmbPeriodoCompEoaf";
+            this.cmbPeriodoCompEoaf.Size = new System.Drawing.Size(110, 29);
+            this.cmbPeriodoCompEoaf.TabIndex = 3;
             // 
             // btnCalcularEoaf
             // 
-            btnCalcularEoaf.BackColor = Color.FromArgb(24, 72, 140);
-            btnCalcularEoaf.Cursor = Cursors.Hand;
-            btnCalcularEoaf.FlatAppearance.BorderColor = Color.FromArgb(24, 72, 140);
-            btnCalcularEoaf.FlatStyle = FlatStyle.Flat;
-            btnCalcularEoaf.ForeColor = Color.FromArgb(255, 255, 255);
-            btnCalcularEoaf.Location = new Point(306, 24);
-            btnCalcularEoaf.Name = "btnCalcularEoaf";
-            btnCalcularEoaf.Size = new Size(120, 30);
-            btnCalcularEoaf.TabIndex = 4;
-            btnCalcularEoaf.Text = "Calcular EOAF";
-            btnCalcularEoaf.UseVisualStyleBackColor = false;
+            this.btnCalcularEoaf.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnCalcularEoaf.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCalcularEoaf.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnCalcularEoaf.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCalcularEoaf.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnCalcularEoaf.Location = new System.Drawing.Point(306, 24);
+            this.btnCalcularEoaf.Name = "btnCalcularEoaf";
+            this.btnCalcularEoaf.Size = new System.Drawing.Size(120, 30);
+            this.btnCalcularEoaf.TabIndex = 4;
+            this.btnCalcularEoaf.Text = "Calcular EOAF";
+            this.btnCalcularEoaf.UseVisualStyleBackColor = false;
+            this.btnCalcularEoaf.Click += new System.EventHandler(this.btnCalcularEoaf_Click);
             // 
             // pnlToolbar
             // 
-            pnlToolbar.AutoScroll = true;
-            pnlToolbar.Controls.Add(label1);
-            pnlToolbar.Controls.Add(cmbPeriodoBaseEoaf);
-            pnlToolbar.Controls.Add(label2);
-            pnlToolbar.Controls.Add(cmbPeriodoCompEoaf);
-            pnlToolbar.Controls.Add(btnCalcularEoaf);
-            pnlToolbar.Dock = DockStyle.Top;
-            pnlToolbar.Location = new Point(0, 66);
-            pnlToolbar.Name = "pnlToolbar";
-            pnlToolbar.Size = new Size(1000, 62);
-            pnlToolbar.TabIndex = 1;
+            this.pnlToolbar.AutoScroll = true;
+            this.pnlToolbar.Controls.Add(this.label1);
+            this.pnlToolbar.Controls.Add(this.cmbPeriodoBaseEoaf);
+            this.pnlToolbar.Controls.Add(this.label2);
+            this.pnlToolbar.Controls.Add(this.cmbPeriodoCompEoaf);
+            this.pnlToolbar.Controls.Add(this.btnCalcularEoaf);
+            this.pnlToolbar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlToolbar.Location = new System.Drawing.Point(0, 66);
+            this.pnlToolbar.Name = "pnlToolbar";
+            this.pnlToolbar.Size = new System.Drawing.Size(1000, 62);
+            this.pnlToolbar.TabIndex = 1;
             // 
             // pnlBody
             // 
-            pnlBody.Controls.Add(grpEoaf);
-            pnlBody.Dock = DockStyle.Fill;
-            pnlBody.Location = new Point(0, 128);
-            pnlBody.Name = "pnlBody";
-            pnlBody.Padding = new Padding(10, 4, 10, 10);
-            pnlBody.Size = new Size(1000, 472);
-            pnlBody.TabIndex = 0;
+            this.pnlBody.Controls.Add(this.grpEoaf);
+            this.pnlBody.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlBody.Location = new System.Drawing.Point(0, 128);
+            this.pnlBody.Name = "pnlBody";
+            this.pnlBody.Padding = new System.Windows.Forms.Padding(10, 4, 10, 10);
+            this.pnlBody.Size = new System.Drawing.Size(1000, 472);
+            this.pnlBody.TabIndex = 0;
             // 
             // EoafControl
             // 
-            AutoScaleDimensions = new SizeF(9F, 21F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(244, 246, 250);
-            Controls.Add(pnlBody);
-            Controls.Add(pnlToolbar);
-            Controls.Add(pnlHeader);
-            Font = new Font("Segoe UI", 9.5F);
-            Name = "EoafControl";
-            Size = new Size(1000, 600);
-            ((System.ComponentModel.ISupportInitialize)dgvEoaf).EndInit();
-            grpEoaf.ResumeLayout(false);
-            pnlHeader.ResumeLayout(false);
-            pnlHeader.PerformLayout();
-            pnlToolbar.ResumeLayout(false);
-            pnlToolbar.PerformLayout();
-            pnlBody.ResumeLayout(false);
-            ResumeLayout(false);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(246)))), ((int)(((byte)(250)))));
+            this.Controls.Add(this.pnlBody);
+            this.Controls.Add(this.pnlToolbar);
+            this.Controls.Add(this.pnlHeader);
+            this.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.Name = "EoafControl";
+            this.Size = new System.Drawing.Size(1000, 600);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvEoaf)).EndInit();
+            this.grpEoaf.ResumeLayout(false);
+            this.pnlHeader.ResumeLayout(false);
+            this.pnlHeader.PerformLayout();
+            this.pnlToolbar.ResumeLayout(false);
+            this.pnlToolbar.PerformLayout();
+            this.pnlBody.ResumeLayout(false);
+            this.ResumeLayout(false);
+
         }
 
         #endregion

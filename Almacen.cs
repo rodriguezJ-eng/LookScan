@@ -6,7 +6,7 @@ namespace LookScan
 {
     public static class Almacen
     {
-        private static readonly List<Periodo> Periodos = new List<Periodo>();
+        public static readonly List<Periodo> Periodos = new List<Periodo>();
         private static Periodo _activo;
 
         public static event Action PeriodosCambiaron;
@@ -15,10 +15,11 @@ namespace LookScan
 
         static Almacen()
         {
-            Periodos.Add(new Periodo("2023"));
-            Periodos.Add(new Periodo("2024"));
-            Periodos.Add(new Periodo("2025"));
+            Periodos.Add(new Periodo("2018"));
+            Periodos.Add(new Periodo("2019"));
+            Periodos.Add(new Periodo("2020"));
             _activo = Periodos[Periodos.Count - 1];
+          
         }
 
         public static string Empresa { get; set; }
@@ -98,22 +99,22 @@ namespace LookScan
 
         public static void CargarDemo()
         {
-            Periodo p2023 = AsegurarPeriodo("2023");
-            Periodo p2024 = AsegurarPeriodo("2024");
-            Periodo p2025 = AsegurarPeriodo("2025");
+            Periodo p2019 = AsegurarPeriodo("2019");
+            Periodo p2020 = AsegurarPeriodo("2020");
 
-            p2023.Cuentas.Clear();
-            p2024.Cuentas.Clear();
-            p2025.Cuentas.Clear();
+            // Limpiamos las cuentas de cada periodo sin eliminar el objeto periodo en sí
+            p2019.Cuentas.Clear();
+            p2020.Cuentas.Clear();
 
-            CargarDemoPeriodo(p2023, 0.78m, 0.74m);
-            CargarDemoPeriodo(p2024, 0.89m, 0.87m);
-            CargarDemoPeriodo(p2025, 1.00m, 1.00m);
+            // Cargamos los datos nominales y específicos para cada año
+            CargarPeriodo2019(p2019);
+            CargarPeriodo2020(p2020);
+           
 
-            Periodo activoDemo = Buscar("2025");
+            Periodo activoDemo = Buscar("2020");
             if (activoDemo != null) _activo = activoDemo;
 
-            Action periodos = PeriodosCambiaron;
+            Action periodos = PeriodosCambiaron; // Nota que es 'Cambiaron', sin la 'ion' extra
             if (periodos != null) periodos();
 
             Action datos = DatosCambiaron;
@@ -151,31 +152,107 @@ namespace LookScan
             });
         }
 
-        private static void CargarDemoPeriodo(Periodo periodo, decimal factorBG, decimal factorER)
+        private static void CargarPeriodo2019(Periodo periodo)
         {
-            AgregarBG(periodo, "Efectivo y equivalentes", Clasif.ActivoCorriente, true, 150000m * factorBG);
-            AgregarBG(periodo, "Cuentas por cobrar", Clasif.ActivoCorriente, true, 220000m * factorBG);
-            AgregarBG(periodo, "Inventarios", Clasif.ActivoCorriente, true, 180000m * factorBG);
-            AgregarBG(periodo, "Otros activos corrientes", Clasif.ActivoCorriente, true, 50000m * factorBG);
-            AgregarBG(periodo, "Propiedad, planta y equipo", Clasif.ActivoNoCorriente, true, 600000m * factorBG);
-            AgregarBG(periodo, "Activos intangibles", Clasif.ActivoNoCorriente, false, 100000m * factorBG);
+            // ACTIVO CORRIENTE
+            AgregarBG(periodo, "Efectivo", Clasif.ActivoCorriente, true, 134746547m);
+            AgregarBG(periodo, "Cuentas por cobrar", Clasif.ActivoCorriente, true, 1764165735m);
+            AgregarBG(periodo, "Otras cuentas por cobrar", Clasif.ActivoCorriente, true, 88728426m);
+            AgregarBG(periodo, "CxC instituciones del Estado", Clasif.ActivoCorriente, true, 48587948m);
+            AgregarBG(periodo, "Inventarios", Clasif.ActivoCorriente, true, 52990239m);
+            AgregarBG(periodo, "Gastos pagados por anticipado", Clasif.ActivoCorriente, true, 57619652m);
 
-            AgregarBG(periodo, "Cuentas por pagar", Clasif.PasivoCorriente, true, 170000m * factorBG);
-            AgregarBG(periodo, "Obligaciones financieras de corto plazo", Clasif.PasivoCorriente, false, 130000m * factorBG);
-            AgregarBG(periodo, "Otros pasivos corrientes", Clasif.PasivoCorriente, true, 50000m * factorBG);
-            AgregarBG(periodo, "Deuda de largo plazo", Clasif.PasivoNoCorriente, false, 250000m * factorBG);
+            // ACTIVO NO CORRIENTE
+            AgregarBG(periodo, "Cuentas por cobrar", Clasif.ActivoNoCorriente, true, 1975123624m);
+            AgregarBG(periodo, "Repuestos para plantas", Clasif.ActivoNoCorriente, true, 496816772m);
+            AgregarBG(periodo, "Plantas eléctricas e instalaciones", Clasif.ActivoNoCorriente, true, 6953365196m);
+            AgregarBG(periodo, "Activos cedidos en administración", Clasif.ActivoNoCorriente, false, 459955842m);
+            AgregarBG(periodo, "Otros activos", Clasif.ActivoNoCorriente, false, 1518259757m);
 
-            AgregarBG(periodo, "Capital social", Clasif.Patrimonio, false, 500000m * factorBG);
-            AgregarBG(periodo, "Utilidades retenidas", Clasif.Patrimonio, false, 200000m * factorBG);
+            // PASIVO CORRIENTE
+            AgregarBG(periodo, "Préstamos por pagar (Estado)", Clasif.PasivoCorriente, true, 1142242848m);
+            AgregarBG(periodo, "Por pagar a CARUNA", Clasif.PasivoCorriente, true, 3663218855m);
+            AgregarBG(periodo, "Cuentas por pagar (Estado)", Clasif.PasivoCorriente, true, 3214000412m);
+            AgregarBG(periodo, "Proveedores energéticos", Clasif.PasivoCorriente, true, 299454426m);
+            AgregarBG(periodo, "Intereses por pagar", Clasif.PasivoCorriente, true, 1508117766m);
+            AgregarBG(periodo, "Cuentas por pagar y gastos acumulados", Clasif.PasivoCorriente, true, 1515624652m);
 
-            AgregarER(periodo, "Ventas", Clasif.Ventas, true, 1800000m * factorER);
-            AgregarER(periodo, "Costo de ventas", Clasif.CostoVentas, true, 1080000m * factorER);
-            AgregarER(periodo, "Gastos operativos", Clasif.GastosOperativos, true, 350000m * factorER);
-            AgregarER(periodo, "Gastos financieros", Clasif.OtrosIngresosGastos, true, -30000m * factorER);
-            AgregarER(periodo, "Otros ingresos", Clasif.OtrosIngresosGastos, true, 10000m * factorER);
-            AgregarER(periodo, "Impuestos", Clasif.Impuestos, true, 105000m * factorER);
+            // PASIVO NO CORRIENTE
+            AgregarBG(periodo, "Préstamos por pagar (Estado)", Clasif.PasivoNoCorriente, false, 3448321435m);
+            AgregarBG(periodo, "Provisión indemnización laboral", Clasif.PasivoNoCorriente, false, 75846914m);
+            AgregarBG(periodo, "Otros pasivos", Clasif.PasivoNoCorriente, false, 1500729095m);
+
+            // PATRIMONIO
+            AgregarBG(periodo, "Aporte inicial del Gobierno", Clasif.Patrimonio, true, 687167065m);
+            AgregarBG(periodo, "Aporte por alivio de deuda", Clasif.Patrimonio, true, 1163872828m);
+            AgregarBG(periodo, "Superávit por revaluación", Clasif.Patrimonio, true, 937135708m);
+            AgregarBG(periodo, "Déficit acumulado", Clasif.Patrimonio, true, -5605372266m);
+
+
+        // Estado de Resultados - 2019
+        AgregarER(periodo, "Energía eléctrica plantas generadoras", Clasif.Ventas, true, 1315068057m);
+            AgregarER(periodo, "Energía eléctrica domiciliar", Clasif.Ventas, true, 528970058m);
+            AgregarER(periodo, "Ingresos por cesión de activos", Clasif.Ventas, true, 63121494m);
+            AgregarER(periodo, "Otras facturaciones", Clasif.Ventas, true, 34471570m);
+            AgregarER(periodo, "Compra de energía", Clasif.CostoVentas, true, 1590348772m);
+            AgregarER(periodo, "Costo de distribución de energía", Clasif.CostoVentas, true, 810085884m);
+            AgregarER(periodo, "Gastos de administración", Clasif.GastosOperativos, true, 536589659m);
+            AgregarER(periodo, "Otros ingresos operativos", Clasif.OtrosIngresos, true, 60633283m);
+            AgregarER(periodo, "Otros gastos", Clasif.GastosOperativos, true, 6927630m);
+            AgregarER(periodo, "Ingresos financieros", Clasif.OtrosIngresos, true, 252246639m);
+            AgregarER(periodo, "Gastos financieros", Clasif.GastosFinancieros, true, 403070376m);
+            AgregarER(periodo, "Pérdida cambiaria, neta", Clasif.GastosFinancieros, true, 471646609m);
         }
+        private static void CargarPeriodo2020(Periodo periodo)
+        {
+            // ACTIVO CORRIENTE
+            AgregarBG(periodo, "Efectivo", Clasif.ActivoCorriente, true, 193270338m);
+            AgregarBG(periodo, "Cuentas por cobrar", Clasif.ActivoCorriente, true, 2132116765m);
+            AgregarBG(periodo, "Otras cuentas por cobrar", Clasif.ActivoCorriente, true, 88352743m);
+            AgregarBG(periodo, "CxC instituciones del Estado", Clasif.ActivoCorriente, true, 64174284m);
+            AgregarBG(periodo, "Inventarios", Clasif.ActivoCorriente, true, 38012389m);
+            AgregarBG(periodo, "Gastos pagados por anticipado", Clasif.ActivoCorriente, true, 4826346m);
 
+            // ACTIVO NO CORRIENTE
+            AgregarBG(periodo, "Cuentas por cobrar", Clasif.ActivoNoCorriente, true, 2224225563m);
+            AgregarBG(periodo, "Repuestos para plantas", Clasif.ActivoNoCorriente, true, 419557143m);
+            AgregarBG(periodo, "Plantas eléctricas e instalaciones", Clasif.ActivoNoCorriente, true, 6926666163m);
+            AgregarBG(periodo, "Activos cedidos en administración", Clasif.ActivoNoCorriente, false, 434071699m);
+            AgregarBG(periodo, "Otros activos", Clasif.ActivoNoCorriente, false, 1661807163m);
+
+            // PASIVO CORRIENTE
+            AgregarBG(periodo, "Préstamos por pagar (Estado)", Clasif.PasivoCorriente, true, 1540062715m);
+            AgregarBG(periodo, "Por pagar a CARUNA", Clasif.PasivoCorriente, true, 3770003784m);
+            AgregarBG(periodo, "Cuentas por pagar (Estado)", Clasif.PasivoCorriente, true, 3459410222m);
+            AgregarBG(periodo, "Proveedores energéticos", Clasif.PasivoCorriente, true, 370343565m);
+            AgregarBG(periodo, "Intereses por pagar", Clasif.PasivoCorriente, true, 1994364239m);
+            AgregarBG(periodo, "Cuentas por pagar y gastos acumulados", Clasif.PasivoCorriente, true, 1721706432m);
+
+            // PASIVO NO CORRIENTE
+            AgregarBG(periodo, "Préstamos por pagar (Estado)", Clasif.PasivoNoCorriente, false, 3241331100m);
+            AgregarBG(periodo, "Provisión indemnización laboral", Clasif.PasivoNoCorriente, false, 77180835m);
+            AgregarBG(periodo, "Otros pasivos", Clasif.PasivoNoCorriente, false, 1643009248m);
+
+            // PATRIMONIO
+            AgregarBG(periodo, "Aporte inicial del Gobierno", Clasif.Patrimonio, true, 687167065m);
+            AgregarBG(periodo, "Aporte por alivio de deuda", Clasif.Patrimonio, true, 1163872828m);
+            AgregarBG(periodo, "Superávit por revaluación", Clasif.Patrimonio, true, 935313924m);
+            AgregarBG(periodo, "Déficit acumulado", Clasif.Patrimonio, true, -6416685361m);
+
+            // Estado de Resultados - 2020
+            AgregarER(periodo, "Energía eléctrica plantas generadoras", Clasif.Ventas, true, 3683449619m);
+            AgregarER(periodo, "Energía eléctrica domiciliar", Clasif.Ventas, true, 570053034m);
+            AgregarER(periodo, "Ingresos por cesión de activos", Clasif.Ventas, true, 54494252m);
+            AgregarER(periodo, "Otras facturaciones", Clasif.Ventas, true, 40864044m);
+            AgregarER(periodo, "Compra de energía", Clasif.CostoVentas, true, 3281491782m);
+            AgregarER(periodo, "Costo de distribución de energía", Clasif.CostoVentas, true, 668267722m);
+            AgregarER(periodo, "Gastos de administración", Clasif.GastosOperativos, true, 554126247m);
+            AgregarER(periodo, "Otros ingresos operativos", Clasif.OtrosIngresos, true, 6198683m);
+            AgregarER(periodo, "Otros gastos", Clasif.GastosOperativos, true, 58133551m);
+            AgregarER(periodo, "Ingresos financieros", Clasif.OtrosIngresos, true, 240026724m);
+            AgregarER(periodo, "Gastos financieros", Clasif.GastosFinancieros, true, 493983896m);
+            AgregarER(periodo, "Pérdida cambiaria, neta", Clasif.GastosFinancieros, true, 350396253m);
+        }
         private static void AgregarBG(Periodo periodo, string nombre, string clasificacion,
                                       bool operativa, decimal monto)
         {
