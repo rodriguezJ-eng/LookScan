@@ -8,6 +8,20 @@ namespace LookScan
         public ResumenGlobalControl()
         {
             InitializeComponent();
+            if (Util.EnDiseno) return;
+
+            btnGenerarResumenGlobal.Click += (s, e) => Generar();
+
+            Almacen.PeriodosCambiaron += Generar;
+            Almacen.DatosCambiaron += Generar;
+            Almacen.ActivoCambio += Generar;
+
+            Generar();
+        }
+
+        private void Generar()
+        {
+            txtResumenGlobal.Text = MotorIa.ResumenGlobal();
         }
     }
 }

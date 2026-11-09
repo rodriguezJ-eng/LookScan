@@ -8,10 +8,12 @@ namespace LookScan
     {
         public static readonly List<Periodo> Periodos = new List<Periodo>();
         private static Periodo _activo;
+        private static string _empresa;
 
         public static event Action PeriodosCambiaron;
         public static event Action ActivoCambio;
         public static event Action DatosCambiaron;
+        public static event Action EmpresaCambio;
 
         static Almacen()
         {
@@ -22,7 +24,21 @@ namespace LookScan
           
         }
 
-        public static string Empresa { get; set; }
+        public static string Empresa
+        {
+            get { return _empresa; }
+            set
+            {
+                string limpio = (value ?? string.Empty).Trim();
+
+                if (string.Equals(_empresa, limpio, StringComparison.Ordinal)) return;
+
+                _empresa = limpio;
+
+                Action handler = EmpresaCambio;
+                if (handler != null) handler();
+            }
+        }
 
         public static IEnumerable<string> Nombres
         {
@@ -97,6 +113,115 @@ namespace LookScan
             if (handler != null) handler();
         }
 
+        // Reemplaza por completo los periodos en memoria. Se usa al cargar un
+        // proyecto guardado en disco.
+        public static void ReemplazarPeriodos(IEnumerable<Periodo> periodos)
+        {
+            Periodos.Clear();
+
+            if (periodos != null)
+            {
+                foreach (Periodo p in periodos)
+                    if (p != null) Periodos.Add(p);
+            }
+
+            Ordenar();
+            _activo = Periodos.LastOrDefault(p => p.TieneDatos) ?? Periodos.LastOrDefault();
+            NotificarTodo();
+        }
+
+        // Añade los periodos de una proyección al almacén. Si ya existe un
+        // periodo proforma con el mismo nombre se actualiza; si existe un
+        // periodo real con ese nombre se conserva y la proforma se añade con
+        // un nombre alternativo.
+        public static List<Periodo> AgregarProyeccion(IEnumerable<Periodo> proyectados)
+        {
+            var agregados = new List<Periodo>();
+            if (proyectados == null) return agregados;
+
+            foreach (Periodo proyectado in proyectados)
+            {
+                if (proyectado == null || string.IsNullOrWhiteSpace(proyectado.Nombre)) continue;
+
+                Periodo existente = Buscar(proyectado.Nombre);
+
+                if (existente == null)
+                {
+                    Periodos.Add(proyectado);
+                    agregados.Add(proyectado);
+                }
+                else if (existente.EsProforma)
+                {
+                    existente.Cuentas.Clear();
+
+                    foreach (Cuenta cuenta in proyectado.Cuentas)
+                        existente.Cuentas.Add(ClonarCuenta(cuenta));
+
+                    existente.EsProforma = true;
+                    agregados.Add(existente);
+                }
+                else
+                {
+                    string nombre = proyectado.Nombre + " (proforma)";
+                    int contador = 2;
+
+                    while (Buscar(nombre) != null)
+                    {
+                        nombre = proyectado.Nombre + " (proforma " + contador + ")";
+                        contador++;
+                    }
+
+                    Periodo copia = ClonarPeriodo(proyectado, nombre);
+                    Periodos.Add(copia);
+                    agregados.Add(copia);
+                }
+            }
+
+            if (agregados.Count == 0) return agregados;
+
+            Ordenar();
+            _activo = agregados[agregados.Count - 1];
+            NotificarTodo();
+            return agregados;
+        }
+
+        private static Periodo ClonarPeriodo(Periodo origen, string nombre)
+        {
+            var copia = new Periodo(nombre)
+            {
+                EsProforma = origen.EsProforma
+            };
+
+            foreach (Cuenta cuenta in origen.Cuentas)
+                copia.Cuentas.Add(ClonarCuenta(cuenta));
+
+            return copia;
+        }
+
+        private static Cuenta ClonarCuenta(Cuenta origen)
+        {
+            return new Cuenta
+            {
+                Tipo = origen.Tipo,
+                Nombre = origen.Nombre,
+                Clasificacion = origen.Clasificacion,
+                Operativa = origen.Operativa,
+                Monto = origen.Monto
+            };
+        }
+
+        private static void NotificarTodo()
+        {
+            Action periodos = PeriodosCambiaron;
+            if (periodos != null) periodos();
+
+            Action datos = DatosCambiaron;
+            if (datos != null) datos();
+
+            Action activo = ActivoCambio;
+            if (activo != null) activo();
+        }
+
         public static void CargarDemo()
         {
             Periodo p2019 = AsegurarPeriodo("2019");
@@ -106,9 +231,17 @@ namespace LookScan
             p2019.Cuentas.Clear();
             p2020.Cuentas.Clear();
 
+            // Los datos del demo son reales, no una proyección.
+            p2019.EsProforma = false;
+            p2020.EsProforma = false;
+
             // El demo solo carga 2019 y 2020; 2018 queda vacío para evitar datos viejos.
             Periodo p2018 = Buscar("2018");
-            if (p2018 != null) p2018.Cuentas.Clear();
+            if (p2018 != null)
+            {
+                p2018.Cuentas.Clear();
+                p2018.EsProforma = false;
+            }
 
             // Cargamos los datos nominales y específicos para cada año
             CargarPeriodo2019(p2019);

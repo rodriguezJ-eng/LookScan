@@ -544,6 +544,497 @@ namespace LookScan
             return resultado;
         }
 
+        // ── DuPont con interpretación ────────────────────────────────────────
+
+        public static IEnumerable<Razon> DuPontRazones(Periodo p)
+        {
+            var resultado = new List<Razon>();
+            if (p == null) return resultado;
+
+            decimal ventas = Ventas(p);
+            decimal activo = ActivoTotal(p);
+            decimal patrimonio = Patrimonio(p);
+            decimal utilidadNeta = UtilidadNeta(p);
+
+            decimal? margen = ventas != 0m ? (decimal?)(utilidadNeta / ventas) : null;
+            decimal? rotacion = activo != 0m ? (decimal?)(ventas / activo) : null;
+            decimal? multiplicador = patrimonio > 0m ? (decimal?)(activo / patrimonio) : null;
+            decimal? roe = margen.HasValue && rotacion.HasValue && multiplicador.HasValue
+                ? (decimal?)(margen.Value * rotacion.Value * multiplicador.Value)
+                : null;
+
+            resultado.Add(new Razon
+            {
+                Nombre = "1) Margen neto (UN / Ventas)",
+                Grupo = "DuPont",
+                ValorTexto = Util.Pct(margen),
+                Interpretacion = InterpretarDuPont("margen", margen, rotacion, multiplicador, roe, patrimonio)
+            });
+
+            resultado.Add(new Razon
+            {
+                Nombre = "2) Rotación de activos (Ventas / Activo total)",
+                Grupo = "DuPont",
+                ValorTexto = rotacion.HasValue ? Util.Numero(rotacion.Value, 2) + "x" : "N/D",
+                Interpretacion = InterpretarDuPont("rotacion", margen, rotacion, multiplicador, roe, patrimonio)
+            });
+
+            resultado.Add(new Razon
+            {
+                Nombre = "3) Multiplicador de capital (Activo / Patrimonio)",
+                Grupo = "DuPont",
+                ValorTexto = multiplicador.HasValue ? Util.Numero(multiplicador.Value, 2) + "x" : "N/D",
+                Interpretacion = InterpretarDuPont("multiplicador", margen, rotacion, multiplicador, roe, patrimonio)
+            });
+
+            resultado.Add(new Razon
+            {
+                Nombre = "ROE = 1 × 2 × 3",
+                Grupo = "DuPont",
+                ValorTexto = Util.Pct(roe),
+                Interpretacion = InterpretarDuPont("roe", margen, rotacion, multiplicador, roe, patrimonio)
+            });
+
+            return resultado;
+        }
+
+        private static string InterpretarDuPont(string clave, decimal? margen, decimal? rotacion,
+                                                decimal? multiplicador, decimal? roe, decimal patrimonio)
+        {
+            string k = (clave ?? string.Empty).ToLowerInvariant();
+
+            if (k.Contains("margen"))
+            {
+                if (!margen.HasValue) return "No calculable: las ventas son cero.";
+                if (margen.Value < 0m)
+                    return "Pérdida neta (" + Util.Pct(margen) + "): los costos y gastos superan las ventas.";
+                if (margen.Value < 0.05m)
+                    return "Margen neto bajo (" + Util.Pct(margen) + "): queda poco de cada venta como utilidad.";
+                if (margen.Value < 0.15m)
+                    return "Margen neto moderado (" + Util.Pct(margen) + "): retención razonable de utilidades.";
+                return "Margen neto alto (" + Util.Pct(margen) + "): buen control de costos y retención de utilidades.";
+            }
+
+            if (k.Contains("rotacion"))
+            {
+                if (!rotacion.HasValue) return "No calculable: el activo total es cero.";
+                if (rotacion.Value < 0.5m)
+                    return "Rotación baja (" + Util.Numero(rotacion.Value, 2) + "x): los activos generan ventas lentamente.";
+                if (rotacion.Value < 1m)
+                    return "Rotación moderada-baja (" + Util.Numero(rotacion.Value, 2) + "x): uso parcial de los activos.";
+                if (rotacion.Value < 2m)
+                    return "Rotación adecuada (" + Util.Numero(rotacion.Value, 2) + "x): los activos acompañan el nivel de ventas.";
+                return "Rotación alta (" + Util.Numero(rotacion.Value, 2) + "x): uso intensivo de los activos para generar ventas.";
+            }
+
+            if (k.Contains("multiplicador"))
+            {
+                if (!multiplicador.HasValue)
+                    return "No interpretable: el patrimonio es negativo o cero; la empresa está descapitalizada.";
+                if (multiplicador.Value < 1.5m)
+                    return "Apalancamiento bajo (" + Util.Numero(multiplicador.Value, 2) + "x): mayor participación del patrimonio.";
+                if (multiplicador.Value < 2.5m)
+                    return "Apalancamiento moderado (" + Util.Numero(multiplicador.Value, 2) + "x): equilibrio entre deuda y patrimonio.";
+                return "Apalancamiento alto (" + Util.Numero(multiplicador.Value, 2) + "x): mayor dependencia de financiamiento externo.";
+            }
+
+            if (k.Contains("roe"))
+            {
+                if (!roe.HasValue)
+                {
+                    return patrimonio <= 0m
+                        ? "No interpretable: el patrimonio es negativo o cero; el ROE no refleja la rentabilidad del accionista."
+                        : "No calculable: faltan datos para el ROE.";
+                }
+
+                if (roe.Value < 0m)
+                    return "Rentabilidad negativa (" + Util.Pct(roe) + "): destrucción de valor para el accionista.";
+                if (roe.Value < 0.05m)
+                    return "Rentabilidad baja (" + Util.Pct(roe) + "): rendimiento reducido sobre el patrimonio.";
+                if (roe.Value < 0.15m)
+                    return "Rentabilidad moderada (" + Util.Pct(roe) + "): rendimiento razonable sobre el patrimonio.";
+                return "Rentabilidad alta (" + Util.Pct(roe) + "): atractivo para el accionista.";
+            }
+
+            return string.Empty;
+        }
+
+        // ── Estado de origen y aplicación de fondos ──────────────────────────
+
+        public static ResultadoEoaf Eoaf(Periodo periodoBase, Periodo periodoComp)
+        {
+            var resultado = new ResultadoEoaf
+            {
+                PeriodoBase = periodoBase != null ? periodoBase.Nombre : string.Empty,
+                PeriodoComparado = periodoComp != null ? periodoComp.Nombre : string.Empty
+            };
+
+            if (periodoBase == null || periodoComp == null) return resultado;
+
+            var montosBase = new Dictionary<string, decimal>(StringComparer.Ordinal);
+            var montosComp = new Dictionary<string, decimal>(StringComparer.Ordinal);
+            var representantes = new Dictionary<string, Cuenta>(StringComparer.Ordinal);
+
+            foreach (Cuenta cuenta in periodoBase.BG)
+            {
+                string clave = Util.Clave(cuenta.Nombre);
+                if (clave.Length == 0) continue;
+
+                if (!montosBase.ContainsKey(clave)) montosBase[clave] = 0m;
+                montosBase[clave] += cuenta.Monto;
+
+                if (!representantes.ContainsKey(clave)) representantes[clave] = cuenta;
+            }
+
+            foreach (Cuenta cuenta in periodoComp.BG)
+            {
+                string clave = Util.Clave(cuenta.Nombre);
+                if (clave.Length == 0) continue;
+
+                if (!montosComp.ContainsKey(clave)) montosComp[clave] = 0m;
+                montosComp[clave] += cuenta.Monto;
+
+                if (!representantes.ContainsKey(clave)) representantes[clave] = cuenta;
+            }
+
+            var claves = montosBase.Keys
+                .Union(montosComp.Keys)
+                .OrderBy(k => Clasif.Orden(representantes[k].Clasificacion))
+                .ThenBy(k => k)
+                .ToList();
+
+            foreach (string clave in claves)
+            {
+                decimal monto1 = montosBase.ContainsKey(clave) ? montosBase[clave] : 0m;
+                decimal monto2 = montosComp.ContainsKey(clave) ? montosComp[clave] : 0m;
+                decimal cambio = monto2 - monto1;
+
+                if (cambio == 0m) continue;
+
+                Cuenta cuenta = representantes[clave];
+                string clasificacion = cuenta.Clasificacion ?? string.Empty;
+
+                decimal origen = 0m;
+                decimal aplicacion = 0m;
+
+                if (Clasif.EsActivo(clasificacion))
+                {
+                    if (cambio > 0m) aplicacion = cambio;
+                    else origen = -cambio;
+                }
+                else if (Clasif.EsPasivo(clasificacion) || Clasif.EsPatrimonio(clasificacion))
+                {
+                    if (cambio > 0m) origen = cambio;
+                    else aplicacion = -cambio;
+                }
+
+                resultado.TotalOrigen += origen;
+                resultado.TotalAplicacion += aplicacion;
+
+                resultado.Filas.Add(new FilaEoaf
+                {
+                    Cuenta = cuenta.Nombre,
+                    Clasificacion = clasificacion,
+                    MontoBase = monto1,
+                    MontoComparado = monto2,
+                    Cambio = cambio,
+                    Origen = origen,
+                    Aplicacion = aplicacion
+                });
+            }
+
+            return resultado;
+        }
+
+        // ── Estado de flujo de efectivo ──────────────────────────────────────
+
+        private class CambioCuenta
+        {
+            public Cuenta Cuenta { get; set; }
+            public decimal Cambio { get; set; }
+        }
+
+        public static ResultadoEfe Efe(Periodo periodoBase, Periodo periodoComp, bool metodoIndirecto)
+        {
+            var resultado = new ResultadoEfe
+            {
+                PeriodoBase = periodoBase != null ? periodoBase.Nombre : string.Empty,
+                PeriodoComparado = periodoComp != null ? periodoComp.Nombre : string.Empty,
+                MetodoIndirecto = metodoIndirecto
+            };
+
+            if (periodoBase == null || periodoComp == null) return resultado;
+
+            decimal efectivoInicial = EfectivoBalance(periodoBase);
+            decimal efectivoFinal = EfectivoBalance(periodoComp);
+            resultado.EfectivoInicial = efectivoInicial;
+            resultado.EfectivoFinalBalance = efectivoFinal;
+
+            var montosBase = new Dictionary<string, decimal>(StringComparer.Ordinal);
+            var montosComp = new Dictionary<string, decimal>(StringComparer.Ordinal);
+            var representantes = new Dictionary<string, Cuenta>(StringComparer.Ordinal);
+
+            foreach (Cuenta cuenta in periodoBase.BG)
+            {
+                string clave = Util.Clave(cuenta.Nombre);
+                if (clave.Length == 0) continue;
+
+                if (!montosBase.ContainsKey(clave)) montosBase[clave] = 0m;
+                montosBase[clave] += cuenta.Monto;
+
+                if (!representantes.ContainsKey(clave)) representantes[clave] = cuenta;
+            }
+
+            foreach (Cuenta cuenta in periodoComp.BG)
+            {
+                string clave = Util.Clave(cuenta.Nombre);
+                if (clave.Length == 0) continue;
+
+                if (!montosComp.ContainsKey(clave)) montosComp[clave] = 0m;
+                montosComp[clave] += cuenta.Monto;
+
+                if (!representantes.ContainsKey(clave)) representantes[clave] = cuenta;
+            }
+
+            var claves = montosBase.Keys
+                .Union(montosComp.Keys)
+                .OrderBy(k => Clasif.Orden(representantes[k].Clasificacion))
+                .ThenBy(k => k)
+                .ToList();
+
+            var cambiosOperacion = new List<CambioCuenta>();
+            var cambiosInversion = new List<CambioCuenta>();
+            var cambiosFinanciacion = new List<CambioCuenta>();
+            decimal ajusteNoMonetario = 0m;
+
+            foreach (string clave in claves)
+            {
+                decimal montoBase = montosBase.ContainsKey(clave) ? montosBase[clave] : 0m;
+                decimal montoComp = montosComp.ContainsKey(clave) ? montosComp[clave] : 0m;
+                decimal cambio = montoComp - montoBase;
+
+                if (cambio == 0m) continue;
+
+                Cuenta cuenta = representantes[clave];
+                var categoria = Clasif.ClasificadorEfe.ObtenerCategoria(cuenta);
+
+                if (categoria == Clasif.ClasificadorEfe.CategoriaEfe.Efectivo) continue;
+
+                if (categoria == Clasif.ClasificadorEfe.CategoriaEfe.NoAfecta)
+                {
+                    string n = Util.Clave(cuenta.Nombre);
+                    bool esResultadoAcumulado = n.Contains("deficit acumulado") ||
+                                                n.Contains("resultados acumulados") ||
+                                                n.Contains("utilidades retenidas") ||
+                                                n.Contains("perdidas acumuladas");
+
+                    if (!esResultadoAcumulado) ajusteNoMonetario += cambio;
+                    continue;
+                }
+
+                var item = new CambioCuenta { Cuenta = cuenta, Cambio = cambio };
+
+                if (categoria == Clasif.ClasificadorEfe.CategoriaEfe.Operacion)
+                    cambiosOperacion.Add(item);
+                else if (categoria == Clasif.ClasificadorEfe.CategoriaEfe.Inversion)
+                    cambiosInversion.Add(item);
+                else if (categoria == Clasif.ClasificadorEfe.CategoriaEfe.Financiacion)
+                    cambiosFinanciacion.Add(item);
+            }
+
+            decimal utilidadNeta = UtilidadNeta(periodoComp);
+            decimal ajustesOperacion = 0m;
+
+            foreach (var item in cambiosOperacion)
+            {
+                bool esActivo = Clasif.EsActivo(item.Cuenta.Clasificacion);
+                ajustesOperacion += esActivo ? -item.Cambio : item.Cambio;
+            }
+
+            decimal flujoOperacionIndirecto = utilidadNeta + ajustesOperacion + ajusteNoMonetario;
+            decimal flujoInversion = cambiosInversion.Sum(x => -x.Cambio);
+            decimal flujoFinanciamiento = cambiosFinanciacion.Sum(x => x.Cambio);
+            decimal flujoOperacionDirecto = 0m;
+
+            if (metodoIndirecto)
+            {
+                AgregarEfe(resultado,
+                    "FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE OPERACIÓN (MÉTODO INDIRECTO)",
+                    0m, false, true);
+                AgregarEfe(resultado, "Utilidad neta del ejercicio", utilidadNeta);
+
+                foreach (var item in cambiosOperacion)
+                {
+                    bool esActivo = Clasif.EsActivo(item.Cuenta.Clasificacion);
+                    decimal efecto = esActivo ? -item.Cambio : item.Cambio;
+                    string etiqueta = EtiquetaOperacion(item.Cuenta, item.Cambio, esActivo);
+                    AgregarEfe(resultado, etiqueta, efecto);
+                }
+
+                if (ajusteNoMonetario != 0m)
+                    AgregarEfe(resultado, "(+/-) Ajuste no monetario (revaluaciones y otros)", ajusteNoMonetario);
+
+                AgregarEfe(resultado,
+                    "EFECTIVO NETO PROVISTO POR ACTIVIDADES DE OPERACIÓN",
+                    flujoOperacionIndirecto, true);
+            }
+            else
+            {
+                AgregarEfe(resultado,
+                    "FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE OPERACIÓN (MÉTODO DIRECTO)",
+                    0m, false, true);
+
+                decimal ventas = Ventas(periodoComp);
+                decimal costoVentas = CostoVentas(periodoComp);
+                decimal gastosOperativos = GastosOperativos(periodoComp);
+                decimal gastosFinancieros = GastosFinancieros(periodoComp);
+                decimal otrosIngresos = OtrosIngresos(periodoComp);
+                decimal impuestos = Impuestos(periodoComp);
+
+                decimal varCxC = 0m;
+                decimal varInventario = 0m;
+                decimal varGastoAnticipado = 0m;
+                decimal varCxPComercial = 0m;
+                decimal varGastoAcumulado = 0m;
+                decimal varIntereses = 0m;
+                decimal varOtros = 0m;
+
+                foreach (var item in cambiosOperacion)
+                {
+                    Cuenta cuenta = item.Cuenta;
+                    decimal cambio = item.Cambio;
+
+                    if (Clasif.ClasificadorEfe.EsCxC(cuenta)) varCxC += cambio;
+                    else if (Clasif.ClasificadorEfe.EsInventario(cuenta)) varInventario += cambio;
+                    else if (Clasif.ClasificadorEfe.EsGastoAnticipado(cuenta)) varGastoAnticipado += cambio;
+                    else if (Clasif.ClasificadorEfe.EsGastoAcumulado(cuenta)) varGastoAcumulado += cambio;
+                    else if (Clasif.ClasificadorEfe.EsInteresPorPagar(cuenta)) varIntereses += cambio;
+                    else if (Clasif.ClasificadorEfe.EsCxPComercial(cuenta)) varCxPComercial += cambio;
+                    else varOtros += Clasif.EsActivo(cuenta.Clasificacion) ? -cambio : cambio;
+                }
+
+                decimal cobrosClientes = ventas - varCxC;
+                decimal pagosProveedores = -(costoVentas + varInventario - varCxPComercial);
+                decimal pagosGastosOperativos = -(gastosOperativos - varGastoAcumulado);
+                decimal pagoIntereses = -(gastosFinancieros - varIntereses);
+                decimal otrosMovimientos = -varGastoAnticipado + varOtros;
+
+                flujoOperacionDirecto = cobrosClientes + pagosProveedores + pagosGastosOperativos +
+                                        otrosIngresos - impuestos + pagoIntereses +
+                                        otrosMovimientos + ajusteNoMonetario;
+
+                AgregarEfe(resultado, "(+) Cobros procedentes de clientes", cobrosClientes);
+                AgregarEfe(resultado, "(-) Pagos a proveedores y costos", pagosProveedores);
+                AgregarEfe(resultado, "(-) Pagos por gastos operativos", pagosGastosOperativos);
+
+                if (otrosIngresos != 0m)
+                    AgregarEfe(resultado, "(+) Otros ingresos operativos", otrosIngresos);
+
+                if (impuestos != 0m)
+                    AgregarEfe(resultado, "(-) Pago de impuestos", -impuestos);
+
+                if (gastosFinancieros != 0m || varIntereses != 0m)
+                    AgregarEfe(resultado, "(-) Pago de intereses", pagoIntereses);
+
+                if (otrosMovimientos != 0m)
+                    AgregarEfe(resultado, "(+/-) Otros movimientos operativos", otrosMovimientos);
+
+                if (ajusteNoMonetario != 0m)
+                    AgregarEfe(resultado, "(+/-) Ajuste no monetario (revaluaciones y otros)", ajusteNoMonetario);
+
+                AgregarEfe(resultado,
+                    "EFECTIVO NETO PROVISTO POR ACTIVIDADES DE OPERACIÓN",
+                    flujoOperacionDirecto, true);
+            }
+
+            AgregarEfe(resultado, "FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE INVERSIÓN", 0m, false, true);
+
+            foreach (var item in cambiosInversion)
+            {
+                string etiqueta = item.Cambio > 0m
+                    ? "(-) Aumento / adquisición de " + item.Cuenta.Nombre
+                    : "(+) Disminución / venta de " + item.Cuenta.Nombre;
+
+                AgregarEfe(resultado, etiqueta, -item.Cambio);
+            }
+
+            AgregarEfe(resultado,
+                "EFECTIVO NETO USADO EN ACTIVIDADES DE INVERSIÓN",
+                flujoInversion, true);
+
+            AgregarEfe(resultado, "FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE FINANCIACIÓN", 0m, false, true);
+
+            foreach (var item in cambiosFinanciacion)
+            {
+                string etiqueta = item.Cambio > 0m
+                    ? "(+) Incremento / obtención de " + item.Cuenta.Nombre
+                    : "(-) Amortización / disminución de " + item.Cuenta.Nombre;
+
+                AgregarEfe(resultado, etiqueta, item.Cambio);
+            }
+
+            AgregarEfe(resultado,
+                "EFECTIVO NETO USADO EN ACTIVIDADES DE FINANCIACIÓN",
+                flujoFinanciamiento, true);
+
+            decimal flujoOperacion = metodoIndirecto ? flujoOperacionIndirecto : flujoOperacionDirecto;
+            decimal incrementoNeto = flujoOperacion + flujoInversion + flujoFinanciamiento;
+            decimal efectivoCalculado = efectivoInicial + incrementoNeto;
+            resultado.EfectivoCalculado = efectivoCalculado;
+
+            AgregarEfe(resultado, "INCREMENTO NETO DE EFECTIVO Y EQUIVALENTES", incrementoNeto, true);
+            AgregarEfe(resultado, "(+) Efectivo y equivalentes al inicio del período", efectivoInicial);
+            AgregarEfe(resultado, "(=) EFECTIVO Y EQUIVALENTES AL FINAL DEL PERÍODO", efectivoCalculado, true);
+            AgregarEfe(resultado, "Efectivo final según el balance", efectivoFinal);
+            AgregarEfe(resultado, "Diferencia (calculado - balance)", efectivoCalculado - efectivoFinal, true);
+
+            return resultado;
+        }
+
+        private static void AgregarEfe(ResultadoEfe resultado, string concepto, decimal monto,
+                                       bool total = false, bool encabezado = false)
+        {
+            resultado.Filas.Add(new FilaEfe
+            {
+                Concepto = concepto,
+                Monto = monto,
+                Total = total,
+                Encabezado = encabezado
+            });
+        }
+
+        private static decimal EfectivoBalance(Periodo periodo)
+        {
+            if (periodo == null) return 0m;
+
+            decimal total = 0m;
+
+            foreach (Cuenta cuenta in periodo.BG)
+            {
+                if (Clasif.ClasificadorEfe.ObtenerCategoria(cuenta) ==
+                    Clasif.ClasificadorEfe.CategoriaEfe.Efectivo)
+                {
+                    total += cuenta.Monto;
+                }
+            }
+
+            return total;
+        }
+
+        private static string EtiquetaOperacion(Cuenta cuenta, decimal cambio, bool esActivo)
+        {
+            if (esActivo)
+            {
+                return cambio > 0m
+                    ? "(-) Aumento de " + cuenta.Nombre
+                    : "(+) Disminución de " + cuenta.Nombre;
+            }
+
+            return cambio > 0m
+                ? "(+) Aumento de " + cuenta.Nombre
+                : "(-) Disminución de " + cuenta.Nombre;
+        }
+
         // ── Auxiliares ───────────────────────────────────────────────────────
 
         private static decimal Suma(Periodo p, TipoEstado tipo, string clasificacion)

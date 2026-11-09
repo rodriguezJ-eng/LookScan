@@ -14,7 +14,12 @@ namespace LookScan
             ucInicio.IniciarClick += (s, e) => tabControl.SelectedIndex = 1;
             if (Util.EnDiseno) return;
 
-            txtEmpresa.TextChanged += (s, e) => Almacen.Empresa = txtEmpresa.Text.Trim();
+            txtEmpresa.TextChanged += (s, e) => Almacen.Empresa = txtEmpresa.Text;
+            Almacen.EmpresaCambio += () =>
+            {
+                if (Util.Igual(txtEmpresa.Text, Almacen.Empresa)) return;
+                txtEmpresa.Text = Almacen.Empresa ?? string.Empty;
+            };
             btnAnadirPeriodo.Click += (s, e) => AnadirPeriodo();
             cmbPeriodoActivo.SelectedIndexChanged += (s, e) =>
             {
@@ -29,10 +34,7 @@ namespace LookScan
             Almacen.ActivoCambio += CargarPeriodosEnComboBox;
             SincronizarCombo();
             CargarPeriodosEnComboBox();
-            
-            Almacen.DatosCambiaron += () => {
-                txtEmpresa.Text = "ENEL";
-            };
+            txtEmpresa.Text = Almacen.Empresa ?? string.Empty;
             cmbPeriodoActivo.SelectedIndex = -1;
             cmbPeriodoActivo.Text = string.Empty;
             numAnio.Value = 2020;

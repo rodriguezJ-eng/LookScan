@@ -115,80 +115,20 @@ namespace LookScan
             dgvEoaf.Columns[5].HeaderText = "Origen";
             dgvEoaf.Columns[6].HeaderText = "Aplicación";
 
-            // Se comparan nombres normalizados (sin tildes, mayúsculas ni espacios repetidos).
-            var montosBase = new Dictionary<string, decimal>(StringComparer.Ordinal);
-            var montosComp = new Dictionary<string, decimal>(StringComparer.Ordinal);
-            var representantes = new Dictionary<string, Cuenta>(StringComparer.Ordinal);
+            // La lógica vive en Calculos para que reportes y exportación usen
+            // exactamente el mismo resultado que esta pantalla.
+            ResultadoEoaf resultado = Calculos.Eoaf(periodoBase, periodoComp);
 
-            foreach (Cuenta cuenta in periodoBase.BG)
+            foreach (FilaEoaf fila in resultado.Filas)
             {
-                string clave = Util.Clave(cuenta.Nombre);
-                if (clave.Length == 0) continue;
-
-                if (!montosBase.ContainsKey(clave)) montosBase[clave] = 0m;
-                montosBase[clave] += cuenta.Monto;
-
-                if (!representantes.ContainsKey(clave)) representantes[clave] = cuenta;
-            }
-
-            foreach (Cuenta cuenta in periodoComp.BG)
-            {
-                string clave = Util.Clave(cuenta.Nombre);
-                if (clave.Length == 0) continue;
-
-                if (!montosComp.ContainsKey(clave)) montosComp[clave] = 0m;
-                montosComp[clave] += cuenta.Monto;
-
-                if (!representantes.ContainsKey(clave)) representantes[clave] = cuenta;
-            }
-
-            var claves = montosBase.Keys
-                .Union(montosComp.Keys)
-                .OrderBy(k => Clasif.Orden(representantes[k].Clasificacion))
-                .ThenBy(k => k)
-                .ToList();
-
-            decimal totalOrigen = 0m;
-            decimal totalAplicacion = 0m;
-
-            foreach (string clave in claves)
-            {
-                decimal monto1 = montosBase.ContainsKey(clave) ? montosBase[clave] : 0m;
-                decimal monto2 = montosComp.ContainsKey(clave) ? montosComp[clave] : 0m;
-                decimal cambio = monto2 - monto1;
-
-                if (cambio == 0m) continue;
-
-                Cuenta cuenta = representantes[clave];
-                string clasificacion = cuenta.Clasificacion ?? string.Empty;
-
-                decimal origen = 0m;
-                decimal aplicacion = 0m;
-
-                if (Clasif.EsActivo(clasificacion))
-                {
-                    // Aumento de activo = aplicación; disminución = origen.
-                    if (cambio > 0m) aplicacion = cambio;
-                    else origen = -cambio;
-                }
-                else if (Clasif.EsPasivo(clasificacion) || Clasif.EsPatrimonio(clasificacion))
-                {
-                    // Aumento de pasivo/patrimonio = origen; disminución = aplicación.
-                    if (cambio > 0m) origen = cambio;
-                    else aplicacion = -cambio;
-                }
-
-                totalOrigen += origen;
-                totalAplicacion += aplicacion;
-
                 dgvEoaf.Rows.Add(
-                    cuenta.Nombre,
-                    clasificacion,
-                    Util.Monto(monto1),
-                    Util.Monto(monto2),
-                    Util.Monto(cambio),
-                    origen > 0m ? Util.Monto(origen) : string.Empty,
-                    aplicacion > 0m ? Util.Monto(aplicacion) : string.Empty);
+                    fila.Cuenta,
+                    fila.Clasificacion,
+                    Util.Monto(fila.MontoBase),
+                    Util.Monto(fila.MontoComparado),
+                    Util.Monto(fila.Cambio),
+                    fila.Origen > 0m ? Util.Monto(fila.Origen) : string.Empty,
+                    fila.Aplicacion > 0m ? Util.Monto(fila.Aplicacion) : string.Empty);
             }
 
             int filaTotal = dgvEoaf.Rows.Add(
@@ -197,8 +137,8 @@ namespace LookScan
                 string.Empty,
                 string.Empty,
                 string.Empty,
-                Util.Monto(totalOrigen),
-                Util.Monto(totalAplicacion));
+                Util.Monto(resultado.TotalOrigen),
+                Util.Monto(resultado.TotalAplicacion));
 
             dgvEoaf.Rows[filaTotal].DefaultCellStyle.Font =
                 new System.Drawing.Font(dgvEoaf.Font, System.Drawing.FontStyle.Bold);
@@ -209,7 +149,7 @@ namespace LookScan
                 string.Empty,
                 string.Empty,
                 string.Empty,
-                Util.Monto(totalOrigen - totalAplicacion),
+                Util.Monto(resultado.Diferencia),
                 string.Empty);
 
             dgvEoaf.Rows[filaDiferencia].DefaultCellStyle.Font =
