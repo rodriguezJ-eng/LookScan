@@ -90,54 +90,157 @@ namespace LookScan
         {
             public enum CategoriaEfe
             {
+                Efectivo,
                 Operacion,
                 Inversion,
                 Financiacion,
                 NoAfecta
             }
 
-            public static CategoriaEfe ObtenerCategoria(string nombreCuenta)
+            // Clasifica una cuenta de balance según su naturaleza para el EFE.
+            public static CategoriaEfe ObtenerCategoria(Cuenta cuenta)
             {
-                if (string.IsNullOrEmpty(nombreCuenta)) return CategoriaEfe.NoAfecta;
+                if (cuenta == null || cuenta.Tipo != TipoEstado.BG) return CategoriaEfe.NoAfecta;
 
-                // Normalizamos a minúsculas para que las mayúsculas no afecten en nada
-                string nombre = nombreCuenta.ToLower().Trim();
+                string nombre = Util.Clave(cuenta.Nombre);
+                bool esActivo = string.IsNullOrEmpty(cuenta.Clasificacion) || Clasif.EsActivo(cuenta.Clasificacion);
 
-                // 1. ACTIVIDADES DE OPERACIÓN (Clientes, Inventarios, Proveedores, Corto Plazo)
-                if (ContieneAlguna(nombre, "cobrar", "cliente", "deudor", "inventario", "mercancia", "Cobros a clientes", "Pagos a proveedores", "Pago de salarios", "Pago de alquiler", 
-                                           "Pago de servicios básico", "Pago de publicidad", "Pago de gastos administrativos", "Pago de gastos operativos", "Cobro por prestación de servicios",
-                                           "existencia", "proveedor", "acreedor","Cobro", "Cliente","Salario","renta","agua","luz","publicidad","pagar","pasivo",
-                                           "anticipado", "gastos pagados", "otros activos corrientes", "otros pasivos corrientes"))
+                // Efectivo y equivalentes.
+                if (esActivo && EsEfectivo(nombre) &&
+                    !Contiene(nombre, "prestamo", "obligacion", "por pagar", "deuda"))
                 {
-                    return CategoriaEfe.Operacion;
+                    return CategoriaEfe.Efectivo;
                 }
 
-                // 2. ACTIVIDADES DE INVERSIÓN (Activos Fijos, Propiedades, Maquinaria, Intangibles)
-                if (ContieneAlguna(nombre, "propiedad", "planta", "equipo", "maquinaria", "mobiliario", "Compra de terreno", "Compra de edificio", "Compra de maquinaria", "Compra de mobiliario y equipo",
-                                           "Compra de vehículo", "Compra de equipos de computación", "Venta de terrenos","Venta de inmuebles","Adquisicion de acciones","Documento por pagar largo plazo",
-                                           "edificio", "terreno", "vehiculo", "intangible", "patente", "marca", "compara de maquinaria y Equipo", "inversiones temporales",
-                                           "inversion a largo plazo"))
+                // Resultados acumulados y déficit ya se explican por la utilidad neta.
+                if (Contiene(nombre, "deficit acumulado", "resultados acumulados",
+                                     "utilidades retenidas", "perdidas acumuladas"))
                 {
-                    return CategoriaEfe.Inversion;
+                    return CategoriaEfe.NoAfecta;
                 }
 
-                // 3. ACTIVIDADES DE FINANCIACIÓN (Préstamos, Bancos, Deudas LP, Capital, Utilidades)
-                if (ContieneAlguna(nombre, "prestamo", "banco", "obligacion", "deuda", "financiera", "amortizacion de deuda","Emision de acciones","pago de bonos","pago de prestamos bancarios",
-                                           "capital", "acciones", "social", "utilidades retenidas","Emision de bonos", "capital social","pago de dividendos","Aporte de capital de los socios",
-                                           "resultados acumulados", "dividendo"))
+                // Cambios patrimoniales no monetarios (revaluaciones, ORI).
+                if (Contiene(nombre, "superavit por revaluacion", "revaluacion", "otro resultado integral"))
+                {
+                    return CategoriaEfe.NoAfecta;
+                }
+
+                // Deuda financiera: su variación es actividad de financiamiento.
+                if (Contiene(nombre, "prestamo", "obligacion financiera", "obligaciones financieras",
+                                     "bono", "deuda financiera", "leasing financiero"))
                 {
                     return CategoriaEfe.Financiacion;
+                }
+
+                // Aportes de capital.
+                if (Contiene(nombre, "aporte de capital", "aportes de capital", "capital social",
+                                     "emision de acciones", "acciones", "aporte inicial", "aporte por alivio"))
+                {
+                    return CategoriaEfe.Financiacion;
+                }
+
+                // Los intereses por pagar se mantienen en operación para conciliar con el gasto financiero.
+                if (Contiene(nombre, "interes")) return CategoriaEfe.Operacion;
+
+                if (Clasif.EsActivo(cuenta.Clasificacion))
+                {
+                    // Las cuentas no corrientes (activos fijos, intangibles, CxC de largo plazo) son inversión.
+                    return Util.Igual(cuenta.Clasificacion, Clasif.ActivoNoCorriente)
+                        ? CategoriaEfe.Inversion
+                        : CategoriaEfe.Operacion;
+                }
+
+                if (Clasif.EsPasivo(cuenta.Clasificacion) || Clasif.EsPatrimonio(cuenta.Clasificacion))
+                {
+                    return CategoriaEfe.Operacion;
                 }
 
                 return CategoriaEfe.NoAfecta;
             }
 
-            // Método auxiliar para buscar si el texto contiene CUALQUIERA de las palabras clave
-            private static bool ContieneAlguna(string texto, params string[] palabrasClave)
+            // Sobrecarga por nombre para usos puntuales donde no se tiene la cuenta completa.
+            public static CategoriaEfe ObtenerCategoria(string nombreCuenta)
             {
-                foreach (var palabra in palabrasClave)
+                return ObtenerCategoria(new Cuenta
                 {
-                    if (texto.Contains(palabra)) return true;
+                    Tipo = TipoEstado.BG,
+                    Nombre = nombreCuenta
+                });
+            }
+
+            public static bool EsEfectivo(string nombre)
+            {
+                string n = Util.Clave(nombre);
+                return n.Contains("efectivo") || n.Contains("caja") ||
+                       n.Contains("banco") || n.Contains("equivalente");
+            }
+
+            public static bool EsCxC(Cuenta cuenta)
+            {
+                if (cuenta == null || cuenta.Tipo != TipoEstado.BG) return false;
+                if (!Util.Igual(cuenta.Clasificacion, Clasif.ActivoCorriente)) return false;
+
+                string n = Util.Clave(cuenta.Nombre);
+                return n.Contains("cobrar") || n.Contains("cxc") ||
+                       n.Contains("cliente") || n.Contains("deudor");
+            }
+
+            public static bool EsInventario(Cuenta cuenta)
+            {
+                if (cuenta == null || cuenta.Tipo != TipoEstado.BG) return false;
+                if (!Util.Igual(cuenta.Clasificacion, Clasif.ActivoCorriente)) return false;
+
+                string n = Util.Clave(cuenta.Nombre);
+                return n.Contains("inventario") || n.Contains("mercancia") || n.Contains("existencia");
+            }
+
+            public static bool EsGastoAnticipado(Cuenta cuenta)
+            {
+                if (cuenta == null || cuenta.Tipo != TipoEstado.BG) return false;
+                if (!Util.Igual(cuenta.Clasificacion, Clasif.ActivoCorriente)) return false;
+
+                string n = Util.Clave(cuenta.Nombre);
+                return n.Contains("anticipado") || n.Contains("gastos pagados") || n.Contains("seguro pagado");
+            }
+
+            public static bool EsCxPComercial(Cuenta cuenta)
+            {
+                if (cuenta == null || cuenta.Tipo != TipoEstado.BG) return false;
+                if (!Clasif.EsPasivo(cuenta.Clasificacion)) return false;
+
+                string n = Util.Clave(cuenta.Nombre);
+
+                if (Contiene(n, "prestamo", "interes", "financier", "impuesto",
+                                  "tribut", "sunat", "estado", "gastos acumulados"))
+                {
+                    return false;
+                }
+
+                return Contiene(n, "proveedor", "acreedor", "por pagar a", "cuentas por pagar");
+            }
+
+            public static bool EsGastoAcumulado(Cuenta cuenta)
+            {
+                if (cuenta == null || cuenta.Tipo != TipoEstado.BG) return false;
+                if (!Clasif.EsPasivo(cuenta.Clasificacion)) return false;
+
+                string n = Util.Clave(cuenta.Nombre);
+                return Contiene(n, "gastos acumulados", "gastos por pagar", "acumulados");
+            }
+
+            public static bool EsInteresPorPagar(Cuenta cuenta)
+            {
+                if (cuenta == null || cuenta.Tipo != TipoEstado.BG) return false;
+                if (!Clasif.EsPasivo(cuenta.Clasificacion)) return false;
+
+                return Util.Clave(cuenta.Nombre).Contains("interes");
+            }
+
+            private static bool Contiene(string texto, params string[] claves)
+            {
+                foreach (string clave in claves)
+                {
+                    if (texto.Contains(Util.Clave(clave))) return true;
                 }
                 return false;
             }

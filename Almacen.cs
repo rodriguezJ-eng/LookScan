@@ -106,12 +106,16 @@ namespace LookScan
             p2019.Cuentas.Clear();
             p2020.Cuentas.Clear();
 
+            // El demo solo carga 2019 y 2020; 2018 queda vacío para evitar datos viejos.
+            Periodo p2018 = Buscar("2018");
+            if (p2018 != null) p2018.Cuentas.Clear();
+
             // Cargamos los datos nominales y específicos para cada año
             CargarPeriodo2019(p2019);
             CargarPeriodo2020(p2020);
-           
 
-            Periodo activoDemo = Buscar("2020");
+            // Al cargar el demo se arranca en 2019 (no en 2020).
+            Periodo activoDemo = Buscar("2019");
             if (activoDemo != null) _activo = activoDemo;
 
             Action periodos = PeriodosCambiaron; // Nota que es 'Cambiaron', sin la 'ion' extra

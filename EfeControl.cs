@@ -3,44 +3,94 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using static LookScan.Clasif;
 
 namespace LookScan
 {
     public partial class EfeControl : UserControl
     {
+        private class CambioCuenta
+        {
+            public Cuenta Cuenta { get; set; }
+            public decimal Cambio { get; set; }
+        }
+
         public EfeControl()
         {
             InitializeComponent();
+            if (Util.EnDiseno) return;
+
+            Almacen.DatosCambiaron += CargarCombosEfe;
+            Almacen.PeriodosCambiaron += CargarCombosEfe;
+            Almacen.ActivoCambio += CargarCombosEfe;
+
             CargarCombosEfe();
-
-
         }
+
         private void CargarCombosEfe()
         {
+            string baseAnterior = cmbPeriodoBaseEfe.SelectedItem as string;
+            string compAnterior = cmbPeriodoCompEfe.SelectedItem as string;
+
             cmbPeriodoBaseEfe.Items.Clear();
             cmbPeriodoCompEfe.Items.Clear();
 
-            string[] misAnios = { "2020", "2019", "2018" };
+            // Se ofrecen primero los periodos con datos; si no hay, se muestran todos.
+            var nombres = Almacen.Periodos
+                .Where(p => p.TieneDatos)
+                .Select(p => p.Nombre)
+                .ToList();
 
-            foreach (var anio in misAnios)
+            if (nombres.Count == 0) nombres = Almacen.Nombres.ToList();
+
+            foreach (var nombre in nombres)
             {
-                cmbPeriodoBaseEfe.Items.Add(anio);
-                cmbPeriodoCompEfe.Items.Add(anio);
+                cmbPeriodoBaseEfe.Items.Add(nombre);
+                cmbPeriodoCompEfe.Items.Add(nombre);
             }
-            cmbPeriodoBaseEfe.SelectedIndex = -1;
-            cmbPeriodoBaseEfe.Text = string.Empty;
 
-            cmbPeriodoCompEfe.SelectedIndex = -1;
-            cmbPeriodoCompEfe.Text = string.Empty;
+            if (nombres.Count == 0) return;
+
+            int indiceBase = -1;
+            int indiceComp = -1;
+
+            if (!string.IsNullOrEmpty(baseAnterior) && !string.IsNullOrEmpty(compAnterior))
+            {
+                indiceBase = nombres.FindIndex(n => Util.Igual(n, baseAnterior));
+                indiceComp = nombres.FindIndex(n => Util.Igual(n, compAnterior));
+            }
+
+            // Si no hay una selección válida, se arranca con el periodo activo y el siguiente.
+            if (indiceBase < 0 || indiceComp < 0 || indiceBase == indiceComp)
+            {
+                int indiceActivo = Almacen.Activo != null
+                    ? nombres.FindIndex(n => Util.Igual(n, Almacen.Activo.Nombre))
+                    : -1;
+
+                if (indiceActivo < 0) indiceActivo = nombres.Count - 1;
+
+                if (indiceActivo < nombres.Count - 1)
+                {
+                    indiceBase = indiceActivo;
+                    indiceComp = indiceActivo + 1;
+                }
+                else
+                {
+                    indiceComp = indiceActivo;
+                    indiceBase = indiceActivo > 0 ? indiceActivo - 1 : 0;
+                }
+            }
+
+            cmbPeriodoBaseEfe.SelectedIndex = indiceBase;
+            cmbPeriodoCompEfe.SelectedIndex = indiceComp;
         }
+
         private void btnCalcularEfe_Click(object sender, EventArgs e)
         {
-            string nombreBase = cmbPeriodoBaseEfe.Text;
-            string nombreComparado = cmbPeriodoCompEfe.Text;
+            string nombreBase = cmbPeriodoBaseEfe.SelectedItem as string;
+            string nombreComparado = cmbPeriodoCompEfe.SelectedItem as string;
 
-            var periodoBase = Almacen.Periodos.FirstOrDefault(p => p.Nombre == nombreBase);
-            var periodoComp = Almacen.Periodos.FirstOrDefault(p => p.Nombre == nombreComparado);
+            var periodoBase = Almacen.Buscar(nombreBase);
+            var periodoComp = Almacen.Buscar(nombreComparado);
 
             if (periodoBase == null || periodoComp == null)
             {
@@ -48,227 +98,315 @@ namespace LookScan
                 return;
             }
 
+            if (Util.Igual(periodoBase.Nombre, periodoComp.Nombre))
+            {
+                MessageBox.Show("Seleccione dos periodos distintos para calcular el flujo de efectivo.", "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (!periodoBase.TieneDatos || !periodoComp.TieneDatos)
+            {
+                MessageBox.Show("Uno de los periodos seleccionados no tiene cuentas. Capture datos o use «Cargar Demo».", "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             if (dgvEfe.Columns.Count == 0)
             {
                 dgvEfe.Columns.Add("Concepto", "Concepto del Flujo de Efectivo");
-                dgvEfe.Columns.Add("Monto", "Monto (C$)");
+                dgvEfe.Columns.Add("Monto", "Monto");
                 dgvEfe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
 
             dgvEfe.Rows.Clear();
-            dgvEfe.BackgroundColor = System.Drawing.Color.White;
+            dgvEfe.BackgroundColor = Color.White;
             dgvEfe.RowHeadersVisible = false;
 
-      
-            decimal efectivoInicial = 0m;
-            decimal utilRetBase = 0m, utilRetComp = 0m;
-            decimal flujoOperacion = 0m;
-            decimal flujoInversion = 0m;
-            decimal flujoFinanciamiento = 0m;
+            decimal efectivoInicial = EfectivoBalance(periodoBase);
+            decimal efectivoFinal = EfectivoBalance(periodoComp);
 
-            List<(string concepto, decimal monto)> filasOperacion = new List<(string, decimal)>();
-            List<(string concepto, decimal monto)> filasInversion = new List<(string, decimal)>();
-            List<(string concepto, decimal monto)> filasFinanciamiento = new List<(string, decimal)>();
+            // Se comparan las cuentas de balance por nombre normalizado.
+            var montosBase = new Dictionary<string, decimal>(StringComparer.Ordinal);
+            var montosComp = new Dictionary<string, decimal>(StringComparer.Ordinal);
+            var representantes = new Dictionary<string, Cuenta>(StringComparer.Ordinal);
 
-            foreach (var cta in periodoBase.Cuentas)
+            foreach (Cuenta cuenta in periodoBase.BG)
             {
-                string nLow = (cta.Nombre ?? "").ToLower();
-                if (nLow.Contains("efectivo y equivalentes")) efectivoInicial += cta.Monto;
-                if (nLow.Contains("utilidades retenidas") || nLow.Contains("resultados acumulados")) utilRetBase += cta.Monto;
-            }
-            foreach (var cta in periodoComp.Cuentas)
-            {
-                string nLow = (cta.Nombre ?? "").ToLower();
-                if (nLow.Contains("utilidades retenidas") || nLow.Contains("resultados acumulados")) utilRetComp += cta.Monto;
+                string clave = Util.Clave(cuenta.Nombre);
+                if (clave.Length == 0) continue;
+
+                if (!montosBase.ContainsKey(clave)) montosBase[clave] = 0m;
+                montosBase[clave] += cuenta.Monto;
+
+                if (!representantes.ContainsKey(clave)) representantes[clave] = cuenta;
             }
 
-            foreach (var ctaComp in periodoComp.Cuentas)
+            foreach (Cuenta cuenta in periodoComp.BG)
             {
-                string nombreCta = ctaComp.Nombre ?? "";
-                string nLow = nombreCta.ToLower();
+                string clave = Util.Clave(cuenta.Nombre);
+                if (clave.Length == 0) continue;
 
-                if (nLow.Contains("efectivo y equivalentes") || nLow.Contains("utilidades retenidas") || nLow.Contains("resultados acumulados"))
+                if (!montosComp.ContainsKey(clave)) montosComp[clave] = 0m;
+                montosComp[clave] += cuenta.Monto;
+
+                if (!representantes.ContainsKey(clave)) representantes[clave] = cuenta;
+            }
+
+            var claves = montosBase.Keys
+                .Union(montosComp.Keys)
+                .OrderBy(k => Clasif.Orden(representantes[k].Clasificacion))
+                .ThenBy(k => k)
+                .ToList();
+
+            var cambiosOperacion = new List<CambioCuenta>();
+            var cambiosInversion = new List<CambioCuenta>();
+            var cambiosFinanciacion = new List<CambioCuenta>();
+
+            decimal ajusteNoMonetario = 0m;
+
+            foreach (string clave in claves)
+            {
+                decimal montoBase = montosBase.ContainsKey(clave) ? montosBase[clave] : 0m;
+                decimal montoComp = montosComp.ContainsKey(clave) ? montosComp[clave] : 0m;
+                decimal cambio = montoComp - montoBase;
+
+                if (cambio == 0m) continue;
+
+                Cuenta cuenta = representantes[clave];
+                var categoria = Clasif.ClasificadorEfe.ObtenerCategoria(cuenta);
+
+                if (categoria == Clasif.ClasificadorEfe.CategoriaEfe.Efectivo) continue;
+
+                if (categoria == Clasif.ClasificadorEfe.CategoriaEfe.NoAfecta)
+                {
+                    string n = Util.Clave(cuenta.Nombre);
+
+                    // El déficit o los resultados acumulados ya se explican por la utilidad neta.
+                    bool esResultadoAcumulado = n.Contains("deficit acumulado") ||
+                                                n.Contains("resultados acumulados") ||
+                                                n.Contains("utilidades retenidas") ||
+                                                n.Contains("perdidas acumuladas");
+
+                    if (!esResultadoAcumulado) ajusteNoMonetario += cambio;
                     continue;
-
-                var categoria = ClasificadorEfe.ObtenerCategoria(nombreCta);
-                if (categoria == ClasificadorEfe.CategoriaEfe.NoAfecta) continue;
-
-                var ctaBase = periodoBase.Cuentas.FirstOrDefault(c => c.Nombre != null && c.Nombre.Trim().Equals(nombreCta.Trim(), StringComparison.OrdinalIgnoreCase));
-                decimal montoBase = ctaBase != null ? ctaBase.Monto : 0m;
-                decimal diferencia = ctaComp.Monto - montoBase;
-
-                if (diferencia == 0) continue;
-
-                if (categoria == ClasificadorEfe.CategoriaEfe.Operacion)
-                {
-                    decimal varEfe = 0m;
-                    string etiqueta = "";
-                    bool esPasivo = nLow.Contains("pagar") || nLow.Contains("pasivo") || nLow.Contains("acreedor") || nLow.Contains("obligacion");
-
-                    if (esPasivo)
-                    {
-                        varEfe = diferencia;
-                        etiqueta = (diferencia > 0 ? "(+) Aumento en " : "(-) Disminución en ") + nombreCta;
-                    }
-                    else
-                    {
-                        varEfe = -diferencia;
-                        etiqueta = (diferencia > 0 ? "(-) Aumento en " : "(+) Disminución en ") + nombreCta;
-                    }
-
-                    if (rbMetodo1.Checked)
-                    {
-                        flujoOperacion += varEfe;
-                        filasOperacion.Add((etiqueta, varEfe));
-                    }
                 }
-                else if (categoria == ClasificadorEfe.CategoriaEfe.Inversion)
-                {
-                    decimal varEfe = -diferencia;
-                    string etiqueta = (diferencia > 0 ? "(-) Adquisición / Aumento en " : "(+) Venta / Disminución en ") + nombreCta;
 
-                    flujoInversion += varEfe;
-                    filasInversion.Add((etiqueta, varEfe));
-                }
-                else if (categoria == ClasificadorEfe.CategoriaEfe.Financiacion)
-                {
-                    decimal varEfe = diferencia;
-                    string etiqueta = (diferencia > 0 ? "(+) Incremento / Obtención de " : "(-) Amortización / Disminución de ") + nombreCta;
+                var item = new CambioCuenta { Cuenta = cuenta, Cambio = cambio };
 
-                    flujoFinanciamiento += varEfe;
-                    filasFinanciamiento.Add((etiqueta, varEfe));
-                }
+                if (categoria == Clasif.ClasificadorEfe.CategoriaEfe.Operacion)
+                    cambiosOperacion.Add(item);
+                else if (categoria == Clasif.ClasificadorEfe.CategoriaEfe.Inversion)
+                    cambiosInversion.Add(item);
+                else if (categoria == Clasif.ClasificadorEfe.CategoriaEfe.Financiacion)
+                    cambiosFinanciacion.Add(item);
             }
 
+            decimal utilidadNeta = Calculos.UtilidadNeta(periodoComp);
+            decimal ajustesOperacion = 0m;
 
-            // metodo 1
+            foreach (var item in cambiosOperacion)
+            {
+                bool esActivo = Clasif.EsActivo(item.Cuenta.Clasificacion);
+                ajustesOperacion += esActivo ? -item.Cambio : item.Cambio;
+            }
+
+            decimal flujoOperacionIndirecto = utilidadNeta + ajustesOperacion + ajusteNoMonetario;
+
+            decimal flujoInversion = cambiosInversion.Sum(x => -x.Cambio);
+            decimal flujoFinanciamiento = cambiosFinanciacion.Sum(x => x.Cambio);
+            decimal flujoOperacionDirecto = 0m;
+
             if (rbMetodo1.Checked)
             {
-                dgvEfe.Rows.Add("FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE OPERACIÓN");
+                dgvEfe.Rows.Add("FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE OPERACIÓN (MÉTODO INDIRECTO)");
 
-                // Calcular Utilidad Neta del Ejercicio
-                decimal ventas = 0m, costoVentas = 0m, gastosOperativos = 0m, gastosFinancieros = 0m, impuestos = 0m, otrosIngresos = 0m;
-                foreach (var cta in periodoComp.Cuentas.Where(c => c.Tipo == TipoEstado.ER))
+                dgvEfe.Rows.Add("Utilidad neta del ejercicio", Util.Monto(utilidadNeta));
+
+                foreach (var item in cambiosOperacion)
                 {
-                    string clasif = cta.Clasificacion != null ? cta.Clasificacion.ToLower().Trim() : "";
-                    if (clasif == "ventas") ventas += cta.Monto;
-                    else if (clasif == "costo de ventas") costoVentas += cta.Monto;
-                    else if (clasif == "gastos operativos") gastosOperativos += cta.Monto;
-                    else if (clasif == "gastos financieros") gastosFinancieros += cta.Monto;
-                    else if (clasif == "otros ingresos") otrosIngresos += cta.Monto;
-                    else if (clasif == "impuestos") impuestos += cta.Monto;
+                    bool esActivo = Clasif.EsActivo(item.Cuenta.Clasificacion);
+                    decimal efecto = esActivo ? -item.Cambio : item.Cambio;
+                    string etiqueta = EtiquetaOperacion(item.Cuenta, item.Cambio, esActivo);
+                    dgvEfe.Rows.Add(etiqueta, Util.Monto(efecto));
                 }
 
-                decimal utilidadBruta = ventas - costoVentas;
-                decimal uaii = utilidadBruta - gastosOperativos;
-                decimal uai = uaii - gastosFinancieros + otrosIngresos;
-                decimal utilidadNeta = uai - impuestos;
-
-                dgvEfe.Rows.Add("Utilidad Neta del Ejercicio", utilidadNeta.ToString("N2"));
-
-                flujoOperacion = utilidadNeta;
-                foreach (var f in filasOperacion)
+                if (ajusteNoMonetario != 0m)
                 {
-                    flujoOperacion += f.monto;
-                    dgvEfe.Rows.Add(f.concepto, f.monto.ToString("N2"));
+                    dgvEfe.Rows.Add("(+/-) Ajuste no monetario (revaluaciones y otros)", Util.Monto(ajusteNoMonetario));
                 }
 
-                int n = dgvEfe.Rows.Add("EFECTIVO NETO PROVISTO POR ACTIVIDADES DE OPERACIÓN", flujoOperacion.ToString("N2"));
-                dgvEfe.Rows[n].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
+                int filaOperacion = dgvEfe.Rows.Add(
+                    "EFECTIVO NETO PROVISTO POR ACTIVIDADES DE OPERACIÓN",
+                    Util.Monto(flujoOperacionIndirecto));
+                dgvEfe.Rows[filaOperacion].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
             }
-          // metodo 2
-            else if (rbMetodo2.Checked)
+            else
             {
-                dgvEfe.Rows.Add("=== 1. FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE OPERACIÓN (MÉTODO DIRECTO) ===", "");
+                dgvEfe.Rows.Add("FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE OPERACIÓN (MÉTODO DIRECTO)");
 
-                decimal ventas = 0m, costoVentas = 0m, gastosOperativos = 0m, gastosFinancieros = 0m, impuestos = 0m, otrosIngresos = 0m;
-                foreach (var cta in periodoComp.Cuentas.Where(c => c.Tipo == TipoEstado.ER))
+                decimal ventas = Calculos.Ventas(periodoComp);
+                decimal costoVentas = Calculos.CostoVentas(periodoComp);
+                decimal gastosOperativos = Calculos.GastosOperativos(periodoComp);
+                decimal gastosFinancieros = Calculos.GastosFinancieros(periodoComp);
+                decimal otrosIngresos = Calculos.OtrosIngresos(periodoComp);
+                decimal impuestos = Calculos.Impuestos(periodoComp);
+
+                decimal varCxC = 0m;
+                decimal varInventario = 0m;
+                decimal varGastoAnticipado = 0m;
+                decimal varCxPComercial = 0m;
+                decimal varGastoAcumulado = 0m;
+                decimal varIntereses = 0m;
+                decimal varOtros = 0m;
+
+                foreach (var item in cambiosOperacion)
                 {
-                    string clasif = cta.Clasificacion != null ? cta.Clasificacion.ToLower().Trim() : "";
-                    if (clasif == "ventas") ventas += cta.Monto;
-                    else if (clasif == "costo de ventas") costoVentas += cta.Monto;
-                    else if (clasif == "gastos operativos") gastosOperativos += cta.Monto;
-                    else if (clasif == "gastos financieros") gastosFinancieros += cta.Monto;
-                    else if (clasif == "otros ingresos") otrosIngresos += cta.Monto;
-                    else if (clasif == "impuestos") impuestos += cta.Monto;
+                    Cuenta cuenta = item.Cuenta;
+                    decimal cambio = item.Cambio;
+
+                    if (Clasif.ClasificadorEfe.EsCxC(cuenta)) varCxC += cambio;
+                    else if (Clasif.ClasificadorEfe.EsInventario(cuenta)) varInventario += cambio;
+                    else if (Clasif.ClasificadorEfe.EsGastoAnticipado(cuenta)) varGastoAnticipado += cambio;
+                    else if (Clasif.ClasificadorEfe.EsGastoAcumulado(cuenta)) varGastoAcumulado += cambio;
+                    else if (Clasif.ClasificadorEfe.EsInteresPorPagar(cuenta)) varIntereses += cambio;
+                    else if (Clasif.ClasificadorEfe.EsCxPComercial(cuenta)) varCxPComercial += cambio;
+                    else varOtros += Clasif.EsActivo(cuenta.Clasificacion) ? -cambio : cambio;
                 }
 
-                decimal varCuentasPorCobrar = 0m, varInventarios = 0m, varCuentasPorPagar = 0m;
-                foreach (var ctaComp in periodoComp.Cuentas)
-                {
-                    string nLow = (ctaComp.Nombre ?? "").ToLower();
-                    if (nLow.Contains("efectivo") || nLow.Contains("utilidades retenidas")) continue;
-                    var ctaBase = periodoBase.Cuentas.FirstOrDefault(c => c.Nombre != null && c.Nombre.Trim().Equals(ctaComp.Nombre.Trim(), StringComparison.OrdinalIgnoreCase));
-                    decimal diff = ctaComp.Monto - (ctaBase != null ? ctaBase.Monto : 0m);
+                decimal cobrosClientes = ventas - varCxC;
+                decimal pagosProveedores = -(costoVentas + varInventario - varCxPComercial);
+                decimal pagosGastosOperativos = -(gastosOperativos - varGastoAcumulado);
+                decimal pagoIntereses = -(gastosFinancieros - varIntereses);
+                decimal otrosMovimientos = -varGastoAnticipado + varOtros;
 
-                    if (nLow.Contains("cobrar") || nLow.Contains("cliente")) varCuentasPorCobrar += diff;
-                    else if (nLow.Contains("inventario") || nLow.Contains("mercancia")) varInventarios += diff;
-                    else if (nLow.Contains("pagar") || nLow.Contains("proveedor")) varCuentasPorPagar += diff;
-                }
+                flujoOperacionDirecto = cobrosClientes + pagosProveedores + pagosGastosOperativos +
+                                        otrosIngresos - impuestos + pagoIntereses +
+                                        otrosMovimientos + ajusteNoMonetario;
 
-                decimal cobrosClientes = ventas - varCuentasPorCobrar;
-                decimal pagosProveedores = -(costoVentas + varInventarios - varCuentasPorPagar);
-                decimal pagosGastosOp = -gastosOperativos;
-                decimal pagoImpuestos = -impuestos;
-                decimal pagoIntereses = -gastosFinancieros;
+                dgvEfe.Rows.Add("(+) Cobros procedentes de clientes", Util.Monto(cobrosClientes));
+                dgvEfe.Rows.Add("(-) Pagos a proveedores y costos", Util.Monto(pagosProveedores));
+                dgvEfe.Rows.Add("(-) Pagos por gastos operativos", Util.Monto(pagosGastosOperativos));
 
-                dgvEfe.Rows.Add("(+) Cobros procedentes de clientes", cobrosClientes.ToString("N2"));
-                dgvEfe.Rows.Add("(-) Pagos a proveedores y costos", pagosProveedores.ToString("N2"));
-                dgvEfe.Rows.Add("(-) Pagos por gastos operativos", pagosGastosOp.ToString("N2"));
-                if (otrosIngresos > 0) dgvEfe.Rows.Add("(+) Otros ingresos operativos", otrosIngresos.ToString("N2"));
-                if (impuestos > 0) dgvEfe.Rows.Add("(-) Pago de impuestos", pagoImpuestos.ToString("N2"));
-                if (gastosFinancieros > 0) dgvEfe.Rows.Add("(-) Pago de intereses", pagoIntereses.ToString("N2"));
+                if (otrosIngresos != 0m)
+                    dgvEfe.Rows.Add("(+) Otros ingresos operativos", Util.Monto(otrosIngresos));
 
-                // Sumatoria total del método directo incluyendo los otros ingresos
-                flujoOperacion = cobrosClientes + pagosProveedores + pagosGastosOp + otrosIngresos + pagoImpuestos + pagoIntereses;
+                if (impuestos != 0m)
+                    dgvEfe.Rows.Add("(-) Pago de impuestos", Util.Monto(-impuestos));
 
-                int nOp = dgvEfe.Rows.Add("EFECTIVO NETO PROVISTO POR ACTIVIDADES DE OPERACIÓN (A)", flujoOperacion.ToString("N2"));
-                dgvEfe.Rows[nOp].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
+                if (gastosFinancieros != 0m || varIntereses != 0m)
+                    dgvEfe.Rows.Add("(-) Pago de intereses", Util.Monto(pagoIntereses));
+
+                if (otrosMovimientos != 0m)
+                    dgvEfe.Rows.Add("(+/-) Otros movimientos operativos", Util.Monto(otrosMovimientos));
+
+                if (ajusteNoMonetario != 0m)
+                    dgvEfe.Rows.Add("(+/-) Ajuste no monetario (revaluaciones y otros)", Util.Monto(ajusteNoMonetario));
+
+                int filaOperacionDirecta = dgvEfe.Rows.Add(
+                    "EFECTIVO NETO PROVISTO POR ACTIVIDADES DE OPERACIÓN",
+                    Util.Monto(flujoOperacionDirecto));
+                dgvEfe.Rows[filaOperacionDirecta].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
             }
 
-   
             dgvEfe.Rows.Add("FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE INVERSIÓN");
-            foreach (var f in filasInversion) dgvEfe.Rows.Add(f.concepto, f.monto.ToString("N2"));
 
-            int nInv = dgvEfe.Rows.Add("EFECTIVO NETO USADO EN ACTIVIDADES DE INVERSIÓN ", flujoInversion.ToString("N2"));
-            dgvEfe.Rows[nInv].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
+            foreach (var item in cambiosInversion)
+            {
+                string etiqueta = item.Cambio > 0m
+                    ? "(-) Aumento / adquisición de " + item.Cuenta.Nombre
+                    : "(+) Disminución / venta de " + item.Cuenta.Nombre;
+
+                dgvEfe.Rows.Add(etiqueta, Util.Monto(-item.Cambio));
+            }
+
+            int filaInversion = dgvEfe.Rows.Add(
+                "EFECTIVO NETO USADO EN ACTIVIDADES DE INVERSIÓN",
+                Util.Monto(flujoInversion));
+            dgvEfe.Rows[filaInversion].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
 
             dgvEfe.Rows.Add("FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE FINANCIACIÓN");
-            foreach (var f in filasFinanciamiento) dgvEfe.Rows.Add(f.concepto, f.monto.ToString("N2"));
 
-            // Cálculo automático de Dividendos
-            decimal utilidadNetaRef = 245000.00m; 
-            decimal pagoDividendos = utilRetBase + utilidadNetaRef - utilRetComp;
-            if (pagoDividendos < 0) pagoDividendos = 0m;
-            if (pagoDividendos > 0)
+            foreach (var item in cambiosFinanciacion)
             {
-                dgvEfe.Rows.Add("(-) Pago de Dividendos", (-pagoDividendos).ToString("N2"));
-                flujoFinanciamiento -= pagoDividendos;
+                string etiqueta = item.Cambio > 0m
+                    ? "(+) Incremento / obtención de " + item.Cuenta.Nombre
+                    : "(-) Amortización / disminución de " + item.Cuenta.Nombre;
+
+                dgvEfe.Rows.Add(etiqueta, Util.Monto(item.Cambio));
             }
 
-            int nFin = dgvEfe.Rows.Add("EFECTIVO NETO USADO EN ACTIVIDADES DE FINANCIACIÓN", flujoFinanciamiento.ToString("N2"));
-            dgvEfe.Rows[nFin].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
+            int filaFinanciamiento = dgvEfe.Rows.Add(
+                "EFECTIVO NETO USADO EN ACTIVIDADES DE FINANCIACIÓN",
+                Util.Monto(flujoFinanciamiento));
+            dgvEfe.Rows[filaFinanciamiento].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
 
+            // Cada método debe reconciliar el mismo efectivo final.
+            decimal flujoOperacion = rbMetodo1.Checked
+                ? flujoOperacionIndirecto
+                : flujoOperacionDirecto;
 
-          
             decimal incrementoNeto = flujoOperacion + flujoInversion + flujoFinanciamiento;
-            int nInc = dgvEfe.Rows.Add("INCREMENTO NETO DE EFECTIVO Y EQUIVALENTES ", incrementoNeto.ToString("N2"));
-            dgvEfe.Rows[nInc].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
+            decimal efectivoCalculado = efectivoInicial + incrementoNeto;
 
-            dgvEfe.Rows.Add("(+) Efectivo y equivalentes al inicio del período", efectivoInicial.ToString("N2"));
+            int filaIncremento = dgvEfe.Rows.Add(
+                "INCREMENTO NETO DE EFECTIVO Y EQUIVALENTES",
+                Util.Monto(incrementoNeto));
+            dgvEfe.Rows[filaIncremento].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
 
-            int nFinPer = dgvEfe.Rows.Add("(=) EFECTIVO Y EQUIVALENTES AL FINAL DEL PERÍODO", (incrementoNeto + efectivoInicial).ToString("N2"));
-            dgvEfe.Rows[nFinPer].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
+            dgvEfe.Rows.Add("(+) Efectivo y equivalentes al inicio del período", Util.Monto(efectivoInicial));
 
+            int filaFinal = dgvEfe.Rows.Add(
+                "(=) EFECTIVO Y EQUIVALENTES AL FINAL DEL PERÍODO",
+                Util.Monto(efectivoCalculado));
+            dgvEfe.Rows[filaFinal].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
+
+            dgvEfe.Rows.Add("Efectivo final según el balance", Util.Monto(efectivoFinal));
+
+            int filaDiferencia = dgvEfe.Rows.Add(
+                "Diferencia (calculado - balance)",
+                Util.Monto(efectivoCalculado - efectivoFinal));
+            dgvEfe.Rows[filaDiferencia].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
 
             foreach (DataGridViewRow row in dgvEfe.Rows)
             {
-                if (row.Cells[0].Value != null && row.Cells[0].Value.ToString().Contains("==="))
+                if (row.Cells[0].Value != null &&
+                    row.Cells[0].Value.ToString().StartsWith("FLUJOS DE EFECTIVO"))
                 {
                     row.DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
                     row.DefaultCellStyle.BackColor = Color.FromArgb(240, 243, 246);
                 }
             }
+        }
+
+        private static decimal EfectivoBalance(Periodo periodo)
+        {
+            if (periodo == null) return 0m;
+
+            decimal total = 0m;
+
+            foreach (Cuenta cuenta in periodo.BG)
+            {
+                if (Clasif.ClasificadorEfe.ObtenerCategoria(cuenta) ==
+                    Clasif.ClasificadorEfe.CategoriaEfe.Efectivo)
+                {
+                    total += cuenta.Monto;
+                }
+            }
+
+            return total;
+        }
+
+        private static string EtiquetaOperacion(Cuenta cuenta, decimal cambio, bool esActivo)
+        {
+            if (esActivo)
+            {
+                return cambio > 0m
+                    ? "(-) Aumento de " + cuenta.Nombre
+                    : "(+) Disminución de " + cuenta.Nombre;
+            }
+
+            return cambio > 0m
+                ? "(+) Aumento de " + cuenta.Nombre
+                : "(-) Disminución de " + cuenta.Nombre;
         }
     }
 }

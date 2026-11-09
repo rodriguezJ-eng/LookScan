@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace LookScan
@@ -19,7 +20,12 @@ namespace LookScan
             UtilUI.AlinearDerecha(dgvErAV, 2);
 
             Almacen.PeriodosCambiaron += () => LlenarPeriodos(false);
-            Almacen.ActivoCambio += CalcularAV;
+            Almacen.ActivoCambio += () =>
+            {
+                LlenarPeriodos(false);
+                CalcularAV();
+                if (_ahCalculado) CalcularAH(false);
+            };
             Almacen.DatosCambiaron += () => { CalcularAV(); if (_ahCalculado) CalcularAH(false); };
 
             LlenarPeriodos(true);
@@ -28,8 +34,44 @@ namespace LookScan
 
         void LlenarPeriodos(bool inicial)
         {
-            UtilUI.LlenarCombo(cmbPeriodoBaseAH, Almacen.Nombres, false, !inicial);
-            UtilUI.LlenarCombo(cmbPeriodoCompAH, Almacen.Nombres, true, !inicial);
+            var nombres = Almacen.Nombres.ToList();
+            if (nombres.Count == 0) return;
+
+            UtilUI.LlenarCombo(cmbPeriodoBaseAH, nombres, false, true);
+            UtilUI.LlenarCombo(cmbPeriodoCompAH, nombres, true, true);
+
+            // Se comparan dos periodos consecutivos que tengan datos. Si el periodo
+            // activo es el último, se toma el anterior como base.
+            var conDatos = Almacen.Periodos
+                .Where(p => p.TieneDatos)
+                .Select(p => p.Nombre)
+                .ToList();
+
+            string baseNombre;
+            string compNombre;
+
+            if (conDatos.Count >= 2)
+            {
+                int indice = conDatos.IndexOf(Almacen.Activo != null ? Almacen.Activo.Nombre : null);
+                if (indice < 0) indice = conDatos.Count - 2;
+                if (indice >= conDatos.Count - 1) indice = conDatos.Count - 2;
+
+                baseNombre = conDatos[indice];
+                compNombre = conDatos[indice + 1];
+            }
+            else if (conDatos.Count == 1)
+            {
+                baseNombre = conDatos[0];
+                compNombre = conDatos[0];
+            }
+            else
+            {
+                baseNombre = nombres.First();
+                compNombre = nombres.Last();
+            }
+
+            cmbPeriodoBaseAH.SelectedItem = baseNombre;
+            cmbPeriodoCompAH.SelectedItem = compNombre;
         }
 
         // ── Análisis horizontal (entre dos periodos) ──

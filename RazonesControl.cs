@@ -19,11 +19,24 @@ namespace LookScan
             UtilUI.AlinearDerecha(dgvCnt, 1);
             UtilUI.AlinearDerecha(dgvCno, 1);
 
-            Almacen.PeriodosCambiaron += () => UtilUI.LlenarCombo(cmbPeriodoRazones, Almacen.Nombres, true);
+            Almacen.PeriodosCambiaron += LlenarPeriodo;
+            Almacen.ActivoCambio += LlenarPeriodo;
             Almacen.DatosCambiaron += Recalcular;
 
-            UtilUI.LlenarCombo(cmbPeriodoRazones, Almacen.Nombres, true, false);
+            if (cmbGrupoRazones.SelectedIndex < 0) cmbGrupoRazones.SelectedIndex = 0;
+            LlenarPeriodo();
             Recalcular();
+        }
+
+        void LlenarPeriodo()
+        {
+            UtilUI.LlenarCombo(cmbPeriodoRazones, Almacen.Nombres, true, true);
+
+            if (Almacen.Activo != null &&
+                Almacen.Nombres.Any(n => Util.Igual(n, Almacen.Activo.Nombre)))
+            {
+                cmbPeriodoRazones.SelectedItem = Almacen.Activo.Nombre;
+            }
         }
 
         void Recalcular()

@@ -59,8 +59,8 @@ namespace LookScan
         void CargarDemo()
         {
             if (Almacen.HayDatos &&
-                MessageBox.Show("Se reemplazarán las cuentas de los periodos 2020, 2019 y 2018 por los datos de ejemplo. ¿Continuar?",
-                    "FINBOT", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+                MessageBox.Show("Se reemplazarán las cuentas de los periodos 2019 y 2020 por los datos de ejemplo y se dejará vacío 2018. ¿Continuar?",
+                    "LookScan", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
             Almacen.CargarDemo();
         }
 

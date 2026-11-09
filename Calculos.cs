@@ -238,7 +238,8 @@ namespace LookScan
 
             decimal? margen = ventas != 0m ? (decimal?)(utilidadNeta / ventas) : null;
             decimal? rotacion = activo != 0m ? (decimal?)(ventas / activo) : null;
-            decimal? multiplicador = patrimonio != 0m ? (decimal?)(activo / patrimonio) : null;
+            // Con patrimonio negativo el multiplicador y el ROE no son interpretables.
+            decimal? multiplicador = patrimonio > 0m ? (decimal?)(activo / patrimonio) : null;
 
             decimal? roe = margen.HasValue && rotacion.HasValue && multiplicador.HasValue
                 ? (decimal?)(margen.Value * rotacion.Value * multiplicador.Value)
@@ -273,7 +274,7 @@ namespace LookScan
              decimal inventario = Inventario(p);
              decimal efectivo = Efectivo(p);
              decimal cuentasPorCobrar = CuentasPorCobrar(p);
-             decimal cuentasPorPagar = CuentasPorPagar(p);
+             decimal cuentasPorPagar = CuentasPorPagarComerciales(p);
              decimal activo = ActivoTotal(p);
              decimal pasivo = PasivoTotal(p);
              decimal patrimonio = Patrimonio(p);
@@ -319,7 +320,8 @@ namespace LookScan
 
              AgregarRazon(resultado, "Endeudamiento", "Deuda sobre patrimonio",
                  pasivo, patrimonio, FormatoRazon.Veces,
-                 "Soles de deuda por cada sol de patrimonio. Se espera un valor moderado.");
+                 "Soles de deuda por cada sol de patrimonio. Se espera un valor moderado.",
+                 true);
 
              AgregarRazon(resultado, "Endeudamiento", "Cobertura de intereses",
                  UtilidadOperativa(p), gastosFinancieros, FormatoRazon.Veces,
@@ -344,7 +346,8 @@ namespace LookScan
 
              AgregarRazon(resultado, "Rentabilidad", "ROE",
                  UtilidadNeta(p), patrimonio, FormatoRazon.Porcentaje,
-                 "Rentabilidad generada sobre el patrimonio de los accionistas.");
+                 "Rentabilidad generada sobre el patrimonio de los accionistas.",
+                 true);
 
              // Mercado
              resultado.Add(new Razon
@@ -375,68 +378,125 @@ namespace LookScan
          }
         
 
-        private static string GenerarInterpretacion(string nombre, decimal valor)
+        private static string GenerarInterpretacion(string nombre, decimal? valor,
+                                                     decimal numerador, decimal denominador)
         {
+            if (!valor.HasValue)
+            {
+                switch (nombre)
+                {
+                    case "Deuda sobre patrimonio":
+                    case "ROE":
+                        return "No interpretable: el patrimonio es cero o negativo; la empresa está descapitalizada y el indicador no refleja la realidad del accionista.";
+                    case "Cobertura de intereses":
+                        return "No calculable: no hay gastos financieros registrados en el periodo.";
+                    case "Periodo promedio de cobro":
+                        return "No calculable: no hay ventas registradas en el periodo.";
+                    case "Periodo promedio de pago":
+                        return "No calculable: no hay costo de ventas registrado en el periodo.";
+                    case "Rotación de inventarios":
+                        return "No calculable: no hay inventario registrado en el periodo.";
+                    default:
+                        return "No calculable: el denominador del indicador es cero.";
+                }
+            }
+
+            decimal v = valor.Value;
+
             switch (nombre)
             {
                 // --- LIQUIDEZ ---
                 case "Razón corriente":
-                    if (valor < 1.0m) return $"Alerta: Con {valor:N2}x, los pasivos superan a los activos líquidos; riesgo de iliquidez a corto plazo.";
-                    if (valor <= 2.0m) return $"Saludable: Con {valor:N2}x, la empresa cubre adecuadamente sus deudas a corto plazo.";
-                    return $"Precaución: {valor:N2}x indica buena liquidez, pero podría reflejar activos ociosos.";
+                    if (v < 1m) return $"Alerta: con {v:N2}x los pasivos corrientes superan a los activos corrientes; existe riesgo de iliquidez de corto plazo.";
+                    if (v <= 2m) return $"Saludable: con {v:N2}x la empresa cubre adecuadamente sus obligaciones de corto plazo.";
+                    return $"Precaución: {v:N2}x muestra buena liquidez, pero podría indicar activos corrientes ociosos.";
 
                 case "Prueba ácida":
-                    if (valor < 1.0m) return $"Riesgo: Con {valor:N2}x, la empresa no podría pagar sus deudas inmediatas sin liquidar inventarios.";
-                    return $"Óptimo: Con {valor:N2}x, la empresa posee alta capacidad de pago inmediato sin depender de inventarios.";
+                    if (v < 1m) return $"Riesgo: con {v:N2}x la empresa no cubriría sus deudas inmediatas sin depender de los inventarios.";
+                    return $"Adecuada: con {v:N2}x la empresa cubre sus obligaciones inmediatas sin vender inventarios.";
 
                 case "Prueba defensiva":
-                    if (valor < 0.20m) return $"Baja cobertura: Con {valor:N2}x, el efectivo disponible es bajo frente a las deudas inmediatas.";
-                    return $"Adecuada: Con {valor:N2}x, se cuenta con suficiente efectivo para compromisos inminentes.";
+                    if (v < 0.2m) return $"Baja cobertura: con {v:N2}x el efectivo disponible es reducido frente a las deudas inmediatas.";
+                    if (v < 1m) return $"Cobertura parcial: con {v:N2}x el efectivo cubre solo una parte de los compromisos inmediatos.";
+                    return $"Sólida: con {v:N2}x el efectivo cubre los compromisos inmediatos.";
 
                 // --- ACTIVIDAD ---
                 case "Rotación de inventarios":
-                    return $"Eficiencia: El inventario rota {valor:N2} veces en el periodo; indica la velocidad de venta y abastecimiento.";
+                    if (v < 4m) return $"Rotación baja ({v:N2} veces): el inventario permanece mucho tiempo en la empresa.";
+                    if (v < 12m) return $"Rotación moderada ({v:N2} veces): el inventario se renueva con una frecuencia razonable.";
+                    return $"Rotación alta ({v:N2} veces): el inventario se renueva rápidamente durante el periodo.";
 
                 case "Periodo promedio de cobro":
-                    return $"Gestión de cobro: La empresa tarda en promedio {valor:N2} días en recaudar las cuentas por cobrar de sus clientes.";
+                    if (v < 30m) return $"Cobro ágil: la empresa recupera sus cuentas por cobrar en aproximadamente {v:N0} días.";
+                    if (v < 60m) return $"Cobro adecuado: el periodo promedio de cobro es de {v:N0} días.";
+                    if (v < 90m) return $"Cobro moderado: la empresa tarda cerca de {v:N0} días en recuperar sus cuentas por cobrar.";
+                    return $"Cobro prolongado: el periodo promedio de cobro alcanza {v:N0} días y conviene revisar la política de crédito.";
 
                 case "Periodo promedio de pago":
-                    return $"Política de pagos: Se tardan unos {valor:N2} días en liquidar las obligaciones con proveedores.";
+                    if (v < 30m) return $"Pago rápido: la empresa liquida sus obligaciones comerciales en aproximadamente {v:N0} días.";
+                    if (v < 60m) return $"Pago adecuado: el periodo promedio de pago es de {v:N0} días.";
+                    if (v < 90m) return $"Pago amplio: la empresa tarda cerca de {v:N0} días en pagar a sus proveedores.";
+                    return $"Pago muy prolongado: el periodo promedio de pago alcanza {v:N0} días; conviene evaluar el costo financiero implícito.";
 
                 case "Rotación de activos":
-                    return $"Utilización: Cada unidad invertida en activos genera {valor:N2}x en ventas para el periodo.";
+                    if (v < 0.5m) return $"Rotación baja ({v:N2}x): los activos generan ventas lentamente.";
+                    if (v < 1m) return $"Rotación moderada-baja ({v:N2}x): los activos participan parcialmente en la generación de ventas.";
+                    if (v < 2m) return $"Rotación adecuada ({v:N2}x): el nivel de ventas guarda relación con los activos.";
+                    return $"Rotación alta ({v:N2}x): se obtiene un uso intensivo de los activos para generar ventas.";
 
                 // --- ENDEUDAMIENTO ---
                 case "Deuda sobre activo":
-                    if (valor > 0.60m) return $"Alto riesgo: El {valor * 100:N1}% de los activos está financiado por acreedores externos.";
-                    return $"Estable: El {valor * 100:N1}% de endeudamiento muestra un nivel moderado y seguro.";
+                    if (v < 0m) return "No interpretable: el pasivo o el activo presentan valores negativos.";
+                    if (v > 1m) return $"Riesgo alto: el {v * 100:N1}% de los activos está financiado con deuda y los pasivos superan al activo total.";
+                    if (v > 0.6m) return $"Endeudamiento alto: el {v * 100:N1}% de los activos se financia con acreedores externos.";
+                    if (v > 0.4m) return $"Endeudamiento moderado: el {v * 100:N1}% de los activos se financia con deuda.";
+                    return $"Endeudamiento bajo: solo el {v * 100:N1}% de los activos se financia con deuda.";
 
                 case "Deuda sobre patrimonio":
-                    return $"Apalancamiento: Existe un nivel de {valor:N2}x de deuda por cada sol aportado por los accionistas.";
+                    if (v < 1m) return $"Apalancamiento bajo: {v:N2}x de deuda por cada sol de patrimonio.";
+                    if (v < 2m) return $"Apalancamiento moderado: {v:N2}x de deuda por cada sol de patrimonio.";
+                    if (v < 3m) return $"Apalancamiento alto: {v:N2}x de deuda por cada sol de patrimonio.";
+                    return $"Apalancamiento muy alto: {v:N2}x de deuda por cada sol de patrimonio; el riesgo financiero es elevado.";
 
                 case "Cobertura de intereses":
-                    if (valor < 1.0m) return $"Alerta crítica: La utilidad operativa no alcanza para cubrir los gastos financieros ({valor:N2}x).";
-                    return $"Solvente: La utilidad operativa cubre {valor:N2} veces los intereses de la deuda.";
+                    if (v < 0m) return $"Sin cobertura: la utilidad operativa es negativa y no alcanza a cubrir los gastos financieros ({v:N2}x).";
+                    if (v < 1m) return $"Alerta crítica: la utilidad operativa no cubre los gastos financieros ({v:N2}x).";
+                    if (v < 3m) return $"Cobertura ajustada: la utilidad operativa cubre {v:N2} veces los gastos financieros.";
+                    return $"Cobertura holgada: la utilidad operativa cubre {v:N2} veces los gastos financieros.";
 
                 // --- RENTABILIDAD ---
                 case "Margen bruto":
-                    return $"Rentabilidad de ventas: Queda un margen bruto del {valor * 100:N1}% después del costo de ventas.";
+                    if (v < 0m) return $"Pérdida bruta ({v * 100:N1}%): el costo de ventas supera a las ventas.";
+                    if (v < 0.15m) return $"Margen bruto bajo ({v * 100:N1}%): queda poco después del costo de ventas.";
+                    if (v < 0.3m) return $"Margen bruto moderado ({v * 100:N1}%): retención razonable después del costo de ventas.";
+                    return $"Margen bruto alto ({v * 100:N1}%): buen control del costo de ventas.";
 
                 case "Margen operativo":
-                    return $"Eficiencia operativa: El {valor * 100:N1}% de las ventas representa la ganancia antes de intereses e impuestos.";
+                    if (v < 0m) return $"Pérdida operativa ({v * 100:N1}%): los gastos operativos superan la utilidad bruta.";
+                    if (v < 0.05m) return $"Margen operativo bajo ({v * 100:N1}%): la operación deja poco margen antes de intereses e impuestos.";
+                    if (v < 0.15m) return $"Margen operativo moderado ({v * 100:N1}%): la operación retiene una porción razonable de las ventas.";
+                    return $"Margen operativo alto ({v * 100:N1}%): eficiencia operativa favorable.";
 
                 case "Margen neto":
-                    if (valor < 0.05m) return $"Margen bajo ({valor * 100:N1}%): La utilidad neta sobre las ventas es reducida.";
-                    return $"Buen rendimiento: El {valor * 100:N1}% de las ventas se convierte en ganancia neta para la empresa.";
+                    if (v < 0m) return $"Pérdida neta ({v * 100:N1}%): los costos, gastos e impuestos superan las ventas.";
+                    if (v < 0.05m) return $"Margen neto bajo ({v * 100:N1}%): queda poco de cada venta como utilidad neta.";
+                    if (v < 0.15m) return $"Margen neto moderado ({v * 100:N1}%): retención razonable de utilidades.";
+                    return $"Margen neto alto ({v * 100:N1}%): buen control de costos y retención de utilidades.";
 
                 case "ROA":
-                    return $"Rendimiento de activos: Se generó un {valor * 100:N1}% de utilidad neta en relación con el total de activos.";
+                    if (v < 0m) return $"Pérdida sobre activos ({v * 100:N1}%): la utilidad neta es negativa respecto del activo total.";
+                    if (v < 0.05m) return $"ROA bajo ({v * 100:N1}%): la utilidad generada sobre los activos es reducida.";
+                    if (v < 0.1m) return $"ROA moderado ({v * 100:N1}%): rendimiento razonable sobre el activo total.";
+                    return $"ROA alto ({v * 100:N1}%): buena capacidad de los activos para generar utilidad neta.";
 
                 case "ROE":
-                    return $"Rentabilidad patrimonial: Los accionistas obtienen un rendimiento del {valor * 100:N1}% sobre su inversión.";
+                    if (v < 0m) return $"Rentabilidad negativa ({v * 100:N1}%): destrucción de valor para el accionista.";
+                    if (v < 0.05m) return $"Rentabilidad baja ({v * 100:N1}%): rendimiento reducido sobre el patrimonio.";
+                    if (v < 0.15m) return $"Rentabilidad moderada ({v * 100:N1}%): rendimiento razonable sobre el patrimonio.";
+                    return $"Rentabilidad alta ({v * 100:N1}%): atractivo para el accionista.";
 
                 default:
-                    return "Indicador financiero analizado para el periodo actual.";
+                    return "Indicador financiero calculado para el periodo.";
             }
         }
 
@@ -567,26 +627,50 @@ namespace LookScan
             };
         }
 
-        private static void AgregarRazon(List<Razon> lista, string grupo, string nombre, decimal numerador, decimal denominador, FormatoRazon formato, string descripcionTeorica)
+        private static void AgregarRazon(List<Razon> lista, string grupo, string nombre,
+                                         decimal numerador, decimal denominador,
+                                         FormatoRazon formato, string descripcionTeorica,
+                                         bool requiereDenominadorPositivo = false)
         {
-            decimal valor = denominador != 0 ? numerador / denominador : 0;
+            decimal? valor = null;
 
-            string interpretacionDinamica = GenerarInterpretacion(nombre, valor);
+            bool denominadorValido = denominador != 0m &&
+                                     (!requiereDenominadorPositivo || denominador > 0m);
 
-            
-            string sufijo = "";
-            if (formato == FormatoRazon.Porcentaje) sufijo = "%";
-            else if (formato == FormatoRazon.Veces) sufijo = "x";
-            else if (formato == FormatoRazon.Dias) sufijo = " días";
+            if (denominadorValido)
+            {
+                decimal calculado = numerador / denominador;
+                if (formato == FormatoRazon.Dias) calculado *= 365m;
+                valor = calculado;
+            }
+
+            string interpretacionDinamica = GenerarInterpretacion(nombre, valor, numerador, denominador);
+
+            string texto;
+            if (!valor.HasValue)
+            {
+                texto = "N/D";
+            }
+            else if (formato == FormatoRazon.Porcentaje)
+            {
+                texto = Util.Numero(valor.Value * 100m, 2) + "%";
+            }
+            else if (formato == FormatoRazon.Veces)
+            {
+                texto = Util.Numero(valor.Value, 2) + "x";
+            }
+            else
+            {
+                texto = Util.Numero(valor.Value, 0) + " días";
+            }
 
             lista.Add(new Razon
             {
                 Nombre = nombre,
                 Grupo = grupo,
-                ValorTexto = valor.ToString("N2") + sufijo,
+                ValorTexto = texto,
                 Interpretacion = interpretacionDinamica
             });
-        
         }
 
         private static decimal Inventario(Periodo p)
@@ -596,12 +680,41 @@ namespace LookScan
 
         private static decimal CuentasPorCobrar(Periodo p)
         {
-            return PorNombre(p, TipoEstado.BG, new[] { Clasif.ActivoCorriente }, "cobrar");
+            // Incluye cuentas por cobrar comerciales, CxC con instituciones y deudores.
+            return PorNombre(p, TipoEstado.BG, new[] { Clasif.ActivoCorriente },
+                "cobrar", "cxc", "cliente", "deudor");
         }
 
-        private static decimal CuentasPorPagar(Periodo p)
+        private static decimal CuentasPorPagarComerciales(Periodo p)
         {
-            return PorNombre(p, TipoEstado.BG, new[] { Clasif.PasivoCorriente }, "pagar");
+            if (p == null) return 0m;
+
+            decimal total = 0m;
+
+            foreach (Cuenta cuenta in p.Cuentas.Where(c => c.Tipo == TipoEstado.BG &&
+                                                           Util.Igual(c.Clasificacion, Clasif.PasivoCorriente)))
+            {
+                string nombre = Util.Clave(cuenta.Nombre);
+
+                bool esComercial = nombre.Contains("proveedor") ||
+                                   nombre.Contains("acreedor") ||
+                                   nombre.Contains("cuentas por pagar") ||
+                                   nombre.Contains("por pagar a") ||
+                                   nombre.Contains("gastos acumulados");
+
+                // Se excluyen deuda financiera, intereses y obligaciones tributarias.
+                bool excluir = nombre.Contains("prestamo") ||
+                               nombre.Contains("interes") ||
+                               nombre.Contains("financier") ||
+                               nombre.Contains("impuesto") ||
+                               nombre.Contains("tribut") ||
+                               nombre.Contains("sunat") ||
+                               nombre.Contains("estado");
+
+                if (esComercial && !excluir) total += cuenta.Monto;
+            }
+
+            return total;
         }
 
         private static decimal Efectivo(Periodo p)
