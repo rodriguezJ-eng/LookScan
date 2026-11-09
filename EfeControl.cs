@@ -12,8 +12,28 @@ namespace LookScan
         public EfeControl()
         {
             InitializeComponent();
-        }
+            CargarCombosEfe();
 
+
+        }
+        private void CargarCombosEfe()
+        {
+            cmbPeriodoBaseEfe.Items.Clear();
+            cmbPeriodoCompEfe.Items.Clear();
+
+            string[] misAnios = { "2020", "2019", "2018" };
+
+            foreach (var anio in misAnios)
+            {
+                cmbPeriodoBaseEfe.Items.Add(anio);
+                cmbPeriodoCompEfe.Items.Add(anio);
+            }
+            cmbPeriodoBaseEfe.SelectedIndex = -1;
+            cmbPeriodoBaseEfe.Text = string.Empty;
+
+            cmbPeriodoCompEfe.SelectedIndex = -1;
+            cmbPeriodoCompEfe.Text = string.Empty;
+        }
         private void btnCalcularEfe_Click(object sender, EventArgs e)
         {
             string nombreBase = cmbPeriodoBaseEfe.Text;
@@ -28,7 +48,6 @@ namespace LookScan
                 return;
             }
 
-            // 2. Configurar columnas del DataGridView si está vacío
             if (dgvEfe.Columns.Count == 0)
             {
                 dgvEfe.Columns.Add("Concepto", "Concepto del Flujo de Efectivo");
@@ -40,7 +59,7 @@ namespace LookScan
             dgvEfe.BackgroundColor = System.Drawing.Color.White;
             dgvEfe.RowHeadersVisible = false;
 
-            // --- VARIABLES GENERALES Y LISTAS UNIVERSALES ---
+      
             decimal efectivoInicial = 0m;
             decimal utilRetBase = 0m, utilRetComp = 0m;
             decimal flujoOperacion = 0m;
@@ -51,7 +70,6 @@ namespace LookScan
             List<(string concepto, decimal monto)> filasInversion = new List<(string, decimal)>();
             List<(string concepto, decimal monto)> filasFinanciamiento = new List<(string, decimal)>();
 
-            // Capturar efectivo inicial y utilidades retenidas
             foreach (var cta in periodoBase.Cuentas)
             {
                 string nLow = (cta.Nombre ?? "").ToLower();
@@ -64,9 +82,6 @@ namespace LookScan
                 if (nLow.Contains("utilidades retenidas") || nLow.Contains("resultados acumulados")) utilRetComp += cta.Monto;
             }
 
-            // =========================================================================
-            // RECORRIDO DINÁMICO UNIVERSAL DE CUENTAS (¡Fuera de los if para que sirva siempre!)
-            // =========================================================================
             foreach (var ctaComp in periodoComp.Cuentas)
             {
                 string nombreCta = ctaComp.Nombre ?? "";
@@ -101,7 +116,6 @@ namespace LookScan
                         etiqueta = (diferencia > 0 ? "(-) Aumento en " : "(+) Disminución en ") + nombreCta;
                     }
 
-                    // Solo se acumula aquí si está activo el método indirecto para evitar duplicar operaciones
                     if (rbMetodo1.Checked)
                     {
                         flujoOperacion += varEfe;
@@ -127,9 +141,7 @@ namespace LookScan
             }
 
 
-            // ==========================================
-            // MÉTODO INDIRECTO (rbMetodo1)
-            // ==========================================
+            // metodo 1
             if (rbMetodo1.Checked)
             {
                 dgvEfe.Rows.Add("FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE OPERACIÓN");
@@ -155,7 +167,6 @@ namespace LookScan
                 dgvEfe.Rows.Add("Utilidad Neta del Ejercicio", utilidadNeta.ToString("N2"));
 
                 flujoOperacion = utilidadNeta;
-                // Sumar variaciones operativas recolectadas en el bucle universal
                 foreach (var f in filasOperacion)
                 {
                     flujoOperacion += f.monto;
@@ -165,9 +176,7 @@ namespace LookScan
                 int n = dgvEfe.Rows.Add("EFECTIVO NETO PROVISTO POR ACTIVIDADES DE OPERACIÓN", flujoOperacion.ToString("N2"));
                 dgvEfe.Rows[n].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
             }
-            // ==========================================
-            // OPCIÓN B: MÉTODO DIRECTO (rbMetodo2)
-            // ==========================================
+          // metodo 2
             else if (rbMetodo2.Checked)
             {
                 dgvEfe.Rows.Add("=== 1. FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE OPERACIÓN (MÉTODO DIRECTO) ===", "");
@@ -217,9 +226,7 @@ namespace LookScan
                 dgvEfe.Rows[nOp].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
             }
 
-            // =========================================================================
-            // SECCIONES B Y C (Inversión y Financiación - ¡Comunes para ambos métodos!)
-            // =========================================================================
+   
             dgvEfe.Rows.Add("FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE INVERSIÓN");
             foreach (var f in filasInversion) dgvEfe.Rows.Add(f.concepto, f.monto.ToString("N2"));
 
@@ -230,7 +237,7 @@ namespace LookScan
             foreach (var f in filasFinanciamiento) dgvEfe.Rows.Add(f.concepto, f.monto.ToString("N2"));
 
             // Cálculo automático de Dividendos
-            decimal utilidadNetaRef = 245000.00m; // Ajusta según tu cálculo de utilidad neta si gustas
+            decimal utilidadNetaRef = 245000.00m; 
             decimal pagoDividendos = utilRetBase + utilidadNetaRef - utilRetComp;
             if (pagoDividendos < 0) pagoDividendos = 0m;
             if (pagoDividendos > 0)
@@ -243,9 +250,7 @@ namespace LookScan
             dgvEfe.Rows[nFin].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
 
 
-            // ==========================================
-            // TOTALES FINALES
-            // ==========================================
+          
             decimal incrementoNeto = flujoOperacion + flujoInversion + flujoFinanciamiento;
             int nInc = dgvEfe.Rows.Add("INCREMENTO NETO DE EFECTIVO Y EQUIVALENTES ", incrementoNeto.ToString("N2"));
             dgvEfe.Rows[nInc].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
@@ -255,7 +260,7 @@ namespace LookScan
             int nFinPer = dgvEfe.Rows.Add("(=) EFECTIVO Y EQUIVALENTES AL FINAL DEL PERÍODO", (incrementoNeto + efectivoInicial).ToString("N2"));
             dgvEfe.Rows[nFinPer].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
 
-            // Formato corporativo para títulos ===
+
             foreach (DataGridViewRow row in dgvEfe.Rows)
             {
                 if (row.Cells[0].Value != null && row.Cells[0].Value.ToString().Contains("==="))

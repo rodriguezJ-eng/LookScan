@@ -163,7 +163,7 @@ namespace LookScan
             AgregarBG(periodo, "Gastos pagados por anticipado", Clasif.ActivoCorriente, true, 57619652m);
 
             // ACTIVO NO CORRIENTE
-            AgregarBG(periodo, "Cuentas por cobrar", Clasif.ActivoNoCorriente, true, 1975123624m);
+            AgregarBG(periodo, "Cuentas por cobrar no corriente", Clasif.ActivoNoCorriente, true, 1975123624m);
             AgregarBG(periodo, "Repuestos para plantas", Clasif.ActivoNoCorriente, true, 496816772m);
             AgregarBG(periodo, "Plantas eléctricas e instalaciones", Clasif.ActivoNoCorriente, true, 6953365196m);
             AgregarBG(periodo, "Activos cedidos en administración", Clasif.ActivoNoCorriente, false, 459955842m);
@@ -178,7 +178,7 @@ namespace LookScan
             AgregarBG(periodo, "Cuentas por pagar y gastos acumulados", Clasif.PasivoCorriente, true, 1515624652m);
 
             // PASIVO NO CORRIENTE
-            AgregarBG(periodo, "Préstamos por pagar (Estado)", Clasif.PasivoNoCorriente, false, 3448321435m);
+            AgregarBG(periodo, "Préstamos por pagar (Estado) no corriente", Clasif.PasivoNoCorriente, false, 3448321435m);
             AgregarBG(periodo, "Provisión indemnización laboral", Clasif.PasivoNoCorriente, false, 75846914m);
             AgregarBG(periodo, "Otros pasivos", Clasif.PasivoNoCorriente, false, 1500729095m);
 
@@ -214,7 +214,7 @@ namespace LookScan
             AgregarBG(periodo, "Gastos pagados por anticipado", Clasif.ActivoCorriente, true, 4826346m);
 
             // ACTIVO NO CORRIENTE
-            AgregarBG(periodo, "Cuentas por cobrar", Clasif.ActivoNoCorriente, true, 2224225563m);
+            AgregarBG(periodo, "Cuentas por cobrar no corriente", Clasif.ActivoNoCorriente, true, 2224225563m);
             AgregarBG(periodo, "Repuestos para plantas", Clasif.ActivoNoCorriente, true, 419557143m);
             AgregarBG(periodo, "Plantas eléctricas e instalaciones", Clasif.ActivoNoCorriente, true, 6926666163m);
             AgregarBG(periodo, "Activos cedidos en administración", Clasif.ActivoNoCorriente, false, 434071699m);
@@ -229,7 +229,7 @@ namespace LookScan
             AgregarBG(periodo, "Cuentas por pagar y gastos acumulados", Clasif.PasivoCorriente, true, 1721706432m);
 
             // PASIVO NO CORRIENTE
-            AgregarBG(periodo, "Préstamos por pagar (Estado)", Clasif.PasivoNoCorriente, false, 3241331100m);
+            AgregarBG(periodo, "Préstamos por pagar (Estado) no corriente", Clasif.PasivoNoCorriente, false, 3241331100m);
             AgregarBG(periodo, "Provisión indemnización laboral", Clasif.PasivoNoCorriente, false, 77180835m);
             AgregarBG(periodo, "Otros pasivos", Clasif.PasivoNoCorriente, false, 1643009248m);
 
