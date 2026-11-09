@@ -104,6 +104,17 @@ namespace LookScan
             if (handler != null) handler();
         }
 
+        // Notifica que una cuenta existente cambió (nombre, clasificación, tipo,
+        // operativa o monto) para que la interfaz y la persistencia se actualicen.
+        public static void ActualizarCuenta(Periodo periodo, Cuenta cuenta)
+        {
+            if (periodo == null || cuenta == null) return;
+            if (!periodo.Cuentas.Contains(cuenta)) return;
+
+            Action handler = DatosCambiaron;
+            if (handler != null) handler();
+        }
+
         public static void EliminarCuenta(Periodo periodo, Cuenta cuenta)
         {
             if (periodo == null || cuenta == null) return;
@@ -224,6 +235,9 @@ namespace LookScan
 
         public static void CargarDemo()
         {
+            // El demo también trae el nombre de la empresa para no tener que escribirlo.
+            Empresa = "ENEL";
+
             Periodo p2019 = AsegurarPeriodo("2019");
             Periodo p2020 = AsegurarPeriodo("2020");
 

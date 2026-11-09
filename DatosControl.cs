@@ -11,21 +11,83 @@ namespace LookScan
             InitializeComponent();
             if (Util.EnDiseno) return;
 
-            btnAgregar.Click += (s, e) => AgregarCuenta();
             btnCargarDemo.Click += (s, e) => CargarDemo();
             dgvBalance.CellContentClick += Grid_CellContentClick;
             dgvResultados.CellContentClick += Grid_CellContentClick;
+            dgvResultados.CellDoubleClick += (s, e) => CargarParaEdicion(dgvResultados, e);
             UtilUI.AlinearDerecha(dgvBalance, 3);
             UtilUI.AlinearDerecha(dgvResultados, 3);
 
             Almacen.ActivoCambio += Redibujar;
             Almacen.DatosCambiaron += Redibujar;
             Redibujar();
-
         }
 
-        private string cuentaEnEdicion = null;
-        void AgregarCuenta()
+        // Cuenta que se está editando. Null significa que el formulario agrega una nueva.
+        private Cuenta cuentaEnEdicion = null;
+
+        void CargarDemo()
+        {
+            if (Almacen.HayDatos &&
+                MessageBox.Show("Se reemplazarán las cuentas de los periodos 2019 y 2020 por los datos de ejemplo y se dejará vacío 2018. ¿Continuar?",
+                    "LookScan", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+            Almacen.CargarDemo();
+        }
+
+        void Grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var g = (DataGridView)sender;
+            if (e.RowIndex < 0 || e.ColumnIndex != g.Columns.Count - 1) return;   // última columna = Eliminar
+            if (!(g.Rows[e.RowIndex].Tag is Cuenta c)) return;
+
+            if (ReferenceEquals(c, cuentaEnEdicion)) LimpiarFormulario();
+            Almacen.EliminarCuenta(Almacen.Activo, c);
+        }
+
+        // Carga todos los campos del formulario con la cuenta de la fila seleccionada.
+        void CargarParaEdicion(DataGridView g, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.RowIndex >= g.Rows.Count) return;
+            if (e.ColumnIndex == g.Columns.Count - 1) return;   // no editar desde el botón Eliminar
+            if (!(g.Rows[e.RowIndex].Tag is Cuenta c)) return;
+
+            cuentaEnEdicion = c;
+
+            cmbTipoEstado.SelectedItem = c.Tipo == TipoEstado.BG ? "BG" : "ER";
+            txtNombreCuenta.Text = c.Nombre ?? string.Empty;
+
+            if (cmbClasificacion.Items.Contains(c.Clasificacion))
+                cmbClasificacion.SelectedItem = c.Clasificacion;
+            else if (!string.IsNullOrEmpty(c.Clasificacion))
+            {
+                cmbClasificacion.Items.Add(c.Clasificacion);
+                cmbClasificacion.SelectedItem = c.Clasificacion;
+            }
+
+            rbOperativa1.Checked = c.Operativa;
+            rbOperativa2.Checked = !c.Operativa;
+
+            decimal monto = c.Monto;
+            if (monto < numMonto.Minimum) monto = numMonto.Minimum;
+            if (monto > numMonto.Maximum) monto = numMonto.Maximum;
+            numMonto.Value = monto;
+
+            btnAgregar.Text = "Actualizar";
+            txtNombreCuenta.Focus();
+            txtNombreCuenta.SelectAll();
+        }
+
+        void LimpiarFormulario()
+        {
+            cuentaEnEdicion = null;
+            btnAgregar.Text = "Agregar";
+            txtNombreCuenta.Clear();
+            numMonto.Value = 0;
+            rbOperativa1.Checked = true;
+        }
+
+        // Único manejador de btnAgregar: agrega una cuenta nueva o guarda la edición.
+        private void btnAgregar_Click(object sender, EventArgs e)
         {
             string nombre = txtNombreCuenta.Text.Trim();
             if (nombre.Length == 0) { UtilUI.Aviso("Escriba el nombre de la cuenta."); txtNombreCuenta.Focus(); return; }
@@ -43,32 +105,38 @@ namespace LookScan
             }
 
             var periodo = Almacen.Activo;
-            if (periodo.Cuentas.Any(c => c.Tipo == tipo && Util.Igual(c.Nombre, nombre)))
+            if (periodo == null) return;
+
+            bool duplicada = periodo.Cuentas.Any(c =>
+                !ReferenceEquals(c, cuentaEnEdicion) &&
+                c.Tipo == tipo && Util.Igual(c.Nombre, nombre));
+            if (duplicada)
             { UtilUI.Aviso("Ya existe una cuenta «" + nombre + "» en " + tipo + " del periodo " + periodo.Nombre + "."); return; }
 
-            Almacen.AgregarCuenta(periodo, new Cuenta
+            if (cuentaEnEdicion == null)
             {
-                Tipo = tipo, Nombre = nombre, Clasificacion = clasif,
-                Operativa = rbOperativa1.Checked, Monto = numMonto.Value
-            });
-            txtNombreCuenta.Clear();
-            numMonto.Value = 0;
+                Almacen.AgregarCuenta(periodo, new Cuenta
+                {
+                    Tipo = tipo,
+                    Nombre = nombre,
+                    Clasificacion = clasif,
+                    Operativa = rbOperativa1.Checked,
+                    Monto = numMonto.Value
+                });
+            }
+            else
+            {
+                Cuenta c = cuentaEnEdicion;
+                c.Tipo = tipo;
+                c.Nombre = nombre;
+                c.Clasificacion = clasif;
+                c.Operativa = rbOperativa1.Checked;
+                c.Monto = numMonto.Value;
+                Almacen.ActualizarCuenta(periodo, c);
+            }
+
+            LimpiarFormulario();
             txtNombreCuenta.Focus();
-        }
-
-        void CargarDemo()
-        {
-            if (Almacen.HayDatos &&
-                MessageBox.Show("Se reemplazarán las cuentas de los periodos 2019 y 2020 por los datos de ejemplo y se dejará vacío 2018. ¿Continuar?",
-                    "LookScan", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
-            Almacen.CargarDemo();
-        }
-
-        void Grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            var g = (DataGridView)sender;
-            if (e.RowIndex < 0 || e.ColumnIndex != g.Columns.Count - 1) return;   // última columna = Eliminar
-            if (g.Rows[e.RowIndex].Tag is Cuenta c) Almacen.EliminarCuenta(Almacen.Activo, c);
         }
 
         void Redibujar()
@@ -86,72 +154,10 @@ namespace LookScan
             int i = g.Rows.Add(c.Nombre, c.Clasificacion, c.Operativa ? "Sí" : "No", Util.Monto(c.Monto), null);
             g.Rows[i].Tag = c;
         }
-   
+
         private void dgvBalance_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
-            {
-                DataGridViewRow row = dgvBalance.Rows[e.RowIndex];
-
-                // Cargamos los datos en los controles de arriba
-                txtNombreCuenta.Text = row.Cells[0].Value?.ToString();
-
-                if (decimal.TryParse(row.Cells[3].Value?.ToString(), out decimal montoValor))
-                {
-                    numMonto.Value = montoValor;
-                }
-
-                cmbClasificacion.Text = row.Cells[1].Value?.ToString();
-
-                // 
-                cuentaEnEdicion = txtNombreCuenta.Text.Trim();
-            }
+            CargarParaEdicion(dgvBalance, e);
         }
-        
-
-
-private void btnAgregar_Click(object sender, EventArgs e)
-        {
-            string nombreIngresado = txtNombreCuenta.Text.Trim();
-
-            if (string.IsNullOrEmpty(cuentaEnEdicion))
-            {
-                // ==========================================
-                // MODO 1: AGREGAR NUEVA CUENTA
-                // ==========================================
-                // Aquí mantienes la validación de duplicados que ya tenías 
-                // y el código donde agregas la cuenta nueva a Almacen.Activo.
-
-                // Ejemplo de lo que ya tenías:
-                // if (ExisteCuenta(nombreIngresado)) 
-                // {
-                //     MessageBox.Show("La cuenta ya existe...");
-                //     return;
-                // }
-                // Almacen.Activo.Cuentas.Add(...);
-            }
-            else
-            {
-                // ==========================================
-                // MODO 2: ACTUALIZAR / EDITAR CUENTA EXISTENTE
-                // ==========================================
-                // Buscamos la cuenta dentro de Almacen.Activo usando el nombre que guardamos al hacer doble clic
-                var cuentaAModificar = Almacen.Activo.Cuentas.FirstOrDefault(c => c.Nombre == cuentaEnEdicion);
-
-                if (cuentaAModificar != null)
-                {
-                    // Actualizamos los datos con los valores de las cajas y del NumericUpDown
-                    cuentaAModificar.Nombre = nombreIngresado;
-                    cuentaAModificar.Monto = numMonto.Value; // Asignamos el valor directo del NumericUpDown
-                    cuentaAModificar.Clasificacion = cmbClasificacion.Text;
-                    // Actualiza aquí los demás campos si los tienes (como si es operativa, etc.)
-                }
-
-                // Limpiamos la memoria de edición para que el botón regrese a su modo normal
-                cuentaEnEdicion = null;
-            }
-        }
-     }
+    }
 }
-
-
