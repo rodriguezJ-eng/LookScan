@@ -350,27 +350,27 @@ namespace LookScan
             this.colTipo.HeaderText = "Tipo";
             this.colTipo.Name = "colTipo";
             this.colTipo.ReadOnly = true;
-            this.colTipo.FillWeight = 25F;
+            this.colTipo.FillWeight = 20F;
 
             // colCategoria
             this.colCategoria.HeaderText = "Categoría";
             this.colCategoria.Name = "colCategoria";
             this.colCategoria.ReadOnly = true;
-            this.colCategoria.FillWeight = 35F;
+            this.colCategoria.FillWeight = 30F;
 
             // colMonto
             this.colMonto.HeaderText = "Monto";
             this.colMonto.Name = "colMonto";
             this.colMonto.ReadOnly = true;
             this.colMonto.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            this.colMonto.FillWeight = 25F;
+            this.colMonto.FillWeight = 22F;
 
             // colFecha
-            this.colFecha.HeaderText = "Fecha";
+            this.colFecha.HeaderText = "Fecha (Día/Mes/Año)";
             this.colFecha.Name = "colFecha";
             this.colFecha.ReadOnly = true;
             this.colFecha.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            this.colFecha.FillWeight = 20F;
+            this.colFecha.FillWeight = 28F;
 
             // 
             // grpResumen

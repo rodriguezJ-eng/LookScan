@@ -24,6 +24,13 @@ namespace LookScan
 
         private void ExportarJson()
         {
+            try
+            {
+                if (!Almacen.HayDatos)
+                {
+                    MessageBox.Show("No se puede exportar: no hay datos financieros cargados en el sistema.", "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
             using (var dialogo = new SaveFileDialog())
             {
                 dialogo.Title = "Exportar datos completos a JSON";
@@ -43,6 +50,11 @@ namespace LookScan
                 {
                     Error("No se pudo exportar el JSON", ex);
                 }
+            }
+            }
+            catch (Exception ex)
+            {
+                Error("No se puede exportar a JSON", ex);
             }
         }
 

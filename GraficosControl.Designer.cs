@@ -139,10 +139,10 @@ namespace LookScan
             tlpGraficos.Location = new Point(0, 0);
             tlpGraficos.Name = "tlpGraficos";
             tlpGraficos.RowCount = 3;
-            tlpGraficos.RowStyles.Add(new RowStyle(SizeType.Absolute, 340F));
-            tlpGraficos.RowStyles.Add(new RowStyle(SizeType.Absolute, 340F));
-            tlpGraficos.RowStyles.Add(new RowStyle(SizeType.Absolute, 340F));
-            tlpGraficos.Size = new Size(1214, 1020);
+            tlpGraficos.RowStyles.Add(new RowStyle(SizeType.Absolute, 460F));
+            tlpGraficos.RowStyles.Add(new RowStyle(SizeType.Absolute, 460F));
+            tlpGraficos.RowStyles.Add(new RowStyle(SizeType.Absolute, 460F));
+            tlpGraficos.Size = new Size(1214, 1400);
             tlpGraficos.TabIndex = 0;
             // 
             // grpGrafico1
@@ -206,7 +206,7 @@ namespace LookScan
             // 
             cmbTipoGrafico1.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTipoGrafico1.FormattingEnabled = true;
-            cmbTipoGrafico1.Items.AddRange(new object[] { "Barras", "Líneas", "Araña", "Pastel", "Polar" });
+            cmbTipoGrafico1.Items.AddRange(new object[] { "Barras", "Líneas", "Pastel", "Dona", "Araña", "Polar" });
             cmbTipoGrafico1.Location = new Point(4, 22);
             cmbTipoGrafico1.Name = "cmbTipoGrafico1";
             cmbTipoGrafico1.Size = new Size(110, 29);
@@ -293,7 +293,7 @@ namespace LookScan
             // 
             cmbTipoGrafico2.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTipoGrafico2.FormattingEnabled = true;
-            cmbTipoGrafico2.Items.AddRange(new object[] { "Araña", "Barras", "Líneas", "Polar", "Pastel" });
+            cmbTipoGrafico2.Items.AddRange(new object[] { "Barras", "Líneas", "Pastel", "Dona", "Araña", "Polar" });
             cmbTipoGrafico2.Location = new Point(4, 22);
             cmbTipoGrafico2.Name = "cmbTipoGrafico2";
             cmbTipoGrafico2.Size = new Size(110, 29);
@@ -380,7 +380,7 @@ namespace LookScan
             // 
             cmbTipoGrafico3.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTipoGrafico3.FormattingEnabled = true;
-            cmbTipoGrafico3.Items.AddRange(new object[] { "Barras", "Líneas", "Araña", "Polar", "Pastel" });
+            cmbTipoGrafico3.Items.AddRange(new object[] { "Barras", "Líneas", "Pastel", "Dona", "Araña", "Polar" });
             cmbTipoGrafico3.Location = new Point(4, 22);
             cmbTipoGrafico3.Name = "cmbTipoGrafico3";
             cmbTipoGrafico3.Size = new Size(110, 29);
@@ -467,7 +467,7 @@ namespace LookScan
             // 
             cmbTipoGrafico4.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTipoGrafico4.FormattingEnabled = true;
-            cmbTipoGrafico4.Items.AddRange(new object[] { "Barras", "Pastel", "Dona", "Polar", "Líneas" });
+            cmbTipoGrafico4.Items.AddRange(new object[] { "Barras", "Líneas", "Pastel", "Dona", "Araña", "Polar" });
             cmbTipoGrafico4.Location = new Point(4, 22);
             cmbTipoGrafico4.Name = "cmbTipoGrafico4";
             cmbTipoGrafico4.Size = new Size(110, 29);
@@ -554,7 +554,7 @@ namespace LookScan
             // 
             cmbTipoGrafico5.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTipoGrafico5.FormattingEnabled = true;
-            cmbTipoGrafico5.Items.AddRange(new object[] { "Barras", "Líneas", "Pastel", "Dona", "Polar" });
+            cmbTipoGrafico5.Items.AddRange(new object[] { "Barras", "Líneas", "Pastel", "Dona", "Araña", "Polar" });
             cmbTipoGrafico5.Location = new Point(4, 22);
             cmbTipoGrafico5.Name = "cmbTipoGrafico5";
             cmbTipoGrafico5.Size = new Size(110, 29);
@@ -641,7 +641,7 @@ namespace LookScan
             // 
             cmbTipoGrafico6.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTipoGrafico6.FormattingEnabled = true;
-            cmbTipoGrafico6.Items.AddRange(new object[] { "Barras", "Líneas", "Araña", "Polar", "Pastel" });
+            cmbTipoGrafico6.Items.AddRange(new object[] { "Barras", "Líneas", "Pastel", "Dona", "Araña", "Polar" });
             cmbTipoGrafico6.Location = new Point(4, 22);
             cmbTipoGrafico6.Name = "cmbTipoGrafico6";
             cmbTipoGrafico6.Size = new Size(110, 29);

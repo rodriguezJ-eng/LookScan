@@ -69,7 +69,9 @@ namespace LookScan
 
         private void btnCalcularEoaf_Click(object sender, EventArgs e)
         {
-            string anioBaseStr = cmbPeriodoBaseEoaf.SelectedItem as string;
+            try
+            {
+                string anioBaseStr = cmbPeriodoBaseEoaf.SelectedItem as string;
             string anioCompStr = cmbPeriodoCompEoaf.SelectedItem as string;
 
             var periodoBase = Almacen.Buscar(anioBaseStr);
@@ -154,6 +156,11 @@ namespace LookScan
 
             dgvEoaf.Rows[filaDiferencia].DefaultCellStyle.Font =
                 new System.Drawing.Font(dgvEoaf.Font, System.Drawing.FontStyle.Bold);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se puede calcular el EOAF: " + ex.Message, "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }

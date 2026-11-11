@@ -68,62 +68,92 @@ namespace LookScan
 
         private void CargarDatosFicticios()
         {
-            dgvMovimientos.Rows.Clear();
-            dgvMovimientos.Rows.Add("Ingreso", "Salario", "15,000", "01/11");
-            dgvMovimientos.Rows.Add("Gasto", "Alimentación", "1,500", "03/11");
-            dgvMovimientos.Rows.Add("Gasto", "Transporte", "800", "05/11");
+            try
+            {
+                int anio = (int)numAnio.Value;
+                int mes = cmbMes.SelectedIndex >= 0 ? cmbMes.SelectedIndex + 1 : 11;
+                dgvMovimientos.Rows.Clear();
+                dgvMovimientos.Rows.Add("Ingreso", "Salario", "15,000", string.Format("{0:00}/{1:00}/{2}", 1, mes, anio));
+                dgvMovimientos.Rows.Add("Gasto", "Alimentación", "1,500", string.Format("{0:00}/{1:00}/{2}", 3, mes, anio));
+                dgvMovimientos.Rows.Add("Gasto", "Transporte", "800", string.Format("{0:00}/{1:00}/{2}", 5, mes, anio));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pueden cargar los movimientos de ejemplo: " + ex.Message, "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void AgregarMovimiento()
         {
-            string tipo = cmbTipo.SelectedItem?.ToString();
-            string categoria = cmbCategoria.SelectedItem?.ToString();
-            string descripcion = txtDescripcion.Text.Trim();
-            string montoTexto = txtMonto.Text.Trim()
-                .Replace("C$", "").Replace(",", "").Trim();
-
-            if (string.IsNullOrEmpty(tipo) || string.IsNullOrEmpty(categoria))
+            try
             {
-                MessageBox.Show("Por favor seleccione tipo y categoría.", "LookScan",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                string tipo = cmbTipo.SelectedItem?.ToString();
+                string categoria = cmbCategoria.SelectedItem?.ToString();
+                string descripcion = txtDescripcion.Text.Trim();
+                string montoTexto = txtMonto.Text.Trim()
+                    .Replace("C$", "").Replace(",", "").Trim();
 
-            if (!decimal.TryParse(montoTexto, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal monto) || monto <= 0)
-            {
-                if (!decimal.TryParse(montoTexto, out monto) || monto <= 0)
+                if (string.IsNullOrEmpty(tipo) || string.IsNullOrEmpty(categoria))
                 {
-                    MessageBox.Show("Por favor ingrese un monto válido mayor que cero.", "LookScan",
+                    MessageBox.Show("No se puede registrar el movimiento: por favor seleccione tipo y categoría.", "LookScan",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+
+                if (!decimal.TryParse(montoTexto, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal monto) || monto <= 0)
+                {
+                    if (!decimal.TryParse(montoTexto, out monto) || monto <= 0)
+                    {
+                        MessageBox.Show("No se puede registrar el movimiento: por favor ingrese un monto válido mayor que cero.", "LookScan",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+
+                int anio = (int)numAnio.Value;
+                int mes = cmbMes.SelectedIndex >= 0 ? cmbMes.SelectedIndex + 1 : DateTime.Now.Month;
+                int dia = DateTime.Now.Day;
+                int maxDias = DateTime.DaysInMonth(anio, mes);
+                if (dia > maxDias) dia = maxDias;
+                DateTime fechaMov = new DateTime(anio, mes, dia);
+                string fecha = fechaMov.ToString("dd/MM/yyyy");
+
+                dgvMovimientos.Rows.Add(tipo, categoria, monto.ToString("N0"), fecha);
+
+                // Se recalcula automáticamente el resumen
+                CalcularResumen();
+
+                // Limpiar inputs
+                txtDescripcion.Clear();
+                txtMonto.Clear();
+                txtDescripcion.Focus();
             }
-
-            string fecha = DateTime.Now.ToString("dd/MM");
-            dgvMovimientos.Rows.Add(tipo, categoria, monto.ToString("N0"), fecha);
-
-            // Se recalcula automáticamente el resumen
-            CalcularResumen();
-
-            // Limpiar inputs
-            txtDescripcion.Clear();
-            txtMonto.Clear();
-            txtDescripcion.Focus();
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se puede registrar el movimiento: " + ex.Message, "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void EliminarMovimiento()
         {
-            if (dgvMovimientos.SelectedRows.Count == 0)
+            try
             {
-                MessageBox.Show("Seleccione un movimiento en la tabla para eliminar.", "LookScan",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
+                if (dgvMovimientos.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("No se puede eliminar: seleccione un movimiento en la tabla para eliminar.", "LookScan",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                dgvMovimientos.Rows.RemoveAt(dgvMovimientos.SelectedRows[0].Index);
+
+                // Se recalcula automáticamente el resumen
+                CalcularResumen();
             }
-
-            dgvMovimientos.Rows.RemoveAt(dgvMovimientos.SelectedRows[0].Index);
-
-            // Se recalcula automáticamente el resumen
-            CalcularResumen();
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se puede eliminar el movimiento: " + ex.Message, "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void LimpiarFormulario()

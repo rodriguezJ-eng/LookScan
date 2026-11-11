@@ -86,7 +86,9 @@ namespace LookScan
 
         private void btnCalcularEfe_Click(object sender, EventArgs e)
         {
-            string nombreBase = cmbPeriodoBaseEfe.SelectedItem as string;
+            try
+            {
+                string nombreBase = cmbPeriodoBaseEfe.SelectedItem as string;
             string nombreComparado = cmbPeriodoCompEfe.SelectedItem as string;
 
             var periodoBase = Almacen.Buscar(nombreBase);
@@ -140,6 +142,11 @@ namespace LookScan
                 {
                     dgvEfe.Rows[indice].DefaultCellStyle.Font = new Font(dgvEfe.Font, FontStyle.Bold);
                 }
+            }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se puede calcular el Flujo de Efectivo: " + ex.Message, "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }

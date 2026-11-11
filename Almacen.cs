@@ -17,11 +17,9 @@ namespace LookScan
 
         static Almacen()
         {
-            Periodos.Add(new Periodo("2018"));
             Periodos.Add(new Periodo("2019"));
             Periodos.Add(new Periodo("2020"));
-            _activo = Periodos[Periodos.Count - 1];
-          
+            _activo = Periodos[0];
         }
 
         public static string Empresa
@@ -249,13 +247,8 @@ namespace LookScan
             p2019.EsProforma = false;
             p2020.EsProforma = false;
 
-            // El demo solo carga 2019 y 2020; 2018 queda vacío para evitar datos viejos.
-            Periodo p2018 = Buscar("2018");
-            if (p2018 != null)
-            {
-                p2018.Cuentas.Clear();
-                p2018.EsProforma = false;
-            }
+            // Asegurar que solo contenga los periodos demo 2019 y 2020
+            Periodos.RemoveAll(p => p.Nombre == "2018");
 
             // Cargamos los datos nominales y específicos para cada año
             CargarPeriodo2019(p2019);

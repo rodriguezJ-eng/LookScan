@@ -74,15 +74,22 @@ namespace LookScan
 
         void AnadirPeriodo()
         {
-            string nombre = ((int)numAnio.Value).ToString();
-            var existente = Almacen.Buscar(nombre);
-            if (existente != null)
+            try
             {
-                Almacen.Activo = existente;
-                UtilUI.Aviso("El periodo " + nombre + " ya existe; quedó como periodo activo.");
-                return;
+                string nombre = ((int)numAnio.Value).ToString();
+                var existente = Almacen.Buscar(nombre);
+                if (existente != null)
+                {
+                    Almacen.Activo = existente;
+                    UtilUI.Aviso("El periodo " + nombre + " ya existe; quedó como periodo activo.");
+                    return;
+                }
+                Almacen.AgregarPeriodo(nombre);
             }
-            Almacen.AgregarPeriodo(nombre);
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se puede añadir el periodo: " + ex.Message, "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void CargarPeriodosEnComboBox()
@@ -119,7 +126,9 @@ namespace LookScan
         }
         private void btnGenerarErYapalancamiento_Click(object sender, EventArgs e)
         {
-            string periodoSeleccionado = cmbGradoApalancamiento.SelectedItem as string;
+            try
+            {
+                string periodoSeleccionado = cmbGradoApalancamiento.SelectedItem as string;
             if (string.IsNullOrEmpty(periodoSeleccionado)) periodoSeleccionado = cmbGradoApalancamiento.Text;
 
             var periodo = Almacen.Buscar(periodoSeleccionado);
@@ -293,6 +302,11 @@ namespace LookScan
 
             dgvEstadoDeResultado.Rows.Add("(-) Impuestos", impuestos.ToString("N2"), porcImpuestos.ToString("0.00") + "%", "Impuestos");
             dgvEstadoDeResultado.Rows.Add("= UTILIDAD NETA", utilidadNeta.ToString("N2"), porcUtilNeta.ToString("0.00") + "%", "Utilidad Neta");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se puede generar el Estado de Resultados y Apalancamiento: " + ex.Message, "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void cmbGradoApalancamiento_SelectedIndexChanged(object sender, EventArgs e)

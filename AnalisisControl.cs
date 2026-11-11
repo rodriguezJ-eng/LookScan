@@ -77,7 +77,9 @@ namespace LookScan
         // ── Análisis horizontal (entre dos periodos) ──
         void CalcularAH(bool avisos)
         {
-            var a = Almacen.Buscar(cmbPeriodoBaseAH.SelectedItem as string);
+            try
+            {
+                var a = Almacen.Buscar(cmbPeriodoBaseAH.SelectedItem as string);
             var b = Almacen.Buscar(cmbPeriodoCompAH.SelectedItem as string);
             if (a == null || b == null) { if (avisos) UtilUI.Aviso("Seleccione el periodo base y el periodo comparado."); return; }
             if (avisos && ReferenceEquals(a, b)) { UtilUI.Aviso("Elija dos periodos distintos para comparar."); return; }
@@ -93,6 +95,14 @@ namespace LookScan
             foreach (var f in Calculos.Horizontal(a, b, TipoEstado.BG)) Agregar(dgvBgAH, f);
             foreach (var f in Calculos.Horizontal(a, b, TipoEstado.ER)) Agregar(dgvErAH, f);
             _ahCalculado = true;
+            }
+            catch (Exception ex)
+            {
+                if (avisos)
+                {
+                    MessageBox.Show("No se puede calcular el análisis horizontal: " + ex.Message, "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
         }
 
         static void Agregar(DataGridView g, FilaComparativa f) =>

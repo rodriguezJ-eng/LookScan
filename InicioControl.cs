@@ -43,8 +43,17 @@ namespace LookScan
 
         }
 
-        private static void Abrir(string url) =>
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url) { UseShellExecute = true });
+        private static void Abrir(string url)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se puede abrir el enlace en este momento: " + ex.Message, "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
 
         private void btnIniciar_Click_1(object sender, EventArgs e)
         {

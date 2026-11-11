@@ -131,7 +131,9 @@ namespace LookScan
 
         private void GuardarProducto()
         {
-            string codigo = txtCodigo.Text.Trim();
+            try
+            {
+                string codigo = txtCodigo.Text.Trim();
             string nombre = txtProducto.Text.Trim();
 
             if (string.IsNullOrEmpty(codigo) || string.IsNullOrEmpty(nombre))
@@ -189,11 +191,18 @@ namespace LookScan
             CalcularResumenInventario();
 
             MessageBox.Show("Producto guardado correctamente.", "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se puede guardar el producto: " + ex.Message, "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void RegistrarMovimiento()
         {
-            ProductoItem prod = cmbProductoMov.SelectedItem as ProductoItem;
+            try
+            {
+                ProductoItem prod = cmbProductoMov.SelectedItem as ProductoItem;
             if (prod == null)
             {
                 MessageBox.Show("Seleccione un producto para el movimiento.", "LookScan",
@@ -241,6 +250,11 @@ namespace LookScan
             CalcularResumenInventario();
             txtCantidadMov.Clear();
             txtCantidadMov.Focus();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se puede registrar el movimiento: " + ex.Message, "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void LimpiarMovimiento()
