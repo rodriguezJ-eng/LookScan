@@ -36,6 +36,8 @@ namespace LookScan
             this.tpProforma = new System.Windows.Forms.TabPage();
             this.tpExportar = new System.Windows.Forms.TabPage();
             this.tpAlmacenamiento = new System.Windows.Forms.TabPage();
+            this.tpPresupuesto = new System.Windows.Forms.TabPage();
+            this.tpInventario = new System.Windows.Forms.TabPage();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tsslPie = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlEncabezado = new System.Windows.Forms.Panel();
@@ -63,6 +65,8 @@ namespace LookScan
             this.ucProforma = new LookScan.ProformaControl();
             this.ucExportar = new LookScan.ExportarControl();
             this.ucAlmacenamiento = new LookScan.AlmacenamientoControl();
+            this.ucPresupuesto = new LookScan.PresupuestoControl();
+            this.ucInventario = new LookScan.InventarioControl();
             this.tpGradoApalancamiento = new System.Windows.Forms.TabPage();
             this.grbGradoApalancamiento = new System.Windows.Forms.GroupBox();
             this.lblPeriodoAnalizar = new System.Windows.Forms.Label();
@@ -95,6 +99,8 @@ namespace LookScan
             this.tpProforma.SuspendLayout();
             this.tpExportar.SuspendLayout();
             this.tpAlmacenamiento.SuspendLayout();
+            this.tpPresupuesto.SuspendLayout();
+            this.tpInventario.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.pnlEncabezado.SuspendLayout();
             this.pnlEncabezadoDer.SuspendLayout();
@@ -125,6 +131,8 @@ namespace LookScan
             this.tabControl.Controls.Add(this.tpProforma);
             this.tabControl.Controls.Add(this.tpExportar);
             this.tabControl.Controls.Add(this.tpAlmacenamiento);
+            this.tabControl.Controls.Add(this.tpPresupuesto);
+            this.tabControl.Controls.Add(this.tpInventario);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(0, 80);
             this.tabControl.Multiline = true;
@@ -273,6 +281,42 @@ namespace LookScan
             this.tpAlmacenamiento.TabIndex = 14;
             this.tpAlmacenamiento.Text = "Almacenamiento";
             this.tpAlmacenamiento.UseVisualStyleBackColor = true;
+            // 
+            // tpPresupuesto
+            // 
+            this.tpPresupuesto.Controls.Add(this.ucPresupuesto);
+            this.tpPresupuesto.Location = new System.Drawing.Point(4, 36);
+            this.tpPresupuesto.Name = "tpPresupuesto";
+            this.tpPresupuesto.Size = new System.Drawing.Size(1515, 634);
+            this.tpPresupuesto.TabIndex = 15;
+            this.tpPresupuesto.Text = "Presupuesto Personal";
+            this.tpPresupuesto.UseVisualStyleBackColor = true;
+            // 
+            // ucPresupuesto
+            // 
+            this.ucPresupuesto.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ucPresupuesto.Location = new System.Drawing.Point(0, 0);
+            this.ucPresupuesto.Name = "ucPresupuesto";
+            this.ucPresupuesto.Size = new System.Drawing.Size(1515, 634);
+            this.ucPresupuesto.TabIndex = 0;
+            // 
+            // tpInventario
+            // 
+            this.tpInventario.Controls.Add(this.ucInventario);
+            this.tpInventario.Location = new System.Drawing.Point(4, 36);
+            this.tpInventario.Name = "tpInventario";
+            this.tpInventario.Size = new System.Drawing.Size(1515, 634);
+            this.tpInventario.TabIndex = 16;
+            this.tpInventario.Text = "Inventario";
+            this.tpInventario.UseVisualStyleBackColor = true;
+            // 
+            // ucInventario
+            // 
+            this.ucInventario.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ucInventario.Location = new System.Drawing.Point(0, 0);
+            this.ucInventario.Name = "ucInventario";
+            this.ucInventario.Size = new System.Drawing.Size(1515, 634);
+            this.ucInventario.TabIndex = 0;
             // 
             // statusStrip
             // 
@@ -774,6 +818,8 @@ namespace LookScan
             this.tpProforma.ResumeLayout(false);
             this.tpExportar.ResumeLayout(false);
             this.tpAlmacenamiento.ResumeLayout(false);
+            this.tpPresupuesto.ResumeLayout(false);
+            this.tpInventario.ResumeLayout(false);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.pnlEncabezado.ResumeLayout(false);
@@ -825,6 +871,10 @@ namespace LookScan
         private LookScan.ExportarControl ucExportar;
         private System.Windows.Forms.TabPage tpAlmacenamiento;
         private LookScan.AlmacenamientoControl ucAlmacenamiento;
+        private System.Windows.Forms.TabPage tpPresupuesto;
+        private LookScan.PresupuestoControl ucPresupuesto;
+        private System.Windows.Forms.TabPage tpInventario;
+        private LookScan.InventarioControl ucInventario;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel tsslPie;
         private System.Windows.Forms.Panel pnlEncabezado;
