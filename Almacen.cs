@@ -258,7 +258,7 @@ namespace LookScan
             Periodo activoDemo = Buscar("2019");
             if (activoDemo != null) _activo = activoDemo;
 
-            Action periodos = PeriodosCambiaron; // Nota que es 'Cambiaron', sin la 'ion' extra
+            Action periodos = PeriodosCambiaron; 
             if (periodos != null) periodos();
 
             Action datos = DatosCambiaron;

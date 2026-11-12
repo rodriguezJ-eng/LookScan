@@ -79,7 +79,7 @@ namespace LookScan
             return resultado;
         }
 
-        // ── Estado de resultados ─────────────────────────────────────────────
+        //  Estado de resultados 
 
         private static void ProyectarResultados(Periodo baseP, Periodo proyectado,
                                                 decimal ventasBase, decimal ventasProyectadas,
@@ -135,7 +135,7 @@ namespace LookScan
             }
         }
 
-        // ── Balance general ──────────────────────────────────────────────────
+        // Balance general 
 
         private static void ProyectarBalance(Periodo baseP, Periodo proyectado,
                                              decimal ventasBase, decimal ventasProyectadas,
@@ -236,7 +236,7 @@ namespace LookScan
             }
         }
 
-        // ── Configuración mostrada en pantalla ───────────────────────────────
+        // Configuración mostrada en pantalla 
 
         private static IEnumerable<FilaConfigProyeccion> Configuracion(Periodo baseP,
                                                                        decimal crecimiento,
@@ -321,7 +321,7 @@ namespace LookScan
             return filas;
         }
 
-        // ── Auxiliares ───────────────────────────────────────────────────────
+        //  Auxiliares 
 
         private static string NombreProyectado(Periodo baseP, int anio)
         {

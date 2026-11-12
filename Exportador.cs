@@ -17,7 +17,7 @@ namespace LookScan
     //  - PDF mediante la impresora «Microsoft Print to PDF».
     public static class Exportador
     {
-        // ── Texto plano ──────────────────────────────────────────────────────
+        // Texto plano 
 
         public static string Texto(DocumentoInforme documento)
         {
@@ -70,7 +70,7 @@ namespace LookScan
             File.WriteAllText(ruta, Texto(documento), new UTF8Encoding(true));
         }
 
-        // ── JSON ─────────────────────────────────────────────────────────────
+        // JSON 
 
         public static string Json(DocumentoInforme documento)
         {
@@ -158,7 +158,7 @@ namespace LookScan
             File.WriteAllText(ruta, Json(documento), new UTF8Encoding(true));
         }
 
-        // ── HTML ─────────────────────────────────────────────────────────────
+        // HTML 
 
         public static string Html(DocumentoInforme documento)
         {
@@ -287,7 +287,7 @@ namespace LookScan
             return sb.ToString();
         }
 
-        // ── Excel SpreadsheetML ──────────────────────────────────────────────
+        //  Excel SpreadsheetML 
 
         public static void GuardarExcel(DocumentoInforme documento, string ruta)
         {
@@ -424,7 +424,7 @@ namespace LookScan
                    XmlTexto(celda.Texto) + "</Data></Cell>";
         }
 
-        // ── Proforma a Excel ─────────────────────────────────────────────────
+        // Proforma a Excel 
 
         public static DocumentoInforme DocumentoProforma(ResultadoProforma resultado)
         {
@@ -519,7 +519,7 @@ namespace LookScan
             GuardarExcel(DocumentoProforma(resultado), ruta);
         }
 
-        // ── PDF / impresión ──────────────────────────────────────────────────
+        // PDF / impresión 
 
         public static void Imprimir(DocumentoInforme documento)
         {
@@ -799,7 +799,7 @@ namespace LookScan
             lineas.Add(new LineaImpresion { Texto = texto, Negrita = negrita });
         }
 
-        // ── Auxiliares de formato ────────────────────────────────────────────
+        // Auxiliares de formato 
 
         private static string JsonTexto(string texto)
         {

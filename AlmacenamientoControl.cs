@@ -26,7 +26,7 @@ namespace LookScan
             RefrescarLista();
         }
 
-        // ── Lista de proyectos ───────────────────────────────────────────────
+        //  Lista de proyectos 
 
         private void RefrescarLista()
         {
@@ -71,7 +71,7 @@ namespace LookScan
                 EliminarProyecto(nombre);
         }
 
-        // ── Acciones ─────────────────────────────────────────────────────────
+        // Acciones 
 
         private void GuardarProyecto()
         {

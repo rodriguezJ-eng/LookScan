@@ -13,7 +13,7 @@ namespace LookScan
             Dias
         }
 
-        // ── Totales del balance ──────────────────────────────────────────────
+        // Totales del balance 
 
         public static decimal ActivoCorriente(Periodo p)
         {
@@ -55,7 +55,7 @@ namespace LookScan
             return PasivoTotal(p) + Patrimonio(p);
         }
 
-        // ── Totales del estado de resultados ─────────────────────────────────
+        // Totales del estado de resultados 
 
         public static decimal Ventas(Periodo p)
         {
@@ -106,7 +106,7 @@ namespace LookScan
             return UtilidadAntesImpuestos(p) - Impuestos(p);
         }
 
-        // ── Análisis horizontal ──────────────────────────────────────────────
+        // Análisis horizontal 
 
         public static IEnumerable<FilaComparativa> Horizontal(Periodo baseP, Periodo comparadoP, TipoEstado tipo)
         {
@@ -158,7 +158,7 @@ namespace LookScan
             return resultado;
         }
 
-        // ── Análisis vertical ────────────────────────────────────────────────
+        // Análisis vertical 
 
         public static IEnumerable<FilaVertical> VerticalBG(Periodo p)
         {
@@ -262,7 +262,7 @@ namespace LookScan
             return resultado;
         }
 
-        // ── Razones financieras ──────────────────────────────────────────────
+        // Razones financieras 
 
          public static IEnumerable<Razon> Razones(Periodo p)
          {
@@ -544,7 +544,7 @@ namespace LookScan
             return resultado;
         }
 
-        // ── DuPont con interpretación ────────────────────────────────────────
+        //  DuPont con interpretación 
 
         public static IEnumerable<Razon> DuPontRazones(Periodo p)
         {
@@ -1035,7 +1035,7 @@ namespace LookScan
                 : "(-) Disminución de " + cuenta.Nombre;
         }
 
-        // ── Auxiliares ───────────────────────────────────────────────────────
+        // Auxiliares 
 
         private static decimal Suma(Periodo p, TipoEstado tipo, string clasificacion)
         {

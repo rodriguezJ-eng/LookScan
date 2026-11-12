@@ -6,7 +6,7 @@ namespace LookScan
 {
     // Construye el documento completo que alimenta reportes y exportaciones.
     // El orden de las secciones es el acordado:
-    // DATOS → ANÁLISIS → RAZONES → EOAF → EFE → DuPont → GRÁFICOS → PROFORMA.
+    // DATOS -> ANÁLISIS -> RAZONES -> EOAF -> EFE -> DuPont -> GRÁFICOS -> PROFORMA.
     public static class GeneradorInforme
     {
         public static DocumentoInforme Generar()
@@ -33,7 +33,7 @@ namespace LookScan
             return documento;
         }
 
-        // ── DATOS ────────────────────────────────────────────────────────────
+        //  DATOS 
 
         private static void AgregarDatos(DocumentoInforme documento, List<Periodo> periodos)
         {
@@ -91,7 +91,7 @@ namespace LookScan
             }
         }
 
-        // ── ANÁLISIS ─────────────────────────────────────────────────────────
+        //  ANÁLISIS 
 
         private static void AgregarAnalisis(DocumentoInforme documento, List<Periodo> periodos)
         {
@@ -177,7 +177,7 @@ namespace LookScan
             }
         }
 
-        // ── RAZONES ──────────────────────────────────────────────────────────
+        // RAZONES 
 
         private static void AgregarRazones(DocumentoInforme documento, List<Periodo> periodos)
         {
@@ -204,7 +204,7 @@ namespace LookScan
             }
         }
 
-        // ── EOAF ─────────────────────────────────────────────────────────────
+        //  EOAF 
 
         private static void AgregarEoaf(DocumentoInforme documento, List<Periodo> periodos)
         {
@@ -242,7 +242,7 @@ namespace LookScan
             }
         }
 
-        // ── EFE ──────────────────────────────────────────────────────────────
+        //  EFE 
 
         private static void AgregarEfe(DocumentoInforme documento, List<Periodo> periodos)
         {
@@ -282,7 +282,7 @@ namespace LookScan
             }
         }
 
-        // ── DuPont ───────────────────────────────────────────────────────────
+        //  DuPont 
 
         private static void AgregarDuPont(DocumentoInforme documento, List<Periodo> periodos)
         {
@@ -309,7 +309,7 @@ namespace LookScan
             }
         }
 
-        // ── GRÁFICOS ─────────────────────────────────────────────────────────
+        // GRÁFICOS 
 
         private static void AgregarGraficos(DocumentoInforme documento)
         {
@@ -349,7 +349,7 @@ namespace LookScan
             return fila == null ? 0m : fila.Monto;
         }
 
-        // ── PROFORMA ─────────────────────────────────────────────────────────
+        // PROFORMA 
 
         private static void AgregarProforma(DocumentoInforme documento, List<Periodo> periodos)
         {

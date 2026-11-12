@@ -10,7 +10,7 @@ namespace LookScan
     // internet ni servicios externos, y nunca inventa cifras.
     public static class MotorIa
     {
-        // ── Resumen de datos del periodo ─────────────────────────────────────
+        //  Resumen de datos del periodo 
 
         public static string ResumenDatos(Periodo p)
         {
@@ -70,7 +70,7 @@ namespace LookScan
             return sb.ToString();
         }
 
-        // ── Interpretación automática de un periodo ──────────────────────────
+        // Interpretación automática de un periodo 
 
         public static string InterpretacionPeriodo(Periodo p)
         {
@@ -161,7 +161,7 @@ namespace LookScan
             return sb.ToString();
         }
 
-        // ── Resumen global de todos los periodos ─────────────────────────────
+        // Resumen global de todos los periodos 
 
         public static string ResumenGlobal()
         {
@@ -270,7 +270,7 @@ namespace LookScan
             return sb.ToString();
         }
 
-        // ── Alertas ──────────────────────────────────────────────────────────
+        // Alertas 
 
         public static List<string> Alertas(Periodo p)
         {
@@ -317,7 +317,7 @@ namespace LookScan
             return alertas;
         }
 
-        // ── Auxiliares públicos ──────────────────────────────────────────────
+        // Auxiliares públicos 
 
         public static Periodo PeriodoAnterior(Periodo p)
         {
@@ -371,7 +371,7 @@ namespace LookScan
             return activo != 0m ? (decimal?)(Calculos.PasivoTotal(p) / activo) : null;
         }
 
-        // ── Auxiliares privados ──────────────────────────────────────────────
+        // Auxiliares privados 
 
         private static string NombreEmpresa()
         {

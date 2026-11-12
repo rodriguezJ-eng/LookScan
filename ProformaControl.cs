@@ -38,7 +38,7 @@ namespace LookScan
             CargarCombosProforma();
         }
 
-        // ── Periodos base ────────────────────────────────────────────────────
+        // Periodos base 
 
         private void CargarCombosProforma()
         {
@@ -126,7 +126,7 @@ namespace LookScan
             return numRetenidas.Value / 100m;
         }
 
-        // ── Configuración de cuentas ─────────────────────────────────────────
+        // Configuración de cuentas 
 
         private void ActualizarConfiguracion()
         {
@@ -169,7 +169,7 @@ namespace LookScan
             }
         }
 
-        // ── Generación ───────────────────────────────────────────────────────
+        // Generación 
 
         private bool GenerarProyeccion(bool avisar)
         {
@@ -302,7 +302,7 @@ namespace LookScan
             }
         }
 
-        // ── Acciones ─────────────────────────────────────────────────────────
+        // Acciones 
 
         private void GuardarProyeccion()
         {
@@ -364,7 +364,7 @@ namespace LookScan
             }
         }
 
-        // ── Auxiliares de presentación ───────────────────────────────────────
+        // Auxiliares de presentación 
 
         private static void PrepararColumnas(DataGridView grid, string primera,
                                              IEnumerable<string> columnas)

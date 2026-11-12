@@ -74,7 +74,7 @@ namespace LookScan
             cmbPeriodoCompAH.SelectedItem = compNombre;
         }
 
-        // ── Análisis horizontal (entre dos periodos) ──
+        // Análisis horizontal (entre dos periodos) 
         void CalcularAH(bool avisos)
         {
             try
@@ -108,7 +108,7 @@ namespace LookScan
         static void Agregar(DataGridView g, FilaComparativa f) =>
             UtilUI.AgregarFila(g, f.Total, f.Cuenta, Util.Monto(f.Base), Util.Monto(f.Comparado), Util.Monto(f.Delta), Util.Pct(f.Pct));
 
-        // ── Análisis vertical (sobre el periodo activo) ──
+        // Análisis vertical (sobre el periodo activo) 
         void CalcularAV()
         {
             dgvBgAV.Rows.Clear();

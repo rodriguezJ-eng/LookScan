@@ -783,9 +783,9 @@ namespace LookScan
             return datos.Select(d => new DatoGraficoItem(d.Nombre, total == 0m ? 0m : d.Valor * 100m / total)).ToList();
         }
 
-        // ─────────────────────────────────────────────────────────────────────
+        // 
         // 1. ANÁLISIS HORIZONTAL Y VERTICAL (BG / ER)
-        // ─────────────────────────────────────────────────────────────────────
+        // 
         private void ActualizarGrafico1()
         {
             try
@@ -836,9 +836,9 @@ namespace LookScan
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────────
+        // 
         // 2. RAZONES FINANCIERAS (COMPARADO)
-        // ─────────────────────────────────────────────────────────────────────
+        // 
         private void ActualizarGrafico2()
         {
             try
@@ -890,9 +890,9 @@ namespace LookScan
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────────
+        // 
         // 3. CAPITAL NETO DE TRABAJO (CNT) Y CNO
-        // ─────────────────────────────────────────────────────────────────────
+        // 
         private void ActualizarGrafico3()
         {
             try
@@ -960,9 +960,9 @@ namespace LookScan
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────────
+        // 
         // 4. EOAF (ORIGEN Y APLICACIÓN DE FONDOS)
-        // ─────────────────────────────────────────────────────────────────────
+        // 
         private void ActualizarGrafico4()
         {
             try
@@ -1041,9 +1041,9 @@ namespace LookScan
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────────
+        // 
         // 5. ESTADO DE FLUJO DE EFECTIVO
-        // ─────────────────────────────────────────────────────────────────────
+        // 
         private void ActualizarGrafico5()
         {
             try
@@ -1096,9 +1096,9 @@ namespace LookScan
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────────
+        // 
         // 6. MODELO DUPONT (COMPARADO)
-        // ─────────────────────────────────────────────────────────────────────
+        // 
         private void ActualizarGrafico6()
         {
             try
@@ -1153,9 +1153,9 @@ namespace LookScan
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────────
+        // 
         // MÉTODOS AUXILIARES DE CÁLCULO
-        // ─────────────────────────────────────────────────────────────────────
+        // 
         private Dictionary<string, double> ExtraerDuPontValores(Periodo p)
         {
             var dict = new Dictionary<string, double>();

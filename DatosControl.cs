@@ -46,7 +46,7 @@ namespace LookScan
             try
             {
                 var g = (DataGridView)sender;
-                if (e.RowIndex < 0 || e.ColumnIndex != g.Columns.Count - 1) return;   // última columna = Eliminar
+                if (e.RowIndex < 0 || e.ColumnIndex != g.Columns.Count - 1) return;  
                 if (!(g.Rows[e.RowIndex].Tag is Cuenta c)) return;
 
                 if (ReferenceEquals(c, cuentaEnEdicion)) LimpiarFormulario();
@@ -62,7 +62,7 @@ namespace LookScan
         void CargarParaEdicion(DataGridView g, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0 || e.RowIndex >= g.Rows.Count) return;
-            if (e.ColumnIndex == g.Columns.Count - 1) return;   // no editar desde el botón Eliminar
+            if (e.ColumnIndex == g.Columns.Count - 1) return; 
             if (!(g.Rows[e.RowIndex].Tag is Cuenta c)) return;
 
             cuentaEnEdicion = c;
