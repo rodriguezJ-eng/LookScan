@@ -57,17 +57,8 @@ namespace LookScan
             dgvExistencias.CellFormatting += dgvExistencias_CellFormatting;
             dgvExistencias.SelectionChanged += (s, e) => CargarProductoSeleccionado();
 
-            // Cargar el demo de inventario proporcionado.
-            CargarDatosFicticios();
-
-            // Llenar formulario de datos con un ejemplo predefinido
-            txtCodigo.Text = "P-001";
-            txtProducto.Text = "Arroz 1 lb";
-            txtExistenciaInicial.Text = "100";
-            txtCostoUnitario.Text = "18.21";
-            txtStockMinimo.Text = "40";
-
-            txtCantidadMov.Text = "70";
+            // Los datos de ejemplo solo se cargan al pulsar "Cargar demo".
+            txtCantidadMov.Clear();
             cmbTipoMov.SelectedItem = "Salida";
 
             ActualizarComboProductos();
@@ -383,7 +374,13 @@ namespace LookScan
             lblProductosReponer.Text = productosAReponer.ToString();
 
             // Actualizar banner de alerta
-            if (productosAReponer > 0)
+            if (_productos.Count == 0)
+            {
+                pnlAlertaBanner.Visible = true;
+                lblAlertaReposicion.Text = "No hay productos registrados. Pulse \"Cargar demo\" o agregue un producto.";
+                lblAlertaReposicion.ForeColor = Color.FromArgb(70, 80, 95);
+            }
+            else if (productosAReponer > 0)
             {
                 pnlAlertaBanner.Visible = true;
                 lblAlertaReposicion.Text = "⚠ Reponer: " + string.Join(", ", alertas);

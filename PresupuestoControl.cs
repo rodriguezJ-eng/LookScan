@@ -37,8 +37,8 @@ namespace LookScan
             cmbTipo.SelectedIndexChanged += (s, e) => ActualizarCategorias();
             cmbTipo.SelectedItem = "Gasto";
 
-            txtDescripcion.Text = "Transporte";
-            txtMonto.Text = "20.00";
+            txtDescripcion.Clear();
+            txtMonto.Clear();
 
             btnAgregar.Click += (s, e) => AgregarMovimiento();
             btnEliminar.Click += (s, e) => EliminarMovimiento();
@@ -47,8 +47,7 @@ namespace LookScan
             btnCargarDemo.Click += (s, e) => { CargarDatosFicticios(); CalcularResumen(); };
             dgvMovimientos.SelectionChanged += (s, e) => CargarMovimientoSeleccionado();
 
-            // Demo de agosto de 2026 proporcionado para el presupuesto personal.
-            CargarDatosFicticios();
+            // Los datos de ejemplo solo se cargan al pulsar "Cargar demo".
 
             // Calcular el resumen y armar el gráfico
             CalcularResumen();
