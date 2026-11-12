@@ -84,7 +84,7 @@ namespace LookScan
             // pnlPrincipal
             // 
             this.pnlPrincipal.AutoScroll = true;
-            this.pnlPrincipal.BackColor = Color.FromArgb(18, 18, 18);
+            this.pnlPrincipal.BackColor = Color.FromArgb(244, 246, 250);
             this.pnlPrincipal.Controls.Add(this.pnlEncabezado);
             this.pnlPrincipal.Controls.Add(this.grpRegistro);
             this.pnlPrincipal.Controls.Add(this.grpMovimientos);
@@ -106,7 +106,7 @@ namespace LookScan
             this.pnlEncabezado.Controls.Add(this.numAnio);
             this.pnlEncabezado.Location = new Point(20, 15);
             this.pnlEncabezado.Name = "pnlEncabezado";
-            this.pnlEncabezado.Size = new Size(650, 42);
+            this.pnlEncabezado.Size = new Size(1000, 42);
             this.pnlEncabezado.TabIndex = 0;
 
             // lblMes
@@ -119,11 +119,11 @@ namespace LookScan
             this.lblMes.Text = "Mes:";
 
             // cmbMes
-            this.cmbMes.BackColor = Color.FromArgb(32, 32, 32);
+            this.cmbMes.BackColor = Color.White;
             this.cmbMes.DropDownStyle = ComboBoxStyle.DropDownList;
             this.cmbMes.FlatStyle = FlatStyle.Flat;
             this.cmbMes.Font = new Font("Segoe UI", 10.5F);
-            this.cmbMes.ForeColor = Color.White;
+            this.cmbMes.ForeColor = Color.FromArgb(35, 45, 60);
             this.cmbMes.FormattingEnabled = true;
             this.cmbMes.Items.AddRange(new object[] {
                 "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -144,10 +144,10 @@ namespace LookScan
             this.lblAnio.Text = "Año:";
 
             // numAnio
-            this.numAnio.BackColor = Color.FromArgb(32, 32, 32);
+            this.numAnio.BackColor = Color.White;
             this.numAnio.BorderStyle = BorderStyle.FixedSingle;
             this.numAnio.Font = new Font("Segoe UI", 10.5F);
-            this.numAnio.ForeColor = Color.White;
+            this.numAnio.ForeColor = Color.FromArgb(35, 45, 60);
             this.numAnio.Location = new Point(325, 6);
             this.numAnio.Maximum = new decimal(new int[] { 2100, 0, 0, 0 });
             this.numAnio.Minimum = new decimal(new int[] { 2000, 0, 0, 0 });
@@ -159,7 +159,7 @@ namespace LookScan
             // 
             // grpRegistro
             // 
-            this.grpRegistro.BackColor = Color.FromArgb(24, 24, 24);
+            this.grpRegistro.BackColor = Color.White;
             this.grpRegistro.Controls.Add(this.lblTipo);
             this.grpRegistro.Controls.Add(this.cmbTipo);
             this.grpRegistro.Controls.Add(this.lblCategoria);
@@ -172,29 +172,29 @@ namespace LookScan
             this.grpRegistro.Controls.Add(this.btnEliminar);
             this.grpRegistro.Controls.Add(this.btnLimpiar);
             this.grpRegistro.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            this.grpRegistro.ForeColor = Color.FromArgb(220, 220, 220);
+            this.grpRegistro.ForeColor = Color.FromArgb(45, 55, 72);
             this.grpRegistro.Location = new Point(20, 68);
             this.grpRegistro.Name = "grpRegistro";
-            this.grpRegistro.Size = new Size(620, 225);
+            this.grpRegistro.Size = new Size(1000, 225);
             this.grpRegistro.TabIndex = 1;
             this.grpRegistro.TabStop = false;
-            this.grpRegistro.Text = "1. Registrar movimiento (GroupBox)";
+            this.grpRegistro.Text = "1. Registrar movimiento";
 
             // lblTipo
             this.lblTipo.AutoSize = true;
             this.lblTipo.Font = new Font("Segoe UI", 9F);
-            this.lblTipo.ForeColor = Color.FromArgb(190, 190, 190);
+            this.lblTipo.ForeColor = Color.FromArgb(70, 80, 95);
             this.lblTipo.Location = new Point(18, 32);
             this.lblTipo.Name = "lblTipo";
             this.lblTipo.Size = new Size(117, 20);
-            this.lblTipo.Text = "Tipo (ComboBox)";
+            this.lblTipo.Text = "Tipo";
 
             // cmbTipo
-            this.cmbTipo.BackColor = Color.FromArgb(34, 34, 34);
+            this.cmbTipo.BackColor = Color.White;
             this.cmbTipo.DropDownStyle = ComboBoxStyle.DropDownList;
             this.cmbTipo.FlatStyle = FlatStyle.Flat;
             this.cmbTipo.Font = new Font("Segoe UI", 9.5F);
-            this.cmbTipo.ForeColor = Color.White;
+            this.cmbTipo.ForeColor = Color.FromArgb(35, 45, 60);
             this.cmbTipo.FormattingEnabled = true;
             this.cmbTipo.Items.AddRange(new object[] { "Ingreso", "Gasto" });
             this.cmbTipo.Location = new Point(18, 55);
@@ -205,18 +205,18 @@ namespace LookScan
             // lblCategoria
             this.lblCategoria.AutoSize = true;
             this.lblCategoria.Font = new Font("Segoe UI", 9F);
-            this.lblCategoria.ForeColor = Color.FromArgb(190, 190, 190);
+            this.lblCategoria.ForeColor = Color.FromArgb(70, 80, 95);
             this.lblCategoria.Location = new Point(315, 32);
             this.lblCategoria.Name = "lblCategoria";
             this.lblCategoria.Size = new Size(152, 20);
-            this.lblCategoria.Text = "Categoría (ComboBox)";
+            this.lblCategoria.Text = "Categoría";
 
             // cmbCategoria
-            this.cmbCategoria.BackColor = Color.FromArgb(34, 34, 34);
+            this.cmbCategoria.BackColor = Color.White;
             this.cmbCategoria.DropDownStyle = ComboBoxStyle.DropDownList;
             this.cmbCategoria.FlatStyle = FlatStyle.Flat;
             this.cmbCategoria.Font = new Font("Segoe UI", 9.5F);
-            this.cmbCategoria.ForeColor = Color.White;
+            this.cmbCategoria.ForeColor = Color.FromArgb(35, 45, 60);
             this.cmbCategoria.FormattingEnabled = true;
             this.cmbCategoria.Location = new Point(315, 55);
             this.cmbCategoria.Name = "cmbCategoria";
@@ -226,17 +226,17 @@ namespace LookScan
             // lblDescripcion
             this.lblDescripcion.AutoSize = true;
             this.lblDescripcion.Font = new Font("Segoe UI", 9F);
-            this.lblDescripcion.ForeColor = Color.FromArgb(190, 190, 190);
+            this.lblDescripcion.ForeColor = Color.FromArgb(70, 80, 95);
             this.lblDescripcion.Location = new Point(18, 97);
             this.lblDescripcion.Name = "lblDescripcion";
             this.lblDescripcion.Size = new Size(147, 20);
-            this.lblDescripcion.Text = "Descripción (TextBox)";
+            this.lblDescripcion.Text = "Descripción";
 
             // txtDescripcion
-            this.txtDescripcion.BackColor = Color.FromArgb(34, 34, 34);
+            this.txtDescripcion.BackColor = Color.White;
             this.txtDescripcion.BorderStyle = BorderStyle.FixedSingle;
             this.txtDescripcion.Font = new Font("Segoe UI", 10F);
-            this.txtDescripcion.ForeColor = Color.White;
+            this.txtDescripcion.ForeColor = Color.FromArgb(35, 45, 60);
             this.txtDescripcion.Location = new Point(18, 120);
             this.txtDescripcion.Name = "txtDescripcion";
             this.txtDescripcion.Size = new Size(270, 30);
@@ -245,24 +245,24 @@ namespace LookScan
             // lblMonto
             this.lblMonto.AutoSize = true;
             this.lblMonto.Font = new Font("Segoe UI", 9F);
-            this.lblMonto.ForeColor = Color.FromArgb(190, 190, 190);
+            this.lblMonto.ForeColor = Color.FromArgb(70, 80, 95);
             this.lblMonto.Location = new Point(315, 97);
             this.lblMonto.Name = "lblMonto";
             this.lblMonto.Size = new Size(137, 20);
-            this.lblMonto.Text = "Monto C$ (TextBox)";
+            this.lblMonto.Text = "Monto C$";
 
             // txtMonto
-            this.txtMonto.BackColor = Color.FromArgb(34, 34, 34);
+            this.txtMonto.BackColor = Color.White;
             this.txtMonto.BorderStyle = BorderStyle.FixedSingle;
             this.txtMonto.Font = new Font("Segoe UI", 10F);
-            this.txtMonto.ForeColor = Color.White;
+            this.txtMonto.ForeColor = Color.FromArgb(35, 45, 60);
             this.txtMonto.Location = new Point(315, 120);
             this.txtMonto.Name = "txtMonto";
             this.txtMonto.Size = new Size(285, 30);
             this.txtMonto.TabIndex = 4;
 
             // btnAgregar
-            this.btnAgregar.BackColor = Color.FromArgb(38, 38, 38);
+            this.btnAgregar.BackColor = Color.FromArgb(24, 72, 140);
             this.btnAgregar.FlatAppearance.BorderColor = Color.FromArgb(70, 70, 70);
             this.btnAgregar.FlatStyle = FlatStyle.Flat;
             this.btnAgregar.Font = new Font("Segoe UI", 9.5F);
@@ -275,7 +275,7 @@ namespace LookScan
             this.btnAgregar.UseVisualStyleBackColor = false;
 
             // btnEliminar
-            this.btnEliminar.BackColor = Color.FromArgb(38, 38, 38);
+            this.btnEliminar.BackColor = Color.FromArgb(24, 72, 140);
             this.btnEliminar.FlatAppearance.BorderColor = Color.FromArgb(70, 70, 70);
             this.btnEliminar.FlatStyle = FlatStyle.Flat;
             this.btnEliminar.Font = new Font("Segoe UI", 9.5F);
@@ -288,7 +288,7 @@ namespace LookScan
             this.btnEliminar.UseVisualStyleBackColor = false;
 
             // btnLimpiar
-            this.btnLimpiar.BackColor = Color.FromArgb(38, 38, 38);
+            this.btnLimpiar.BackColor = Color.FromArgb(24, 72, 140);
             this.btnLimpiar.FlatAppearance.BorderColor = Color.FromArgb(70, 70, 70);
             this.btnLimpiar.FlatStyle = FlatStyle.Flat;
             this.btnLimpiar.Font = new Font("Segoe UI", 9.5F);
@@ -303,36 +303,36 @@ namespace LookScan
             // 
             // grpMovimientos
             // 
-            this.grpMovimientos.BackColor = Color.FromArgb(24, 24, 24);
+            this.grpMovimientos.BackColor = Color.White;
             this.grpMovimientos.Controls.Add(this.dgvMovimientos);
             this.grpMovimientos.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            this.grpMovimientos.ForeColor = Color.FromArgb(220, 220, 220);
+            this.grpMovimientos.ForeColor = Color.FromArgb(45, 55, 72);
             this.grpMovimientos.Location = new Point(20, 305);
             this.grpMovimientos.Name = "grpMovimientos";
             this.grpMovimientos.Padding = new Padding(12);
-            this.grpMovimientos.Size = new Size(620, 195);
+            this.grpMovimientos.Size = new Size(1000, 195);
             this.grpMovimientos.TabIndex = 2;
             this.grpMovimientos.TabStop = false;
-            this.grpMovimientos.Text = "2. Movimientos (DataGridView)";
+            this.grpMovimientos.Text = "2. Movimientos";
 
             // dgvMovimientos
             this.dgvMovimientos.AllowUserToAddRows = false;
             this.dgvMovimientos.AllowUserToDeleteRows = false;
             this.dgvMovimientos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvMovimientos.BackgroundColor = Color.FromArgb(28, 28, 28);
+            this.dgvMovimientos.BackgroundColor = Color.White;
             this.dgvMovimientos.BorderStyle = BorderStyle.None;
             this.dgvMovimientos.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            this.dgvMovimientos.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(38, 38, 38);
+            this.dgvMovimientos.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(24, 72, 140);
             this.dgvMovimientos.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             this.dgvMovimientos.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
             this.dgvMovimientos.ColumnHeadersHeight = 32;
             this.dgvMovimientos.Columns.AddRange(new DataGridViewColumn[] {
                 this.colTipo, this.colCategoria, this.colMonto, this.colFecha
             });
-            this.dgvMovimientos.DefaultCellStyle.BackColor = Color.FromArgb(24, 24, 24);
-            this.dgvMovimientos.DefaultCellStyle.ForeColor = Color.FromArgb(235, 235, 235);
+            this.dgvMovimientos.DefaultCellStyle.BackColor = Color.White;
+            this.dgvMovimientos.DefaultCellStyle.ForeColor = Color.FromArgb(35, 45, 60);
             this.dgvMovimientos.DefaultCellStyle.SelectionBackColor = Color.FromArgb(50, 65, 85);
-            this.dgvMovimientos.DefaultCellStyle.SelectionForeColor = Color.White;
+            this.dgvMovimientos.DefaultCellStyle.SelectionForeColor = Color.FromArgb(35, 45, 60);
             this.dgvMovimientos.Dock = DockStyle.Fill;
             this.dgvMovimientos.EnableHeadersVisualStyles = false;
             this.dgvMovimientos.GridColor = Color.FromArgb(44, 44, 44);
@@ -375,17 +375,17 @@ namespace LookScan
             // 
             // grpResumen
             // 
-            this.grpResumen.BackColor = Color.FromArgb(24, 24, 24);
+            this.grpResumen.BackColor = Color.White;
             this.grpResumen.Controls.Add(this.tlpResumen);
             this.grpResumen.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            this.grpResumen.ForeColor = Color.FromArgb(220, 220, 220);
+            this.grpResumen.ForeColor = Color.FromArgb(45, 55, 72);
             this.grpResumen.Location = new Point(20, 510);
             this.grpResumen.Name = "grpResumen";
             this.grpResumen.Padding = new Padding(12);
-            this.grpResumen.Size = new Size(620, 175);
+            this.grpResumen.Size = new Size(1000, 175);
             this.grpResumen.TabIndex = 3;
             this.grpResumen.TabStop = false;
-            this.grpResumen.Text = "3. Resumen (Labels)";
+            this.grpResumen.Text = "3. Resumen";
 
             // tlpResumen
             this.tlpResumen.ColumnCount = 2;
@@ -405,7 +405,7 @@ namespace LookScan
             this.tlpResumen.TabIndex = 0;
 
             // pnlIngresos
-            this.pnlIngresos.BackColor = Color.FromArgb(12, 45, 22);
+            this.pnlIngresos.BackColor = Color.FromArgb(222, 247, 232);
             this.pnlIngresos.Controls.Add(this.lblTotalIngresosTitulo);
             this.pnlIngresos.Controls.Add(this.lblTotalIngresos);
             this.pnlIngresos.Dock = DockStyle.Fill;
@@ -434,7 +434,7 @@ namespace LookScan
             this.lblTotalIngresos.Text = "C$ 15,000";
 
             // pnlGastos
-            this.pnlGastos.BackColor = Color.FromArgb(55, 18, 22);
+            this.pnlGastos.BackColor = Color.FromArgb(255, 229, 234);
             this.pnlGastos.Controls.Add(this.lblTotalGastosTitulo);
             this.pnlGastos.Controls.Add(this.lblTotalGastos);
             this.pnlGastos.Dock = DockStyle.Fill;
@@ -463,7 +463,7 @@ namespace LookScan
             this.lblTotalGastos.Text = "C$ 2,300";
 
             // pnlSaldo
-            this.pnlSaldo.BackColor = Color.FromArgb(12, 38, 68);
+            this.pnlSaldo.BackColor = Color.FromArgb(226, 240, 255);
             this.pnlSaldo.Controls.Add(this.lblSaldoDisponibleTitulo);
             this.pnlSaldo.Controls.Add(this.lblSaldoDisponible);
             this.pnlSaldo.Dock = DockStyle.Fill;
@@ -492,7 +492,7 @@ namespace LookScan
             this.lblSaldoDisponible.Text = "C$ 12,700";
 
             // pnlAhorro
-            this.pnlAhorro.BackColor = Color.FromArgb(58, 28, 4);
+            this.pnlAhorro.BackColor = Color.FromArgb(255, 242, 218);
             this.pnlAhorro.Controls.Add(this.lblCapacidadAhorroTitulo);
             this.pnlAhorro.Controls.Add(this.lblCapacidadAhorro);
             this.pnlAhorro.Dock = DockStyle.Fill;
@@ -523,25 +523,25 @@ namespace LookScan
             // 
             // grpGrafico
             // 
-            this.grpGrafico.BackColor = Color.FromArgb(24, 24, 24);
+            this.grpGrafico.BackColor = Color.White;
             this.grpGrafico.Controls.Add(this.chartGastos);
             this.grpGrafico.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            this.grpGrafico.ForeColor = Color.FromArgb(220, 220, 220);
+            this.grpGrafico.ForeColor = Color.FromArgb(45, 55, 72);
             this.grpGrafico.Location = new Point(20, 695);
             this.grpGrafico.Name = "grpGrafico";
             this.grpGrafico.Padding = new Padding(12);
-            this.grpGrafico.Size = new Size(620, 210);
+            this.grpGrafico.Size = new Size(1000, 210);
             this.grpGrafico.TabIndex = 4;
             this.grpGrafico.TabStop = false;
-            this.grpGrafico.Text = "4. Gastos por categoría (Chart)";
+            this.grpGrafico.Text = "4. Gastos por categoría";
 
             // chartGastos
-            this.chartGastos.BackColor = Color.FromArgb(24, 24, 24);
-            chartArea1.BackColor = Color.FromArgb(24, 24, 24);
-            chartArea1.AxisX.LabelStyle.ForeColor = Color.FromArgb(220, 220, 220);
+            this.chartGastos.BackColor = Color.White;
+            chartArea1.BackColor = Color.White;
+            chartArea1.AxisX.LabelStyle.ForeColor = Color.FromArgb(45, 55, 72);
             chartArea1.AxisX.LineColor = Color.FromArgb(60, 60, 60);
             chartArea1.AxisX.MajorGrid.LineColor = Color.FromArgb(35, 35, 35);
-            chartArea1.AxisY.LabelStyle.ForeColor = Color.FromArgb(220, 220, 220);
+            chartArea1.AxisY.LabelStyle.ForeColor = Color.FromArgb(45, 55, 72);
             chartArea1.AxisY.LineColor = Color.FromArgb(60, 60, 60);
             chartArea1.AxisY.MajorGrid.LineColor = Color.FromArgb(35, 35, 35);
             chartArea1.AxisY.LabelStyle.Format = "{0}%";
@@ -563,7 +563,7 @@ namespace LookScan
             // 
             this.AutoScaleDimensions = new SizeF(8F, 20F);
             this.AutoScaleMode = AutoScaleMode.Font;
-            this.BackColor = Color.FromArgb(18, 18, 18);
+            this.BackColor = Color.FromArgb(244, 246, 250);
             this.Controls.Add(this.pnlPrincipal);
             this.Font = new Font("Segoe UI", 9F);
             this.Name = "PresupuestoControl";

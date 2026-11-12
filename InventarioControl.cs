@@ -126,6 +126,9 @@ namespace LookScan
             BackColor = Color.FromArgb(244, 246, 250);
             pnlPrincipal.BackColor = BackColor;
             foreach (GroupBox grupo in new[] { grpDatosProducto, grpRegistrarMov, grpExistencias, grpResumenAlerta }) grupo.Width = 1000;
+            pnlValorTotal.BackColor = Color.FromArgb(226, 240, 255);
+            pnlReponer.BackColor = Color.FromArgb(255, 242, 218);
+            pnlAlertaBanner.BackColor = Color.FromArgb(255, 232, 232);
             AplicarTemaClaro(this);
         }
 

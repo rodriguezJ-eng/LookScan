@@ -107,6 +107,10 @@ namespace LookScan
             pnlPrincipal.BackColor = BackColor;
             pnlEncabezado.Width = 1000;
             foreach (GroupBox grupo in new[] { grpRegistro, grpMovimientos, grpResumen, grpGrafico }) grupo.Width = 1000;
+            pnlIngresos.BackColor = Color.FromArgb(222, 247, 232);
+            pnlGastos.BackColor = Color.FromArgb(255, 229, 234);
+            pnlSaldo.BackColor = Color.FromArgb(226, 240, 255);
+            pnlAhorro.BackColor = Color.FromArgb(255, 242, 218);
             AplicarTemaClaro(this);
         }
 
