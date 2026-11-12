@@ -91,9 +91,10 @@ namespace LookScan
 
             cmbPeriodoBaseGraf.SelectedIndexChanged += (s, e) => { if (!_actualizandoCombos) ActualizarTodosLosGraficos(); };
             cmbPeriodoCompGraf.SelectedIndexChanged += (s, e) => { if (!_actualizandoCombos) ActualizarTodosLosGraficos(); };
-            cmbTopN.SelectedIndexChanged += (s, e) => { if (!_actualizandoCombos) ActualizarGrafico1(); };
-            cmbOrdenarPor.SelectedIndexChanged += (s, e) => { if (!_actualizandoCombos) ActualizarGrafico1(); };
-            cmbMostrar.SelectedIndexChanged += (s, e) => { if (!_actualizandoCombos) ActualizarGrafico1(); };
+            // Estos filtros son globales: se aplican al conjunto de los seis gráficos.
+            cmbTopN.SelectedIndexChanged += (s, e) => { if (!_actualizandoCombos) ActualizarTodosLosGraficos(); };
+            cmbOrdenarPor.SelectedIndexChanged += (s, e) => { if (!_actualizandoCombos) ActualizarTodosLosGraficos(); };
+            cmbMostrar.SelectedIndexChanged += (s, e) => { if (!_actualizandoCombos) ActualizarTodosLosGraficos(); };
 
             // Eventos por gráfico individual
             cmbTipoGrafico1.SelectedIndexChanged += (s, e) => { if (!_actualizandoCombos) ActualizarGrafico1(); };
@@ -141,11 +142,59 @@ namespace LookScan
             chart.BackColor = Color.White;
             chart.AntiAliasing = AntiAliasingStyles.All;
             chart.TextAntiAliasingQuality = TextAntiAliasingQuality.High;
+            chart.Cursor = Cursors.Cross;
+            chart.MouseWheel += Chart_MouseWheel;
+            chart.MouseDoubleClick += (s, e) => RestablecerZoom(chart);
+
+            // Seleccionar un área acerca los ejes; doble clic vuelve a la vista completa.
+            chart.SelectionRangeChanged += (s, e) =>
+            {
+                if (e.Axis == null || e.NewSelectionEnd <= e.NewSelectionStart) return;
+                e.Axis.ScaleView.Zoom(e.NewSelectionStart, e.NewSelectionEnd);
+                e.Axis.ScaleView.Position = e.NewSelectionStart;
+            };
 
             contenedor.Controls.Add(chart);
             chart.BringToFront();
 
             return chart;
+        }
+
+        private void Chart_MouseWheel(object sender, MouseEventArgs e)
+        {
+            Chart chart = sender as Chart;
+            if (chart == null || chart.ChartAreas.Count == 0) return;
+
+            ChartArea area = chart.ChartAreas[0];
+            Axis eje = area.AxisX;
+            if (e.Delta < 0)
+            {
+                RestablecerZoom(chart);
+                return;
+            }
+
+            double minimo = eje.ScaleView.ViewMinimum;
+            double maximo = eje.ScaleView.ViewMaximum;
+            if (double.IsNaN(minimo) || double.IsNaN(maximo) || maximo <= minimo)
+            {
+                minimo = eje.Minimum;
+                maximo = eje.Maximum;
+            }
+            if (double.IsNaN(minimo) || double.IsNaN(maximo) || maximo <= minimo) return;
+
+            double centro = (minimo + maximo) / 2d;
+            double rango = Math.Max(1d, (maximo - minimo) * 0.70d);
+            eje.ScaleView.Zoom(centro - rango / 2d, centro + rango / 2d);
+        }
+
+        private void RestablecerZoom(Chart chart)
+        {
+            if (chart == null) return;
+            foreach (ChartArea area in chart.ChartAreas)
+            {
+                area.AxisX.ScaleView.ZoomReset(0);
+                area.AxisY.ScaleView.ZoomReset(0);
+            }
         }
 
         private void ConfigurarComboTipos(ComboBox cmbTipo, ComboBox cmbEstilo, string tipoDefecto, string estiloDefecto)
@@ -257,11 +306,20 @@ namespace LookScan
             area.AxisX.LineColor = Color.FromArgb(200, 205, 215);
             area.AxisX.MajorGrid.LineColor = Color.FromArgb(235, 238, 245);
             area.AxisX.Interval = 1;
+            area.AxisX.ScaleView.Zoomable = true;
+            area.AxisX.ScrollBar.Enabled = true;
+            area.AxisX.ScrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll;
+            area.CursorX.IsUserEnabled = true;
+            area.CursorX.IsUserSelectionEnabled = true;
 
             area.AxisY.LabelStyle.Font = new Font("Segoe UI", 8.5F);
             area.AxisY.LabelStyle.ForeColor = Color.FromArgb(60, 65, 75);
             area.AxisY.LineColor = Color.FromArgb(200, 205, 215);
             area.AxisY.MajorGrid.LineColor = Color.FromArgb(235, 238, 245);
+            area.AxisY.ScaleView.Zoomable = true;
+            area.AxisY.ScrollBar.Enabled = true;
+            area.CursorY.IsUserEnabled = true;
+            area.CursorY.IsUserSelectionEnabled = true;
 
             chart.ChartAreas.Add(area);
 
@@ -393,6 +451,14 @@ namespace LookScan
             {
                 MostrarMensajeVacio(chart, lblPlaceholder, "No hay datos registrados para graficar.\nCapture información o use el botón 'Cargar Demo' en la pestaña Datos.");
                 return;
+            }
+
+            AplicarFiltrosGlobales(ref datosBase, ref datosComp);
+            if (cmbMostrar.SelectedItem != null && Util.Igual(cmbMostrar.SelectedItem.ToString(), "Porcentaje"))
+            {
+                datosBase = ConvertirAPorcentaje(datosBase);
+                datosComp = ConvertirAPorcentaje(datosComp);
+                titulo += " (%)";
             }
 
             MostrarChart(chart, lblPlaceholder);
@@ -677,6 +743,46 @@ namespace LookScan
             }
         }
 
+        private void AplicarFiltrosGlobales(ref List<DatoGraficoItem> datosBase, ref List<DatoGraficoItem> datosComp)
+        {
+            List<DatoGraficoItem> baseLocal = datosBase ?? new List<DatoGraficoItem>();
+            List<DatoGraficoItem> compLocal = datosComp ?? new List<DatoGraficoItem>();
+            var categorias = baseLocal.Select(d => d.Nombre)
+                .Concat(compLocal.Select(d => d.Nombre))
+                .Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+            if (categorias.Count == 0) return;
+
+            string orden = cmbOrdenarPor.SelectedItem as string ?? "Valor";
+            var ordenadas = categorias.Select(nombre => new
+            {
+                Nombre = nombre,
+                Base = (baseLocal.FirstOrDefault(d => Util.Igual(d.Nombre, nombre)) ?? new DatoGraficoItem(nombre, 0m)).Valor,
+                Comp = (compLocal.FirstOrDefault(d => Util.Igual(d.Nombre, nombre)) ?? new DatoGraficoItem(nombre, 0m)).Valor
+            });
+
+            if (orden.IndexOf("porcentual", StringComparison.OrdinalIgnoreCase) >= 0)
+                ordenadas = ordenadas.OrderByDescending(x => x.Base == 0m ? Math.Abs(x.Comp) : Math.Abs((x.Comp - x.Base) / x.Base));
+            else if (orden.IndexOf("absoluta", StringComparison.OrdinalIgnoreCase) >= 0)
+                ordenadas = ordenadas.OrderByDescending(x => Math.Abs(x.Comp - x.Base));
+            else if (orden.IndexOf("nombre", StringComparison.OrdinalIgnoreCase) >= 0)
+                ordenadas = ordenadas.OrderBy(x => x.Nombre);
+            else
+                ordenadas = ordenadas.OrderByDescending(x => Math.Max(Math.Abs(x.Base), Math.Abs(x.Comp)));
+
+            int topN;
+            if (!int.TryParse(cmbTopN.SelectedItem as string, out topN) || topN <= 0) topN = categorias.Count;
+            var seleccion = ordenadas.Take(topN).ToList();
+            datosBase = seleccion.Select(x => new DatoGraficoItem(x.Nombre, x.Base)).ToList();
+            datosComp = seleccion.Select(x => new DatoGraficoItem(x.Nombre, x.Comp)).ToList();
+        }
+
+        private List<DatoGraficoItem> ConvertirAPorcentaje(List<DatoGraficoItem> datos)
+        {
+            if (datos == null) return null;
+            decimal total = datos.Sum(d => Math.Abs(d.Valor));
+            return datos.Select(d => new DatoGraficoItem(d.Nombre, total == 0m ? 0m : d.Valor * 100m / total)).ToList();
+        }
+
         // ─────────────────────────────────────────────────────────────────────
         // 1. ANÁLISIS HORIZONTAL Y VERTICAL (BG / ER)
         // ─────────────────────────────────────────────────────────────────────
@@ -697,8 +803,6 @@ namespace LookScan
 
                 string tipoStr = cmbTipoGrafico1.SelectedItem?.ToString() ?? "Barras";
                 string estiloStr = cmbEstiloGrafico1.SelectedItem?.ToString() ?? "Clásico";
-                string mostrar = cmbMostrar.SelectedItem?.ToString() ?? "Monto";
-                string ordenar = cmbOrdenarPor.SelectedItem?.ToString() ?? "Valor";
 
                 var lista = new List<Tuple<string, decimal, decimal>>
                 {
@@ -710,48 +814,6 @@ namespace LookScan
                     Tuple.Create("Ventas", Calculos.Ventas(baseP), Calculos.Ventas(compP)),
                     Tuple.Create("Utilidad Neta", Calculos.UtilidadNeta(baseP), Calculos.UtilidadNeta(compP))
                 };
-
-                // Ordenar por Valor o Nombre según filtro
-                if (ordenar == "Valor")
-                {
-                    lista = lista.OrderByDescending(t => Math.Abs(t.Item3)).ToList();
-                }
-                else if (ordenar == "Nombre")
-                {
-                    lista = lista.OrderBy(t => t.Item1).ToList();
-                }
-
-                // Top N
-                int topN = int.TryParse(cmbTopN.SelectedItem?.ToString(), out int n) ? n : 5;
-                if (topN > 0 && topN < lista.Count)
-                {
-                    lista = lista.Take(topN).ToList();
-                }
-
-                // Si se selecciona mostrar variación porcentual
-                if (mostrar == "Porcentaje")
-                {
-                    var datosVar = lista.Select(t =>
-                    {
-                        decimal b = t.Item2;
-                        decimal c = t.Item3;
-                        decimal pct = b != 0m ? ((c - b) / Math.Abs(b)) * 100m : 0m;
-                        return new DatoGraficoItem(t.Item1, pct);
-                    }).ToList();
-
-                    RenderizarGrafico(
-                        _chart1,
-                        lblAreaGrafico1,
-                        "Variación % (" + baseP.Nombre + " vs " + compP.Nombre + ")",
-                        datosVar,
-                        null,
-                        "Variación %",
-                        null,
-                        tipoStr,
-                        estiloStr,
-                        false);
-                    return;
-                }
 
                 var itemsBase = lista.Select(t => new DatoGraficoItem(t.Item1, t.Item2)).ToList();
                 var itemsComp = lista.Select(t => new DatoGraficoItem(t.Item1, t.Item3)).ToList();
@@ -1002,10 +1064,11 @@ namespace LookScan
 
                 ResultadoEfe efe = Calculos.Efe(baseP, compP, true);
 
-                decimal flujoOp = ObtenerMontoEfe(efe, "ACTIVIDADES DE OPERACIÓN");
-                decimal flujoInv = ObtenerMontoEfe(efe, "ACTIVIDADES DE INVERSIÓN");
-                decimal flujoFin = ObtenerMontoEfe(efe, "ACTIVIDADES DE FINANCIACIÓN");
-                decimal flujoNeto = flujoOp + flujoInv + flujoFin;
+                // Se deben leer las filas de total, no los encabezados de sección (que son cero).
+                decimal flujoOp = ObtenerMontoEfe(efe, "EFECTIVO NETO PROVISTO POR ACTIVIDADES DE OPERACIÓN");
+                decimal flujoInv = ObtenerMontoEfe(efe, "EFECTIVO NETO USADO EN ACTIVIDADES DE INVERSIÓN");
+                decimal flujoFin = ObtenerMontoEfe(efe, "EFECTIVO NETO USADO EN ACTIVIDADES DE FINANCIACIÓN");
+                decimal flujoNeto = ObtenerMontoEfe(efe, "INCREMENTO NETO DE EFECTIVO Y EQUIVALENTES");
 
                 var items = new List<DatoGraficoItem>
                 {
@@ -1128,7 +1191,7 @@ namespace LookScan
         {
             if (efe == null || efe.Filas == null) return 0m;
 
-            var fila = efe.Filas.FirstOrDefault(f => f.Concepto.IndexOf(fragmentoConcepto, StringComparison.OrdinalIgnoreCase) >= 0);
+            var fila = efe.Filas.FirstOrDefault(f => f.Total && f.Concepto.IndexOf(fragmentoConcepto, StringComparison.OrdinalIgnoreCase) >= 0);
             return fila != null ? fila.Monto : 0m;
         }
 

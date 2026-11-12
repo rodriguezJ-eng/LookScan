@@ -314,7 +314,39 @@ namespace LookScan
         private static void AgregarGraficos(DocumentoInforme documento)
         {
             SeccionInforme seccion = documento.AgregarSeccion("GRÁFICOS");
-            seccion.AgregarNota("Sección reservada. Los gráficos aún no están programados; se incorporarán en una etapa posterior.");
+            List<Periodo> periodos = MotorIa.PeriodosConDatos();
+            if (periodos.Count == 0)
+            {
+                seccion.AgregarNota("No hay datos registrados para generar gráficos.");
+                return;
+            }
+
+            Periodo baseP = periodos.First();
+            Periodo compP = periodos.Last();
+            var resumen = documento.AgregarGrafico("Resumen financiero", baseP.Nombre, compP.Nombre);
+            resumen.AgregarPunto("Activo corriente", Calculos.ActivoCorriente(baseP), Calculos.ActivoCorriente(compP));
+            resumen.AgregarPunto("Pasivo corriente", Calculos.PasivoCorriente(baseP), Calculos.PasivoCorriente(compP));
+            resumen.AgregarPunto("Ventas", Calculos.Ventas(baseP), Calculos.Ventas(compP));
+            resumen.AgregarPunto("Utilidad neta", Calculos.UtilidadNeta(baseP), Calculos.UtilidadNeta(compP));
+
+            var capital = documento.AgregarGrafico("Capital neto de trabajo", baseP.Nombre, compP.Nombre);
+            capital.AgregarPunto("CNT", Calculos.ActivoCorriente(baseP) - Calculos.PasivoCorriente(baseP), Calculos.ActivoCorriente(compP) - Calculos.PasivoCorriente(compP));
+            capital.AgregarPunto("CNO", Calculos.ActivoCorriente(baseP) - Calculos.PasivoCorriente(baseP), Calculos.ActivoCorriente(compP) - Calculos.PasivoCorriente(compP));
+
+            ResultadoEfe efe = Calculos.Efe(baseP, compP, true);
+            var flujo = documento.AgregarGrafico("Estado de flujo de efectivo", "Flujo");
+            flujo.AgregarPunto("Operación", TotalEfe(efe, "EFECTIVO NETO PROVISTO POR ACTIVIDADES DE OPERACIÓN"));
+            flujo.AgregarPunto("Inversión", TotalEfe(efe, "EFECTIVO NETO USADO EN ACTIVIDADES DE INVERSIÓN"));
+            flujo.AgregarPunto("Financiación", TotalEfe(efe, "EFECTIVO NETO USADO EN ACTIVIDADES DE FINANCIACIÓN"));
+            flujo.AgregarPunto("Flujo neto", TotalEfe(efe, "INCREMENTO NETO DE EFECTIVO Y EQUIVALENTES"));
+
+            seccion.AgregarNota("Los gráficos y sus datos se incluyen en las exportaciones HTML y Excel.");
+        }
+
+        private static decimal TotalEfe(ResultadoEfe efe, string concepto)
+        {
+            FilaEfe fila = efe.Filas.FirstOrDefault(f => f.Total && f.Concepto.IndexOf(concepto, StringComparison.OrdinalIgnoreCase) >= 0);
+            return fila == null ? 0m : fila.Monto;
         }
 
         // ── PROFORMA ─────────────────────────────────────────────────────────

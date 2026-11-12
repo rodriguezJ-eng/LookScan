@@ -182,6 +182,8 @@ namespace LookScan
             sb.AppendLine("tr.total td { background: #E8EEF7; font-weight: bold; }");
             sb.AppendLine("tr.encabezado td { background: #F2F4F8; font-weight: bold; }");
             sb.AppendLine(".nota { background: #FFF8E1; border-left: 4px solid #E0A800; padding: 10px 12px; margin-bottom: 18px; }");
+            sb.AppendLine(".grafico { page-break-inside: avoid; margin: 20px 0 30px; border: 1px solid #dce3ee; padding: 14px; border-radius: 6px; }");
+            sb.AppendLine(".grafico svg { width: 100%; height: 270px; } .grafico text { font-family: Segoe UI, Arial; fill: #394150; font-size: 12px; }");
             sb.AppendLine("</style>");
             sb.AppendLine("</head>");
             sb.AppendLine("<body>");
@@ -192,6 +194,13 @@ namespace LookScan
                               ? string.Empty
                               : " · Periodo activo: " + HtmlTexto(documento.PeriodoActivo)) +
                           "</div>");
+
+            if (documento.Graficos.Count > 0)
+            {
+                sb.AppendLine("<h2>GRÁFICOS</h2>");
+                foreach (GraficoInforme grafico in documento.Graficos)
+                    sb.AppendLine(HtmlGrafico(grafico));
+            }
 
             foreach (SeccionInforme seccion in documento.Secciones)
             {
@@ -243,6 +252,39 @@ namespace LookScan
         public static void GuardarHtml(DocumentoInforme documento, string ruta)
         {
             File.WriteAllText(ruta, Html(documento), new UTF8Encoding(true));
+        }
+
+        private static string HtmlGrafico(GraficoInforme grafico)
+        {
+            const int ancho = 900, alto = 270, izquierda = 155, arriba = 28, abajo = 42;
+            var sb = new StringBuilder();
+            decimal maximo = grafico.Puntos.SelectMany(p => p.Valores).Select(v => Math.Abs(v)).DefaultIfEmpty(1m).Max();
+            if (maximo == 0m) maximo = 1m;
+            int series = Math.Max(1, grafico.Series.Count);
+            float espacio = (ancho - izquierda - 25f) / Math.Max(1, grafico.Puntos.Count);
+            float anchoBarra = Math.Max(5f, Math.Min(28f, (espacio - 8f) / series));
+            Color[] colores = { Color.FromArgb(41, 128, 185), Color.FromArgb(230, 126, 34), Color.FromArgb(39, 174, 96) };
+
+            sb.Append("<div class=\"grafico\"><h3>").Append(HtmlTexto(grafico.Titulo)).Append("</h3><svg viewBox=\"0 0 ").Append(ancho).Append(" ").Append(alto).Append("\">");
+            sb.Append("<line x1=\"").Append(izquierda).Append("\" y1=\"").Append(alto - abajo).Append("\" x2=\"").Append(ancho - 15).Append("\" y2=\"").Append(alto - abajo).Append("\" stroke=\"#9ba7b6\"/>");
+            for (int i = 0; i < grafico.Puntos.Count; i++)
+            {
+                PuntoGraficoInforme punto = grafico.Puntos[i];
+                float x = izquierda + i * espacio;
+                for (int s = 0; s < punto.Valores.Count; s++)
+                {
+                    decimal valor = punto.Valores[s];
+                    float h = (float)(Math.Abs(valor) / maximo * (alto - arriba - abajo));
+                    float y = alto - abajo - h;
+                    float bx = x + s * anchoBarra;
+                    sb.Append("<rect x=\"").Append(bx.ToString(CultureInfo.InvariantCulture)).Append("\" y=\"").Append(y.ToString(CultureInfo.InvariantCulture)).Append("\" width=\"").Append(anchoBarra - 2).Append("\" height=\"").Append(h.ToString(CultureInfo.InvariantCulture)).Append("\" fill=\"#").Append(colores[s % colores.Length].ToArgb().ToString("X8").Substring(2)).Append("\"><title>").Append(HtmlTexto(punto.Etiqueta)).Append(": ").Append(valor.ToString("N2")).Append("</title></rect>");
+                }
+                sb.Append("<text x=\"").Append(x.ToString(CultureInfo.InvariantCulture)).Append("\" y=\"").Append(alto - 18).Append("\">").Append(HtmlTexto(punto.Etiqueta)).Append("</text>");
+            }
+            for (int s = 0; s < grafico.Series.Count; s++)
+                sb.Append("<rect x=\"").Append(izquierda + s * 130).Append("\" y=\"5\" width=\"12\" height=\"12\" fill=\"#").Append(colores[s % colores.Length].ToArgb().ToString("X8").Substring(2)).Append("\"/><text x=\"").Append(izquierda + 18 + s * 130).Append("\" y=\"16\">").Append(HtmlTexto(grafico.Series[s])).Append("</text>");
+            sb.Append("</svg></div>");
+            return sb.ToString();
         }
 
         // ── Excel SpreadsheetML ──────────────────────────────────────────────
@@ -333,6 +375,25 @@ namespace LookScan
                               "<FreezePanes/><SplitHorizontal>2</SplitHorizontal><TopRowBottomPane>2</TopRowBottomPane>" +
                               "<ActivePane>2</ActivePane></WorksheetOptions>");
                 sb.AppendLine("</Worksheet>");
+            }
+
+            foreach (GraficoInforme grafico in documento.Graficos)
+            {
+                string nombre = NombreHoja("Gráfico " + grafico.Titulo, nombres);
+                sb.AppendLine("<Worksheet ss:Name=\"" + XmlTexto(nombre) + "\"><Table>");
+                sb.AppendLine("<Row><Cell ss:StyleID=\"Titulo\"><Data ss:Type=\"String\">" + XmlTexto(grafico.Titulo) + "</Data></Cell></Row>");
+                sb.AppendLine("<Row><Cell ss:StyleID=\"Encabezado\"><Data ss:Type=\"String\">Categoría</Data></Cell>");
+                foreach (string serie in grafico.Series)
+                    sb.AppendLine("<Cell ss:StyleID=\"Encabezado\"><Data ss:Type=\"String\">" + XmlTexto(serie) + "</Data></Cell>");
+                sb.AppendLine("</Row>");
+                foreach (PuntoGraficoInforme punto in grafico.Puntos)
+                {
+                    sb.AppendLine("<Row><Cell><Data ss:Type=\"String\">" + XmlTexto(punto.Etiqueta) + "</Data></Cell>");
+                    foreach (decimal valor in punto.Valores)
+                        sb.AppendLine("<Cell ss:StyleID=\"Numero\"><Data ss:Type=\"Number\">" + valor.ToString(CultureInfo.InvariantCulture) + "</Data></Cell>");
+                    sb.AppendLine("</Row>");
+                }
+                sb.AppendLine("</Table></Worksheet>");
             }
 
             sb.AppendLine("</Workbook>");
@@ -475,6 +536,8 @@ namespace LookScan
 
                 var lineas = ConstruirLineas(documento);
                 int indice = 0;
+                int indiceGrafico = 0;
+                bool imprimiendoGraficos = false;
                 var fuenteNormal = new Font("Consolas", 8.5f);
                 var fuenteNegrita = new Font("Consolas", 8.5f, FontStyle.Bold);
                 var fuenteTitulo = new Font("Consolas", 11f, FontStyle.Bold);
@@ -482,6 +545,14 @@ namespace LookScan
 
                 impresion.PrintPage += delegate(object sender, PrintPageEventArgs e)
                 {
+                    if (imprimiendoGraficos)
+                    {
+                        DibujarGraficoImpresion(e.Graphics, documento.Graficos[indiceGrafico], e.MarginBounds);
+                        indiceGrafico++;
+                        e.HasMorePages = indiceGrafico < documento.Graficos.Count;
+                        return;
+                    }
+
                     float x = e.MarginBounds.Left;
                     float y = e.MarginBounds.Top;
                     float ancho = e.MarginBounds.Width;
@@ -513,6 +584,14 @@ namespace LookScan
                         indice++;
                     }
 
+                    // Tras las tablas se añaden los gráficos en páginas apaisadas.
+                    if (indiceGrafico < documento.Graficos.Count)
+                    {
+                        imprimiendoGraficos = true;
+                        e.HasMorePages = true;
+                        return;
+                    }
+
                     e.HasMorePages = false;
                 };
 
@@ -534,6 +613,40 @@ namespace LookScan
                                 "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
                     }
+                }
+            }
+        }
+
+        private static void DibujarGraficoImpresion(Graphics g, GraficoInforme grafico, Rectangle area)
+        {
+            using (var titulo = new Font("Segoe UI", 15f, FontStyle.Bold))
+            using (var texto = new Font("Segoe UI", 8.5f))
+            using (var eje = new Pen(Color.FromArgb(130, 145, 160)))
+            using (var azul = new SolidBrush(Color.FromArgb(24, 72, 140)))
+            {
+                g.DrawString(grafico.Titulo, titulo, azul, area.Left, area.Top);
+                int izquierda = area.Left + 150, abajo = area.Bottom - 65, arriba = area.Top + 55;
+                g.DrawLine(eje, izquierda, abajo, area.Right - 20, abajo);
+                decimal maximo = grafico.Puntos.SelectMany(p => p.Valores).Select(v => Math.Abs(v)).DefaultIfEmpty(1m).Max();
+                if (maximo == 0m) maximo = 1m;
+                float espacio = (area.Width - 180f) / Math.Max(1, grafico.Puntos.Count);
+                Color[] colores = { Color.FromArgb(41, 128, 185), Color.FromArgb(230, 126, 34), Color.FromArgb(39, 174, 96) };
+                for (int i = 0; i < grafico.Puntos.Count; i++)
+                {
+                    PuntoGraficoInforme punto = grafico.Puntos[i];
+                    float x = izquierda + i * espacio;
+                    for (int s = 0; s < punto.Valores.Count; s++)
+                    {
+                        float h = (float)(Math.Abs(punto.Valores[s]) / maximo * (abajo - arriba));
+                        using (var brocha = new SolidBrush(colores[s % colores.Length]))
+                            g.FillRectangle(brocha, x + s * 24, abajo - h, 20, h);
+                    }
+                    g.DrawString(punto.Etiqueta, texto, Brushes.Black, x, abajo + 8);
+                }
+                for (int s = 0; s < grafico.Series.Count; s++)
+                {
+                    using (var brocha = new SolidBrush(colores[s % colores.Length])) g.FillRectangle(brocha, izquierda + s * 145, area.Top + 32, 12, 12);
+                    g.DrawString(grafico.Series[s], texto, Brushes.Black, izquierda + 17 + s * 145, area.Top + 30);
                 }
             }
         }

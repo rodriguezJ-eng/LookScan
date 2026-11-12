@@ -10,6 +10,7 @@ namespace LookScan
         public DocumentoInforme()
         {
             Secciones = new List<SeccionInforme>();
+            Graficos = new List<GraficoInforme>();
         }
 
         public string Titulo { get; set; }
@@ -17,6 +18,14 @@ namespace LookScan
         public string Generado { get; set; }
         public string PeriodoActivo { get; set; }
         public List<SeccionInforme> Secciones { get; private set; }
+        public List<GraficoInforme> Graficos { get; private set; }
+
+        public GraficoInforme AgregarGrafico(string titulo, params string[] series)
+        {
+            var grafico = new GraficoInforme(titulo, series);
+            Graficos.Add(grafico);
+            return grafico;
+        }
 
         public SeccionInforme AgregarSeccion(string titulo)
         {
@@ -24,6 +33,32 @@ namespace LookScan
             Secciones.Add(seccion);
             return seccion;
         }
+    }
+
+    // Datos neutrales de un gráfico: los exportadores los convierten a SVG/HTML o a hojas de Excel.
+    public class GraficoInforme
+    {
+        public GraficoInforme(string titulo, params string[] series)
+        {
+            Titulo = titulo;
+            Series = new List<string>(series ?? new string[0]);
+            Puntos = new List<PuntoGraficoInforme>();
+        }
+
+        public string Titulo { get; private set; }
+        public List<string> Series { get; private set; }
+        public List<PuntoGraficoInforme> Puntos { get; private set; }
+
+        public void AgregarPunto(string etiqueta, params decimal[] valores)
+        {
+            Puntos.Add(new PuntoGraficoInforme { Etiqueta = etiqueta ?? string.Empty, Valores = new List<decimal>(valores ?? new decimal[0]) });
+        }
+    }
+
+    public class PuntoGraficoInforme
+    {
+        public string Etiqueta { get; set; }
+        public List<decimal> Valores { get; set; }
     }
 
     public class SeccionInforme
