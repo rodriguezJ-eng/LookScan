@@ -60,6 +60,14 @@ namespace LookScan
 
             // Pinta la fila de rojo cuando hay que reponer (CellFormatting / RowPrePaint)
             dgvExistencias.CellFormatting += dgvExistencias_CellFormatting;
+            dgvExistencias.SelectionChanged += (s, e) => CargarProductoSeleccionado();
+            var btnEditar = new Button
+            {
+                Text = "Editar seleccionado", Location = new Point(650, 120), Size = new Size(180, 36),
+                BackColor = Color.FromArgb(24, 72, 140), ForeColor = Color.White, FlatStyle = FlatStyle.Flat
+            };
+            btnEditar.Click += (s, e) => GuardarProducto();
+            grpDatosProducto.Controls.Add(btnEditar);
 
             // Cargar el demo de inventario proporcionado.
             CargarDatosFicticios();
@@ -172,6 +180,18 @@ namespace LookScan
             }
 
             cmbProductoMov.EndUpdate();
+        }
+
+        private void CargarProductoSeleccionado()
+        {
+            if (dgvExistencias.SelectedRows.Count == 0) return;
+            ProductoItem producto = dgvExistencias.SelectedRows[0].Tag as ProductoItem;
+            if (producto == null) return;
+            txtCodigo.Text = producto.Codigo;
+            txtProducto.Text = producto.Nombre;
+            txtExistenciaInicial.Text = producto.ExistenciaInicial.ToString("N0");
+            txtCostoUnitario.Text = producto.CostoUnitario.ToString("N2");
+            txtStockMinimo.Text = producto.StockMinimo.ToString("N0");
         }
 
         private void GuardarProducto()

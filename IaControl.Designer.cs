@@ -21,198 +21,196 @@ namespace LookScan
 
         private void InitializeComponent()
         {
-            txtResumenIa = new TextBox();
-            grpResumenIa = new GroupBox();
-            txtInterpretacion = new TextBox();
-            grpInterpretacion = new GroupBox();
-            tlpIa = new TableLayoutPanel();
-            pnlHeader = new Panel();
-            lblTitulo = new Label();
-            lblDescripcion = new Label();
-            btnPrepararResumen = new Button();
-            btnGenerarInterpretacion = new Button();
-            pnlToolbar = new Panel();
-            pnlBody = new Panel();
-            grpResumenIa.SuspendLayout();
-            grpInterpretacion.SuspendLayout();
-            tlpIa.SuspendLayout();
-            pnlHeader.SuspendLayout();
-            pnlToolbar.SuspendLayout();
-            pnlBody.SuspendLayout();
-            SuspendLayout();
+            this.txtResumenIa = new System.Windows.Forms.RichTextBox();
+            this.grpResumenIa = new System.Windows.Forms.GroupBox();
+            this.txtInterpretacion = new System.Windows.Forms.RichTextBox();
+            this.grpInterpretacion = new System.Windows.Forms.GroupBox();
+            this.tlpIa = new System.Windows.Forms.TableLayoutPanel();
+            this.pnlHeader = new System.Windows.Forms.Panel();
+            this.lblTitulo = new System.Windows.Forms.Label();
+            this.lblDescripcion = new System.Windows.Forms.Label();
+            this.btnPrepararResumen = new System.Windows.Forms.Button();
+            this.btnGenerarInterpretacion = new System.Windows.Forms.Button();
+            this.pnlToolbar = new System.Windows.Forms.Panel();
+            this.pnlBody = new System.Windows.Forms.Panel();
+            this.grpResumenIa.SuspendLayout();
+            this.grpInterpretacion.SuspendLayout();
+            this.tlpIa.SuspendLayout();
+            this.pnlHeader.SuspendLayout();
+            this.pnlToolbar.SuspendLayout();
+            this.pnlBody.SuspendLayout();
+            this.SuspendLayout();
             // 
             // txtResumenIa
             // 
-            txtResumenIa.BackColor = Color.FromArgb(255, 255, 255);
-            txtResumenIa.Dock = DockStyle.Fill;
-            txtResumenIa.Location = new Point(8, 28);
-            txtResumenIa.Multiline = true;
-            txtResumenIa.Name = "txtResumenIa";
-            txtResumenIa.ReadOnly = true;
-            txtResumenIa.ScrollBars = ScrollBars.Vertical;
-            txtResumenIa.Size = new Size(468, 416);
-            txtResumenIa.TabIndex = 0;
+            this.txtResumenIa.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.txtResumenIa.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtResumenIa.Location = new System.Drawing.Point(8, 28);
+            this.txtResumenIa.Name = "txtResumenIa";
+            this.txtResumenIa.ReadOnly = true;
+            this.txtResumenIa.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.txtResumenIa.Size = new System.Drawing.Size(468, 416);
+            this.txtResumenIa.TabIndex = 0;
+            this.txtResumenIa.Text = "";
             // 
             // grpResumenIa
             // 
-            grpResumenIa.Controls.Add(txtResumenIa);
-            grpResumenIa.Dock = DockStyle.Fill;
-            grpResumenIa.Location = new Point(3, 3);
-            grpResumenIa.Name = "grpResumenIa";
-            grpResumenIa.Padding = new Padding(8, 6, 8, 8);
-            grpResumenIa.Size = new Size(484, 452);
-            grpResumenIa.TabIndex = 0;
-            grpResumenIa.TabStop = false;
-            grpResumenIa.Text = "Resumen preparado";
+            this.grpResumenIa.Controls.Add(this.txtResumenIa);
+            this.grpResumenIa.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpResumenIa.Location = new System.Drawing.Point(3, 3);
+            this.grpResumenIa.Name = "grpResumenIa";
+            this.grpResumenIa.Padding = new System.Windows.Forms.Padding(8, 6, 8, 8);
+            this.grpResumenIa.Size = new System.Drawing.Size(484, 452);
+            this.grpResumenIa.TabIndex = 0;
+            this.grpResumenIa.TabStop = false;
+            this.grpResumenIa.Text = "Resumen preparado";
             // 
             // txtInterpretacion
             // 
-            txtInterpretacion.BackColor = Color.FromArgb(255, 255, 255);
-            txtInterpretacion.Dock = DockStyle.Fill;
-            txtInterpretacion.Location = new Point(8, 28);
-            txtInterpretacion.Multiline = true;
-            txtInterpretacion.Name = "txtInterpretacion";
-            txtInterpretacion.ReadOnly = true;
-            txtInterpretacion.ScrollBars = ScrollBars.Vertical;
-            txtInterpretacion.Size = new Size(468, 416);
-            txtInterpretacion.TabIndex = 0;
+            this.txtInterpretacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.txtInterpretacion.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtInterpretacion.Location = new System.Drawing.Point(8, 28);
+            this.txtInterpretacion.Name = "txtInterpretacion";
+            this.txtInterpretacion.ReadOnly = true;
+            this.txtInterpretacion.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.txtInterpretacion.Size = new System.Drawing.Size(468, 416);
+            this.txtInterpretacion.TabIndex = 0;
+            this.txtInterpretacion.Text = "";
             // 
             // grpInterpretacion
             // 
-            grpInterpretacion.Controls.Add(txtInterpretacion);
-            grpInterpretacion.Dock = DockStyle.Fill;
-            grpInterpretacion.Location = new Point(493, 3);
-            grpInterpretacion.Name = "grpInterpretacion";
-            grpInterpretacion.Padding = new Padding(8, 6, 8, 8);
-            grpInterpretacion.Size = new Size(484, 452);
-            grpInterpretacion.TabIndex = 1;
-            grpInterpretacion.TabStop = false;
-            grpInterpretacion.Text = "Interpretación";
+            this.grpInterpretacion.Controls.Add(this.txtInterpretacion);
+            this.grpInterpretacion.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpInterpretacion.Location = new System.Drawing.Point(493, 3);
+            this.grpInterpretacion.Name = "grpInterpretacion";
+            this.grpInterpretacion.Padding = new System.Windows.Forms.Padding(8, 6, 8, 8);
+            this.grpInterpretacion.Size = new System.Drawing.Size(484, 452);
+            this.grpInterpretacion.TabIndex = 1;
+            this.grpInterpretacion.TabStop = false;
+            this.grpInterpretacion.Text = "Interpretación";
             // 
             // tlpIa
             // 
-            tlpIa.ColumnCount = 2;
-            tlpIa.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tlpIa.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tlpIa.Controls.Add(grpResumenIa, 0, 0);
-            tlpIa.Controls.Add(grpInterpretacion, 1, 0);
-            tlpIa.Dock = DockStyle.Fill;
-            tlpIa.Location = new Point(10, 4);
-            tlpIa.Name = "tlpIa";
-            tlpIa.RowCount = 1;
-            tlpIa.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tlpIa.Size = new Size(980, 458);
-            tlpIa.TabIndex = 0;
+            this.tlpIa.ColumnCount = 2;
+            this.tlpIa.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpIa.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpIa.Controls.Add(this.grpResumenIa, 0, 0);
+            this.tlpIa.Controls.Add(this.grpInterpretacion, 1, 0);
+            this.tlpIa.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpIa.Location = new System.Drawing.Point(10, 4);
+            this.tlpIa.Name = "tlpIa";
+            this.tlpIa.RowCount = 1;
+            this.tlpIa.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpIa.Size = new System.Drawing.Size(980, 458);
+            this.tlpIa.TabIndex = 0;
             // 
             // pnlHeader
             // 
-            pnlHeader.Controls.Add(lblTitulo);
-            pnlHeader.Controls.Add(lblDescripcion);
-            pnlHeader.Dock = DockStyle.Top;
-            pnlHeader.Location = new Point(0, 0);
-            pnlHeader.Name = "pnlHeader";
-            pnlHeader.Size = new Size(1000, 66);
-            pnlHeader.TabIndex = 2;
+            this.pnlHeader.Controls.Add(this.lblTitulo);
+            this.pnlHeader.Controls.Add(this.lblDescripcion);
+            this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlHeader.Location = new System.Drawing.Point(0, 0);
+            this.pnlHeader.Name = "pnlHeader";
+            this.pnlHeader.Size = new System.Drawing.Size(1000, 66);
+            this.pnlHeader.TabIndex = 2;
             // 
             // lblTitulo
             // 
-            lblTitulo.AutoSize = true;
-            lblTitulo.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
-            lblTitulo.ForeColor = Color.FromArgb(24, 72, 140);
-            lblTitulo.Location = new Point(14, 8);
-            lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(251, 37);
-            lblTitulo.TabIndex = 0;
-            lblTitulo.Text = "IA local (heurística)";
+            this.lblTitulo.AutoSize = true;
+            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI Semibold", 16F, System.Drawing.FontStyle.Bold);
+            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.lblTitulo.Location = new System.Drawing.Point(14, 8);
+            this.lblTitulo.Name = "lblTitulo";
+            this.lblTitulo.Size = new System.Drawing.Size(203, 37);
+            this.lblTitulo.TabIndex = 0;
+            this.lblTitulo.Text = "Intérprete local";
             // 
             // lblDescripcion
             // 
-            lblDescripcion.AutoSize = true;
-            lblDescripcion.ForeColor = Color.FromArgb(105, 105, 105);
-            lblDescripcion.Location = new Point(16, 42);
-            lblDescripcion.Name = "lblDescripcion";
-            lblDescripcion.Size = new Size(339, 21);
-            lblDescripcion.TabIndex = 1;
-            lblDescripcion.Text = "Interpretación automática sin servicios externos";
+            this.lblDescripcion.AutoSize = true;
+            this.lblDescripcion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(105)))), ((int)(((byte)(105)))));
+            this.lblDescripcion.Location = new System.Drawing.Point(16, 42);
+            this.lblDescripcion.Name = "lblDescripcion";
+            this.lblDescripcion.Size = new System.Drawing.Size(147, 21);
+            this.lblDescripcion.TabIndex = 1;
+            this.lblDescripcion.Text = "Interpretación Local";
             // 
             // btnPrepararResumen
             // 
-            btnPrepararResumen.BackColor = Color.FromArgb(255, 255, 255);
-            btnPrepararResumen.Cursor = Cursors.Hand;
-            btnPrepararResumen.FlatAppearance.BorderColor = Color.FromArgb(24, 72, 140);
-            btnPrepararResumen.FlatStyle = FlatStyle.Flat;
-            btnPrepararResumen.ForeColor = Color.FromArgb(24, 72, 140);
-            btnPrepararResumen.Location = new Point(10, 24);
-            btnPrepararResumen.Name = "btnPrepararResumen";
-            btnPrepararResumen.Size = new Size(150, 30);
-            btnPrepararResumen.TabIndex = 0;
-            btnPrepararResumen.Text = "Preparar resumen";
-            btnPrepararResumen.UseVisualStyleBackColor = false;
+            this.btnPrepararResumen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnPrepararResumen.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPrepararResumen.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnPrepararResumen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPrepararResumen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnPrepararResumen.Location = new System.Drawing.Point(10, 24);
+            this.btnPrepararResumen.Name = "btnPrepararResumen";
+            this.btnPrepararResumen.Size = new System.Drawing.Size(150, 30);
+            this.btnPrepararResumen.TabIndex = 0;
+            this.btnPrepararResumen.Text = "Preparar resumen";
+            this.btnPrepararResumen.UseVisualStyleBackColor = false;
             // 
             // btnGenerarInterpretacion
             // 
-            btnGenerarInterpretacion.BackColor = Color.FromArgb(24, 72, 140);
-            btnGenerarInterpretacion.Cursor = Cursors.Hand;
-            btnGenerarInterpretacion.FlatAppearance.BorderColor = Color.FromArgb(24, 72, 140);
-            btnGenerarInterpretacion.FlatStyle = FlatStyle.Flat;
-            btnGenerarInterpretacion.ForeColor = Color.FromArgb(255, 255, 255);
-            btnGenerarInterpretacion.Location = new Point(172, 24);
-            btnGenerarInterpretacion.Name = "btnGenerarInterpretacion";
-            btnGenerarInterpretacion.Size = new Size(210, 30);
-            btnGenerarInterpretacion.TabIndex = 1;
-            btnGenerarInterpretacion.Text = "Generar interpretación (local)";
-            btnGenerarInterpretacion.UseVisualStyleBackColor = false;
+            this.btnGenerarInterpretacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnGenerarInterpretacion.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnGenerarInterpretacion.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnGenerarInterpretacion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGenerarInterpretacion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnGenerarInterpretacion.Location = new System.Drawing.Point(172, 24);
+            this.btnGenerarInterpretacion.Name = "btnGenerarInterpretacion";
+            this.btnGenerarInterpretacion.Size = new System.Drawing.Size(210, 30);
+            this.btnGenerarInterpretacion.TabIndex = 1;
+            this.btnGenerarInterpretacion.Text = "Generar interpretación (local)";
+            this.btnGenerarInterpretacion.UseVisualStyleBackColor = false;
             // 
             // pnlToolbar
             // 
-            pnlToolbar.AutoScroll = true;
-            pnlToolbar.Controls.Add(btnPrepararResumen);
-            pnlToolbar.Controls.Add(btnGenerarInterpretacion);
-            pnlToolbar.Dock = DockStyle.Top;
-            pnlToolbar.Location = new Point(0, 66);
-            pnlToolbar.Name = "pnlToolbar";
-            pnlToolbar.Size = new Size(1000, 62);
-            pnlToolbar.TabIndex = 1;
+            this.pnlToolbar.AutoScroll = true;
+            this.pnlToolbar.Controls.Add(this.btnPrepararResumen);
+            this.pnlToolbar.Controls.Add(this.btnGenerarInterpretacion);
+            this.pnlToolbar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlToolbar.Location = new System.Drawing.Point(0, 66);
+            this.pnlToolbar.Name = "pnlToolbar";
+            this.pnlToolbar.Size = new System.Drawing.Size(1000, 62);
+            this.pnlToolbar.TabIndex = 1;
             // 
             // pnlBody
             // 
-            pnlBody.Controls.Add(tlpIa);
-            pnlBody.Dock = DockStyle.Fill;
-            pnlBody.Location = new Point(0, 128);
-            pnlBody.Name = "pnlBody";
-            pnlBody.Padding = new Padding(10, 4, 10, 10);
-            pnlBody.Size = new Size(1000, 472);
-            pnlBody.TabIndex = 0;
-            pnlBody.Paint += pnlBody_Paint;
+            this.pnlBody.Controls.Add(this.tlpIa);
+            this.pnlBody.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlBody.Location = new System.Drawing.Point(0, 128);
+            this.pnlBody.Name = "pnlBody";
+            this.pnlBody.Padding = new System.Windows.Forms.Padding(10, 4, 10, 10);
+            this.pnlBody.Size = new System.Drawing.Size(1000, 472);
+            this.pnlBody.TabIndex = 0;
             // 
             // IaControl
             // 
-            AutoScaleDimensions = new SizeF(9F, 21F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(244, 246, 250);
-            Controls.Add(pnlBody);
-            Controls.Add(pnlToolbar);
-            Controls.Add(pnlHeader);
-            Font = new Font("Segoe UI", 9.5F);
-            Name = "IaControl";
-            Size = new Size(1000, 600);
-            grpResumenIa.ResumeLayout(false);
-            grpResumenIa.PerformLayout();
-            grpInterpretacion.ResumeLayout(false);
-            grpInterpretacion.PerformLayout();
-            tlpIa.ResumeLayout(false);
-            pnlHeader.ResumeLayout(false);
-            pnlHeader.PerformLayout();
-            pnlToolbar.ResumeLayout(false);
-            pnlBody.ResumeLayout(false);
-            ResumeLayout(false);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(246)))), ((int)(((byte)(250)))));
+            this.Controls.Add(this.pnlBody);
+            this.Controls.Add(this.pnlToolbar);
+            this.Controls.Add(this.pnlHeader);
+            this.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.Name = "IaControl";
+            this.Size = new System.Drawing.Size(1000, 600);
+            this.grpResumenIa.ResumeLayout(false);
+            this.grpInterpretacion.ResumeLayout(false);
+            this.tlpIa.ResumeLayout(false);
+            this.pnlHeader.ResumeLayout(false);
+            this.pnlHeader.PerformLayout();
+            this.pnlToolbar.ResumeLayout(false);
+            this.pnlBody.ResumeLayout(false);
+            this.ResumeLayout(false);
+
         }
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtResumenIa;
+        private System.Windows.Forms.RichTextBox txtResumenIa;
         private System.Windows.Forms.GroupBox grpResumenIa;
-        private System.Windows.Forms.TextBox txtInterpretacion;
+        private System.Windows.Forms.RichTextBox txtInterpretacion;
         private System.Windows.Forms.GroupBox grpInterpretacion;
         private System.Windows.Forms.TableLayoutPanel tlpIa;
         private System.Windows.Forms.Panel pnlHeader;

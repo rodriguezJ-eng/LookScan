@@ -13,12 +13,12 @@ namespace LookScan
     {
         private readonly string[] _categoriasGasto = new[]
         {
-            "Alimentación", "Transporte", "Servicios", "Educación", "Salud", "Entretenimiento", "Otros"
+            "Meriendas", "Transporte", "Copias y materiales", "Personal/Ocio", "Otros"
         };
 
         private readonly string[] _categoriasIngreso = new[]
         {
-            "Salario", "Ventas", "Honorarios", "Inversiones", "Otros"
+            "Apoyo familiar", "Imprevistos", "Materiales", "Personal/Ocio", "Otros"
         };
 
         public PresupuestoControl()
@@ -43,6 +43,14 @@ namespace LookScan
             btnAgregar.Click += (s, e) => AgregarMovimiento();
             btnEliminar.Click += (s, e) => EliminarMovimiento();
             btnLimpiar.Click += (s, e) => LimpiarFormulario();
+            dgvMovimientos.SelectionChanged += (s, e) => CargarMovimientoSeleccionado();
+            var btnEditar = new Button
+            {
+                Text = "Editar seleccionado", Location = new Point(815, 115), Size = new Size(160, 38),
+                BackColor = Color.FromArgb(24, 72, 140), ForeColor = Color.White, FlatStyle = FlatStyle.Flat
+            };
+            btnEditar.Click += (s, e) => EditarMovimientoSeleccionado();
+            grpRegistro.Controls.Add(btnEditar);
             var btnDemo = new Button
             {
                 Text = "Cargar demo de agosto 2026", AutoSize = true,
@@ -82,17 +90,17 @@ namespace LookScan
             {
                 dgvMovimientos.Rows.Clear();
                 Action<int, string, string, decimal> agregar = (dia, tipo, descripcion, monto) =>
-                    dgvMovimientos.Rows.Add(tipo, descripcion, monto.ToString("N2"), new DateTime(2026, 8, dia).ToString("dd/MM/yyyy"));
+                    dgvMovimientos.Rows.Add(tipo, descripcion, monto.ToString("N2"), new DateTime(2026, 8, dia).ToString("dd/MM/yyyy"), descripcion);
 
                 agregar(3, "Ingreso", "Apoyo familiar", 250); agregar(3, "Reserva", "Imprevistos", 55); agregar(3, "Ahorro", "Materiales", 65); agregar(3, "Gasto", "Transporte", 20);
-                agregar(4, "Gasto", "Transporte", 20); agregar(4, "Gasto", "Alimentación/Merienda", 15);
+                agregar(4, "Gasto", "Transporte", 20); agregar(4, "Gasto", "Meriendas", 15);
                 agregar(5, "Gasto", "Transporte", 20); agregar(5, "Gasto", "Meriendas", 15);
                 agregar(6, "Gasto", "Transporte", 20); agregar(6, "Gasto", "Copias y materiales", 10);
                 agregar(7, "Gasto", "Transporte", 20); agregar(7, "Gasto", "Personal/Ocio", 10); agregar(8, "Gasto", "Personal/Ocio", 5); agregar(9, "Gasto", "Personal/Ocio", 0);
                 agregar(10, "Ingreso", "Apoyo familiar", 250); agregar(10, "Reserva", "Imprevistos", 40); agregar(10, "Ahorro", "Materiales", 0); agregar(10, "Gasto", "Transporte", 20); agregar(10, "Gasto", "Personal/Ocio", 20);
-                agregar(11, "Gasto", "Transporte", 20); agregar(11, "Gasto", "Alimentación/Merienda", 20); agregar(12, "Gasto", "Transporte", 20); agregar(12, "Gasto", "Personal/Ocio", 15); agregar(13, "Gasto", "Transporte", 20); agregar(13, "Gasto", "Personal/Ocio", 15); agregar(14, "Gasto", "Transporte", 20); agregar(14, "Gasto", "Personal/Ocio", 30); agregar(15, "Gasto", "Personal/Ocio", 10); agregar(16, "Gasto", "Personal/Ocio", 5);
+                agregar(11, "Gasto", "Transporte", 20); agregar(11, "Gasto", "Meriendas", 20); agregar(12, "Gasto", "Transporte", 20); agregar(12, "Gasto", "Personal/Ocio", 15); agregar(13, "Gasto", "Transporte", 20); agregar(13, "Gasto", "Personal/Ocio", 15); agregar(14, "Gasto", "Transporte", 20); agregar(14, "Gasto", "Personal/Ocio", 30); agregar(15, "Gasto", "Personal/Ocio", 10); agregar(16, "Gasto", "Personal/Ocio", 5);
                 agregar(17, "Ingreso", "Apoyo familiar", 250); agregar(17, "Reserva", "Imprevistos", 55); agregar(17, "Ahorro", "Materiales", 45); agregar(17, "Gasto", "Transporte", 20); agregar(18, "Gasto", "Transporte", 20); agregar(18, "Gasto", "Alimentación/Merienda", 15); agregar(19, "Gasto", "Transporte", 20); agregar(20, "Gasto", "Transporte", 20); agregar(20, "Gasto", "Copias y materiales", 15); agregar(21, "Gasto", "Transporte", 20); agregar(21, "Gasto", "Personal/Ocio", 10); agregar(22, "Gasto", "Personal/Ocio", 10); agregar(23, "Gasto", "Personal/Ocio", 0);
-                agregar(24, "Ingreso", "Apoyo familiar", 250); agregar(24, "Reserva", "Imprevistos", 50); agregar(24, "Ahorro", "Personal/Ocio", 30); agregar(24, "Gasto", "Transporte", 20); agregar(25, "Gasto", "Transporte", 20); agregar(25, "Gasto", "Alimentación/Merienda", 15); agregar(26, "Gasto", "Transporte", 20); agregar(26, "Gasto", "Meriendas", 10); agregar(27, "Gasto", "Transporte", 20); agregar(27, "Gasto", "Copias y materiales", 5); agregar(28, "Gasto", "Transporte", 20); agregar(28, "Gasto", "Personal/Ocio", 20); agregar(29, "Gasto", "Personal/Ocio", 10); agregar(30, "Gasto", "Personal/Ocio", 0);
+                agregar(24, "Ingreso", "Apoyo familiar", 250); agregar(24, "Reserva", "Imprevistos", 50); agregar(24, "Ahorro", "Personal/Ocio", 30); agregar(24, "Gasto", "Transporte", 20); agregar(25, "Gasto", "Transporte", 20); agregar(25, "Gasto", "Meriendas", 15); agregar(26, "Gasto", "Transporte", 20); agregar(26, "Gasto", "Meriendas", 10); agregar(27, "Gasto", "Transporte", 20); agregar(27, "Gasto", "Copias y materiales", 5); agregar(28, "Gasto", "Transporte", 20); agregar(28, "Gasto", "Personal/Ocio", 20); agregar(29, "Gasto", "Personal/Ocio", 10); agregar(30, "Gasto", "Personal/Ocio", 0);
                 agregar(31, "Ingreso", "Apoyo familiar", 250); agregar(31, "Gasto", "Transporte", 20); agregar(31, "Reserva", "Imprevistos", 50); agregar(31, "Ahorro", "Materiales", 50); agregar(31, "Gasto", "Personal/Ocio", 130);
             }
             catch (Exception ex)
@@ -173,7 +181,7 @@ namespace LookScan
                 DateTime fechaMov = new DateTime(anio, mes, dia);
                 string fecha = fechaMov.ToString("dd/MM/yyyy");
 
-                dgvMovimientos.Rows.Add(tipo, categoria, monto.ToString("N0"), fecha);
+                dgvMovimientos.Rows.Add(tipo, categoria, monto.ToString("N2"), fecha, descripcion);
 
                 // Se recalcula automáticamente el resumen
                 CalcularResumen();
@@ -209,6 +217,40 @@ namespace LookScan
             {
                 MessageBox.Show("No se puede eliminar el movimiento: " + ex.Message, "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void EditarMovimientoSeleccionado()
+        {
+            if (dgvMovimientos.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Seleccione un movimiento para editar.", "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            DataGridViewRow fila = dgvMovimientos.SelectedRows[0];
+            string monto = txtMonto.Text.Replace("C$", "").Replace(",", "").Trim();
+            decimal valor;
+            if (!decimal.TryParse(monto, NumberStyles.Any, CultureInfo.InvariantCulture, out valor) && !decimal.TryParse(monto, out valor))
+            {
+                MessageBox.Show("Ingrese un monto válido para guardar la edición.", "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            fila.Cells["colTipo"].Value = cmbTipo.SelectedItem;
+            fila.Cells["colCategoria"].Value = cmbCategoria.SelectedItem;
+            fila.Cells["colMonto"].Value = valor.ToString("N2");
+            fila.Cells["colDescripcion"].Value = txtDescripcion.Text.Trim();
+            CalcularResumen();
+        }
+
+        private void CargarMovimientoSeleccionado()
+        {
+            if (dgvMovimientos.SelectedRows.Count == 0) return;
+            DataGridViewRow fila = dgvMovimientos.SelectedRows[0];
+            string tipo = fila.Cells["colTipo"].Value as string;
+            if (!string.IsNullOrEmpty(tipo)) cmbTipo.SelectedItem = tipo;
+            string categoria = fila.Cells["colCategoria"].Value as string;
+            if (!string.IsNullOrEmpty(categoria) && cmbCategoria.Items.Contains(categoria)) cmbCategoria.SelectedItem = categoria;
+            txtMonto.Text = fila.Cells["colMonto"].Value == null ? string.Empty : fila.Cells["colMonto"].Value.ToString();
+            txtDescripcion.Text = fila.Cells["colDescripcion"].Value == null ? string.Empty : fila.Cells["colDescripcion"].Value.ToString();
         }
 
         private void LimpiarFormulario()

@@ -13,6 +13,32 @@ namespace LookScan
             MessageBox.Show(mensaje, "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        // Presenta resúmenes extensos con jerarquía visual sin alterar su contenido.
+        public static void MostrarTextoEstructurado(RichTextBox destino, string texto)
+        {
+            if (destino == null) return;
+            destino.Clear();
+            destino.BackColor = Color.White;
+            destino.ForeColor = Color.FromArgb(45, 55, 72);
+            destino.BorderStyle = BorderStyle.FixedSingle;
+            destino.Font = new Font("Segoe UI", 10F);
+
+            string[] lineas = (texto ?? string.Empty).Replace("\r", string.Empty).Split('\n');
+            foreach (string lineaOriginal in lineas)
+            {
+                string linea = lineaOriginal.TrimEnd();
+                bool encabezado = linea.Length > 0 &&
+                    (linea == linea.ToUpperInvariant() || (linea.EndsWith(":") && !linea.StartsWith("-")));
+                destino.SelectionFont = new Font("Segoe UI", encabezado ? 11F : 10F,
+                    encabezado ? FontStyle.Bold : FontStyle.Regular);
+                destino.SelectionColor = encabezado ? Color.FromArgb(24, 72, 140) : Color.FromArgb(45, 55, 72);
+                destino.AppendText(linea + Environment.NewLine);
+                if (encabezado) destino.AppendText(Environment.NewLine);
+            }
+            destino.SelectionStart = 0;
+            destino.SelectionLength = 0;
+        }
+
         public static void AlinearDerecha(DataGridView grid, params int[] columnas)
         {
             if (grid == null || columnas == null) return;

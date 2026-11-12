@@ -28,12 +28,12 @@ namespace LookScan
 
         private void ActualizarResumen()
         {
-            txtResumenIa.Text = MotorIa.ResumenDatos(Almacen.Activo);
+            UtilUI.MostrarTextoEstructurado(txtResumenIa, MotorIa.ResumenDatos(Almacen.Activo));
         }
 
         private void ActualizarInterpretacion()
         {
-            txtInterpretacion.Text = MotorIa.InterpretacionPeriodo(Almacen.Activo);
+            UtilUI.MostrarTextoEstructurado(txtInterpretacion, MotorIa.InterpretacionPeriodo(Almacen.Activo));
         }
 
         private void pnlBody_Paint(object sender, PaintEventArgs e)

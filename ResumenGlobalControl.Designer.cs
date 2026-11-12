@@ -21,7 +21,7 @@ namespace LookScan
 
         private void InitializeComponent()
         {
-            this.txtResumenGlobal = new System.Windows.Forms.TextBox();
+            this.txtResumenGlobal = new System.Windows.Forms.RichTextBox();
             this.grpResumenGlobal = new System.Windows.Forms.GroupBox();
             this.pnlHeader = new System.Windows.Forms.Panel();
             this.lblTitulo = new System.Windows.Forms.Label();
@@ -39,9 +39,8 @@ namespace LookScan
             // 
             this.txtResumenGlobal.BackColor = System.Drawing.Color.FromArgb(255, 255, 255);
             this.txtResumenGlobal.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtResumenGlobal.Multiline = true;
             this.txtResumenGlobal.ReadOnly = true;
-            this.txtResumenGlobal.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtResumenGlobal.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.txtResumenGlobal.Name = "txtResumenGlobal";
             // 
             // grpResumenGlobal
@@ -126,7 +125,7 @@ namespace LookScan
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtResumenGlobal;
+        private System.Windows.Forms.RichTextBox txtResumenGlobal;
         private System.Windows.Forms.GroupBox grpResumenGlobal;
         private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.Label lblTitulo;

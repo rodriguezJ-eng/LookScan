@@ -219,7 +219,7 @@ namespace LookScan
             this.tpIa.Name = "tpIa";
             this.tpIa.Size = new System.Drawing.Size(1515, 634);
             this.tpIa.TabIndex = 8;
-            this.tpIa.Text = "IA";
+            this.tpIa.Text = "Intérprete local";
             this.tpIa.UseVisualStyleBackColor = true;
             // 
             // tpResumenGlobal

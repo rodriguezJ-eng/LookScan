@@ -21,7 +21,7 @@ namespace LookScan
 
         private void Generar()
         {
-            txtResumenGlobal.Text = MotorIa.ResumenGlobal();
+            UtilUI.MostrarTextoEstructurado(txtResumenGlobal, MotorIa.ResumenGlobal());
         }
     }
 }

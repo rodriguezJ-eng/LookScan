@@ -26,7 +26,7 @@ namespace LookScan
         private void ActualizarReporte()
         {
             _documento = GeneradorInforme.Generar();
-            txtReporte.Text = Exportador.Texto(_documento);
+            UtilUI.MostrarTextoEstructurado(txtReporte, Exportador.Texto(_documento));
         }
 
         private void DescargarTexto()

@@ -21,7 +21,7 @@ namespace LookScan
 
         private void InitializeComponent()
         {
-            this.txtReporte = new System.Windows.Forms.TextBox();
+            this.txtReporte = new System.Windows.Forms.RichTextBox();
             this.grpVistaReporte = new System.Windows.Forms.GroupBox();
             this.pnlHeader = new System.Windows.Forms.Panel();
             this.lblTitulo = new System.Windows.Forms.Label();
@@ -40,9 +40,8 @@ namespace LookScan
             // 
             this.txtReporte.BackColor = System.Drawing.Color.FromArgb(255, 255, 255);
             this.txtReporte.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtReporte.Multiline = true;
             this.txtReporte.ReadOnly = true;
-            this.txtReporte.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtReporte.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.txtReporte.Name = "txtReporte";
             // 
             // grpVistaReporte
@@ -141,7 +140,7 @@ namespace LookScan
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtReporte;
+        private System.Windows.Forms.RichTextBox txtReporte;
         private System.Windows.Forms.GroupBox grpVistaReporte;
         private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.Label lblTitulo;

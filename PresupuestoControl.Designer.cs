@@ -52,6 +52,7 @@ namespace LookScan
             this.colCategoria = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colMonto = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colFecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDescripcion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.grpResumen = new System.Windows.Forms.GroupBox();
             this.tlpResumen = new System.Windows.Forms.TableLayoutPanel();
             this.pnlIngresos = new System.Windows.Forms.Panel();
@@ -229,7 +230,9 @@ namespace LookScan
             this.cmbTipo.FormattingEnabled = true;
             this.cmbTipo.Items.AddRange(new object[] {
             "Ingreso",
-            "Gasto"});
+            "Gasto",
+            "Ahorro",
+            "Reserva"});
             this.cmbTipo.Location = new System.Drawing.Point(18, 55);
             this.cmbTipo.Name = "cmbTipo";
             this.cmbTipo.Size = new System.Drawing.Size(270, 29);
@@ -381,6 +384,7 @@ namespace LookScan
             this.colCategoria,
             this.colMonto,
             this.colFecha});
+            this.dgvMovimientos.Columns.Add(this.colDescripcion);
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
@@ -437,6 +441,12 @@ namespace LookScan
             this.colFecha.HeaderText = "Fecha (Día/Mes/Año)";
             this.colFecha.MinimumWidth = 6;
             this.colFecha.Name = "colFecha";
+            // 
+            // colDescripcion
+            // 
+            this.colDescripcion.HeaderText = "Descripción";
+            this.colDescripcion.Name = "colDescripcion";
+            this.colDescripcion.ReadOnly = true;
             this.colFecha.ReadOnly = true;
             // 
             // grpResumen
@@ -708,6 +718,7 @@ namespace LookScan
         private DataGridViewTextBoxColumn colCategoria;
         private DataGridViewTextBoxColumn colMonto;
         private DataGridViewTextBoxColumn colFecha;
+        private DataGridViewTextBoxColumn colDescripcion;
         private GroupBox grpResumen;
         private TableLayoutPanel tlpResumen;
         private Panel pnlIngresos;
