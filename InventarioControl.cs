@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace LookScan
@@ -40,6 +41,7 @@ namespace LookScan
         public InventarioControl()
         {
             InitializeComponent();
+            AplicarTemaClaroYAmpliar();
             InicializarEventosYDatos();
         }
 
@@ -48,18 +50,25 @@ namespace LookScan
             btnGuardarProducto.Click += (s, e) => GuardarProducto();
             btnRegistrarMov.Click += (s, e) => RegistrarMovimiento();
             btnLimpiarMov.Click += (s, e) => LimpiarMovimiento();
+            var btnDemo = new Button
+            {
+                Text = "Cargar demo", Location = new Point(650, 168), Size = new Size(180, 36),
+                BackColor = Color.FromArgb(24, 72, 140), ForeColor = Color.White, FlatStyle = FlatStyle.Flat
+            };
+            btnDemo.Click += (s, e) => { CargarDatosFicticios(); ActualizarComboProductos(); RefrescarGrid(); CalcularResumenInventario(); };
+            grpDatosProducto.Controls.Add(btnDemo);
 
             // Pinta la fila de rojo cuando hay que reponer (CellFormatting / RowPrePaint)
             dgvExistencias.CellFormatting += dgvExistencias_CellFormatting;
 
-            // Cargar datos ficticios iniciales exactos a la imagen
+            // Cargar el demo de inventario proporcionado.
             CargarDatosFicticios();
 
             // Llenar formulario de datos con un ejemplo predefinido
             txtCodigo.Text = "P-001";
             txtProducto.Text = "Arroz 1 lb";
             txtExistenciaInicial.Text = "100";
-            txtCostoUnitario.Text = "18.50";
+            txtCostoUnitario.Text = "18.21";
             txtStockMinimo.Text = "40";
 
             txtCantidadMov.Text = "70";
@@ -74,7 +83,6 @@ namespace LookScan
         {
             _productos.Clear();
 
-            // Producto 1: Arroz (quedará en stock mínimo -> alerta roja)
             _productos.Add(new ProductoItem
             {
                 Codigo = "P-001",
@@ -82,33 +90,65 @@ namespace LookScan
                 ExistenciaInicial = 100,
                 Entradas = 10,
                 Salidas = 70,
-                CostoUnitario = 18.50m,
+                CostoUnitario = 18.21m,
                 StockMinimo = 40
             });
 
-            // Producto 2: Frijol
             _productos.Add(new ProductoItem
             {
                 Codigo = "P-002",
-                Nombre = "Frijol",
+                Nombre = "Frijol 1 lb",
                 ExistenciaInicial = 80,
-                Entradas = 20,
+                Entradas = 30,
                 Salidas = 30,
                 CostoUnitario = 20.00m,
-                StockMinimo = 25
+                StockMinimo = 30
             });
 
-            // Producto 3: Aceite
             _productos.Add(new ProductoItem
             {
                 Codigo = "P-003",
-                Nombre = "Aceite",
+                Nombre = "Aceite 1 L",
                 ExistenciaInicial = 50,
                 Entradas = 0,
                 Salidas = 15,
                 CostoUnitario = 50.00m,
                 StockMinimo = 20
             });
+
+            _productos.Add(new ProductoItem { Codigo = "P-004", Nombre = "Azúcar 1 lb", ExistenciaInicial = 120, Entradas = 0, Salidas = 85, CostoUnitario = 15m, StockMinimo = 50 });
+            _productos.Add(new ProductoItem { Codigo = "P-005", Nombre = "Jabón de lavar", ExistenciaInicial = 60, Entradas = 10, Salidas = 50, CostoUnitario = 25m, StockMinimo = 25 });
+            _productos.Add(new ProductoItem { Codigo = "P-006", Nombre = "Leche 1 L", ExistenciaInicial = 30, Entradas = 10, Salidas = 0, CostoUnitario = 38m, StockMinimo = 15 });
+        }
+
+        private void AplicarTemaClaroYAmpliar()
+        {
+            BackColor = Color.FromArgb(244, 246, 250);
+            pnlPrincipal.BackColor = BackColor;
+            foreach (GroupBox grupo in new[] { grpDatosProducto, grpRegistrarMov, grpExistencias, grpResumenAlerta }) grupo.Width = 1000;
+            AplicarTemaClaro(this);
+        }
+
+        private void AplicarTemaClaro(Control control)
+        {
+            foreach (Control hijo in control.Controls)
+            {
+                if (hijo is GroupBox) { hijo.BackColor = Color.White; hijo.ForeColor = Color.FromArgb(45, 55, 72); hijo.Text = Regex.Replace(hijo.Text, @"\s*\([^)]*\)", ""); }
+                else if (hijo is TextBox || hijo is ComboBox) { hijo.BackColor = Color.White; hijo.ForeColor = Color.FromArgb(35, 45, 60); }
+                else if (hijo is DataGridView)
+                {
+                    var tabla = (DataGridView)hijo;
+                    tabla.BackgroundColor = Color.White;
+                    tabla.DefaultCellStyle.BackColor = Color.White;
+                    tabla.DefaultCellStyle.ForeColor = Color.FromArgb(35, 45, 60);
+                    tabla.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(24, 72, 140);
+                    tabla.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+                    tabla.GridColor = Color.FromArgb(220, 225, 235);
+                }
+                else if (hijo is Button) { hijo.BackColor = Color.FromArgb(24, 72, 140); hijo.ForeColor = Color.White; }
+                else if (hijo is Label) { hijo.ForeColor = Color.FromArgb(70, 80, 95); hijo.Text = Regex.Replace(hijo.Text, @"\s*\([^)]*\)", ""); }
+                AplicarTemaClaro(hijo);
+            }
         }
 
         private void ActualizarComboProductos()

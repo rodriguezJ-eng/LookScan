@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -23,26 +24,35 @@ namespace LookScan
         public PresupuestoControl()
         {
             InitializeComponent();
+            AplicarTemaClaroYAmpliar();
             InicializarEventosYDatos();
         }
 
         private void InicializarEventosYDatos()
         {
             // Configurar combos iniciales
-            cmbMes.SelectedItem = "Noviembre";
+            cmbMes.SelectedItem = "Agosto";
             numAnio.Value = 2026;
 
             cmbTipo.SelectedIndexChanged += (s, e) => ActualizarCategorias();
             cmbTipo.SelectedItem = "Gasto";
 
-            txtDescripcion.Text = "Supermercado";
-            txtMonto.Text = "1500.00";
+            txtDescripcion.Text = "Transporte";
+            txtMonto.Text = "20.00";
 
             btnAgregar.Click += (s, e) => AgregarMovimiento();
             btnEliminar.Click += (s, e) => EliminarMovimiento();
             btnLimpiar.Click += (s, e) => LimpiarFormulario();
+            var btnDemo = new Button
+            {
+                Text = "Cargar demo de agosto 2026", AutoSize = true,
+                Location = new Point(470, 4), BackColor = Color.FromArgb(24, 72, 140), ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+            btnDemo.Click += (s, e) => { CargarDatosFicticios(); CalcularResumen(); };
+            pnlEncabezado.Controls.Add(btnDemo);
 
-            // Cargar datos ficticios iniciales como muestra la guía / captura
+            // Demo de agosto de 2026 proporcionado para el presupuesto personal.
             CargarDatosFicticios();
 
             // Calcular el resumen y armar el gráfico
@@ -70,16 +80,55 @@ namespace LookScan
         {
             try
             {
-                int anio = (int)numAnio.Value;
-                int mes = cmbMes.SelectedIndex >= 0 ? cmbMes.SelectedIndex + 1 : 11;
                 dgvMovimientos.Rows.Clear();
-                dgvMovimientos.Rows.Add("Ingreso", "Salario", "15,000", string.Format("{0:00}/{1:00}/{2}", 1, mes, anio));
-                dgvMovimientos.Rows.Add("Gasto", "Alimentación", "1,500", string.Format("{0:00}/{1:00}/{2}", 3, mes, anio));
-                dgvMovimientos.Rows.Add("Gasto", "Transporte", "800", string.Format("{0:00}/{1:00}/{2}", 5, mes, anio));
+                Action<int, string, string, decimal> agregar = (dia, tipo, descripcion, monto) =>
+                    dgvMovimientos.Rows.Add(tipo, descripcion, monto.ToString("N2"), new DateTime(2026, 8, dia).ToString("dd/MM/yyyy"));
+
+                agregar(3, "Ingreso", "Apoyo familiar", 250); agregar(3, "Reserva", "Imprevistos", 55); agregar(3, "Ahorro", "Materiales", 65); agregar(3, "Gasto", "Transporte", 20);
+                agregar(4, "Gasto", "Transporte", 20); agregar(4, "Gasto", "Alimentación/Merienda", 15);
+                agregar(5, "Gasto", "Transporte", 20); agregar(5, "Gasto", "Meriendas", 15);
+                agregar(6, "Gasto", "Transporte", 20); agregar(6, "Gasto", "Copias y materiales", 10);
+                agregar(7, "Gasto", "Transporte", 20); agregar(7, "Gasto", "Personal/Ocio", 10); agregar(8, "Gasto", "Personal/Ocio", 5); agregar(9, "Gasto", "Personal/Ocio", 0);
+                agregar(10, "Ingreso", "Apoyo familiar", 250); agregar(10, "Reserva", "Imprevistos", 40); agregar(10, "Ahorro", "Materiales", 0); agregar(10, "Gasto", "Transporte", 20); agregar(10, "Gasto", "Personal/Ocio", 20);
+                agregar(11, "Gasto", "Transporte", 20); agregar(11, "Gasto", "Alimentación/Merienda", 20); agregar(12, "Gasto", "Transporte", 20); agregar(12, "Gasto", "Personal/Ocio", 15); agregar(13, "Gasto", "Transporte", 20); agregar(13, "Gasto", "Personal/Ocio", 15); agregar(14, "Gasto", "Transporte", 20); agregar(14, "Gasto", "Personal/Ocio", 30); agregar(15, "Gasto", "Personal/Ocio", 10); agregar(16, "Gasto", "Personal/Ocio", 5);
+                agregar(17, "Ingreso", "Apoyo familiar", 250); agregar(17, "Reserva", "Imprevistos", 55); agregar(17, "Ahorro", "Materiales", 45); agregar(17, "Gasto", "Transporte", 20); agregar(18, "Gasto", "Transporte", 20); agregar(18, "Gasto", "Alimentación/Merienda", 15); agregar(19, "Gasto", "Transporte", 20); agregar(20, "Gasto", "Transporte", 20); agregar(20, "Gasto", "Copias y materiales", 15); agregar(21, "Gasto", "Transporte", 20); agregar(21, "Gasto", "Personal/Ocio", 10); agregar(22, "Gasto", "Personal/Ocio", 10); agregar(23, "Gasto", "Personal/Ocio", 0);
+                agregar(24, "Ingreso", "Apoyo familiar", 250); agregar(24, "Reserva", "Imprevistos", 50); agregar(24, "Ahorro", "Personal/Ocio", 30); agregar(24, "Gasto", "Transporte", 20); agregar(25, "Gasto", "Transporte", 20); agregar(25, "Gasto", "Alimentación/Merienda", 15); agregar(26, "Gasto", "Transporte", 20); agregar(26, "Gasto", "Meriendas", 10); agregar(27, "Gasto", "Transporte", 20); agregar(27, "Gasto", "Copias y materiales", 5); agregar(28, "Gasto", "Transporte", 20); agregar(28, "Gasto", "Personal/Ocio", 20); agregar(29, "Gasto", "Personal/Ocio", 10); agregar(30, "Gasto", "Personal/Ocio", 0);
+                agregar(31, "Ingreso", "Apoyo familiar", 250); agregar(31, "Gasto", "Transporte", 20); agregar(31, "Reserva", "Imprevistos", 50); agregar(31, "Ahorro", "Materiales", 50); agregar(31, "Gasto", "Personal/Ocio", 130);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("No se pueden cargar los movimientos de ejemplo: " + ex.Message, "LookScan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void AplicarTemaClaroYAmpliar()
+        {
+            BackColor = Color.FromArgb(244, 246, 250);
+            pnlPrincipal.BackColor = BackColor;
+            pnlEncabezado.Width = 1000;
+            foreach (GroupBox grupo in new[] { grpRegistro, grpMovimientos, grpResumen, grpGrafico }) grupo.Width = 1000;
+            AplicarTemaClaro(this);
+        }
+
+        private void AplicarTemaClaro(Control control)
+        {
+            foreach (Control hijo in control.Controls)
+            {
+                if (hijo is GroupBox) { hijo.BackColor = Color.White; hijo.ForeColor = Color.FromArgb(45, 55, 72); }
+                else if (hijo is TextBox || hijo is ComboBox || hijo is NumericUpDown) { hijo.BackColor = Color.White; hijo.ForeColor = Color.FromArgb(35, 45, 60); }
+                else if (hijo is DataGridView)
+                {
+                    var tabla = (DataGridView)hijo;
+                    tabla.BackgroundColor = Color.White;
+                    tabla.DefaultCellStyle.BackColor = Color.White;
+                    tabla.DefaultCellStyle.ForeColor = Color.FromArgb(35, 45, 60);
+                    tabla.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(24, 72, 140);
+                    tabla.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+                    tabla.GridColor = Color.FromArgb(220, 225, 235);
+                }
+                else if (hijo is Button) { hijo.BackColor = Color.FromArgb(24, 72, 140); hijo.ForeColor = Color.White; }
+                else if (hijo is Label) { hijo.ForeColor = Color.FromArgb(70, 80, 95); hijo.Text = Regex.Replace(hijo.Text, @"\s*\([^)]*\)", ""); }
+                AplicarTemaClaro(hijo);
             }
         }
 
