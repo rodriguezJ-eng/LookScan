@@ -61,7 +61,7 @@ namespace LookScan
             if (esGasto)
             {
                 cmbCategoria.Items.AddRange(_categoriasGasto);
-                cmbCategoria.SelectedItem = "Alimentación";
+                cmbCategoria.SelectedItem = "Meriendas";
             }
             else
             {
@@ -85,7 +85,7 @@ namespace LookScan
                 agregar(7, "Gasto", "Transporte", 20); agregar(7, "Gasto", "Personal/Ocio", 10); agregar(8, "Gasto", "Personal/Ocio", 5); agregar(9, "Gasto", "Personal/Ocio", 0);
                 agregar(10, "Ingreso", "Apoyo familiar", 250); agregar(10, "Reserva", "Imprevistos", 40); agregar(10, "Ahorro", "Materiales", 0); agregar(10, "Gasto", "Transporte", 20); agregar(10, "Gasto", "Personal/Ocio", 20);
                 agregar(11, "Gasto", "Transporte", 20); agregar(11, "Gasto", "Meriendas", 20); agregar(12, "Gasto", "Transporte", 20); agregar(12, "Gasto", "Personal/Ocio", 15); agregar(13, "Gasto", "Transporte", 20); agregar(13, "Gasto", "Personal/Ocio", 15); agregar(14, "Gasto", "Transporte", 20); agregar(14, "Gasto", "Personal/Ocio", 30); agregar(15, "Gasto", "Personal/Ocio", 10); agregar(16, "Gasto", "Personal/Ocio", 5);
-                agregar(17, "Ingreso", "Apoyo familiar", 250); agregar(17, "Reserva", "Imprevistos", 55); agregar(17, "Ahorro", "Materiales", 45); agregar(17, "Gasto", "Transporte", 20); agregar(18, "Gasto", "Transporte", 20); agregar(18, "Gasto", "Alimentación/Merienda", 15); agregar(19, "Gasto", "Transporte", 20); agregar(20, "Gasto", "Transporte", 20); agregar(20, "Gasto", "Copias y materiales", 15); agregar(21, "Gasto", "Transporte", 20); agregar(21, "Gasto", "Personal/Ocio", 10); agregar(22, "Gasto", "Personal/Ocio", 10); agregar(23, "Gasto", "Personal/Ocio", 0);
+                agregar(17, "Ingreso", "Apoyo familiar", 250); agregar(17, "Reserva", "Imprevistos", 55); agregar(17, "Ahorro", "Materiales", 45); agregar(17, "Gasto", "Transporte", 20); agregar(18, "Gasto", "Transporte", 20); agregar(18, "Gasto", "Meriendas", 15); agregar(19, "Gasto", "Transporte", 20); agregar(20, "Gasto", "Transporte", 20); agregar(20, "Gasto", "Copias y materiales", 15); agregar(21, "Gasto", "Transporte", 20); agregar(21, "Gasto", "Personal/Ocio", 10); agregar(22, "Gasto", "Personal/Ocio", 10); agregar(23, "Gasto", "Personal/Ocio", 0);
                 agregar(24, "Ingreso", "Apoyo familiar", 250); agregar(24, "Reserva", "Imprevistos", 50); agregar(24, "Ahorro", "Personal/Ocio", 30); agregar(24, "Gasto", "Transporte", 20); agregar(25, "Gasto", "Transporte", 20); agregar(25, "Gasto", "Meriendas", 15); agregar(26, "Gasto", "Transporte", 20); agregar(26, "Gasto", "Meriendas", 10); agregar(27, "Gasto", "Transporte", 20); agregar(27, "Gasto", "Copias y materiales", 5); agregar(28, "Gasto", "Transporte", 20); agregar(28, "Gasto", "Personal/Ocio", 20); agregar(29, "Gasto", "Personal/Ocio", 10); agregar(30, "Gasto", "Personal/Ocio", 0);
                 agregar(31, "Ingreso", "Apoyo familiar", 250); agregar(31, "Gasto", "Transporte", 20); agregar(31, "Reserva", "Imprevistos", 50); agregar(31, "Ahorro", "Materiales", 50); agregar(31, "Gasto", "Personal/Ocio", 130);
             }
@@ -137,7 +137,7 @@ namespace LookScan
             try
             {
                 string tipo = cmbTipo.SelectedItem?.ToString();
-                string categoria = cmbCategoria.SelectedItem?.ToString();
+                string categoria = NormalizarCategoria(cmbCategoria.SelectedItem?.ToString());
                 string descripcion = txtDescripcion.Text.Trim();
                 string montoTexto = txtMonto.Text.Trim()
                     .Replace("C$", "").Replace(",", "").Trim();
@@ -221,7 +221,7 @@ namespace LookScan
                 return;
             }
             fila.Cells["colTipo"].Value = cmbTipo.SelectedItem;
-            fila.Cells["colCategoria"].Value = cmbCategoria.SelectedItem;
+            fila.Cells["colCategoria"].Value = NormalizarCategoria(cmbCategoria.SelectedItem?.ToString());
             fila.Cells["colMonto"].Value = valor.ToString("N2");
             fila.Cells["colDescripcion"].Value = txtDescripcion.Text.Trim();
             CalcularResumen();
@@ -233,7 +233,7 @@ namespace LookScan
             DataGridViewRow fila = dgvMovimientos.SelectedRows[0];
             string tipo = fila.Cells["colTipo"].Value as string;
             if (!string.IsNullOrEmpty(tipo)) cmbTipo.SelectedItem = tipo;
-            string categoria = fila.Cells["colCategoria"].Value as string;
+            string categoria = NormalizarCategoria(fila.Cells["colCategoria"].Value as string);
             if (!string.IsNullOrEmpty(categoria) && cmbCategoria.Items.Contains(categoria)) cmbCategoria.SelectedItem = categoria;
             txtMonto.Text = fila.Cells["colMonto"].Value == null ? string.Empty : fila.Cells["colMonto"].Value.ToString();
             txtDescripcion.Text = fila.Cells["colDescripcion"].Value == null ? string.Empty : fila.Cells["colDescripcion"].Value.ToString();
@@ -244,8 +244,26 @@ namespace LookScan
             txtDescripcion.Clear();
             txtMonto.Clear();
             cmbTipo.SelectedItem = "Gasto";
-            cmbCategoria.SelectedItem = "Alimentación";
+            cmbCategoria.SelectedItem = "Meriendas";
             txtDescripcion.Focus();
+        }
+
+        /// <summary>
+        /// Unifica las variantes de "Alimentación" en la categoría "Meriendas"
+        /// para que no aparezcan como barras separadas en el gráfico.
+        /// </summary>
+        private static string NormalizarCategoria(string categoria)
+        {
+            if (string.IsNullOrWhiteSpace(categoria)) return categoria;
+
+            string limpia = categoria.Trim().ToLowerInvariant();
+            limpia = limpia.Replace("á", "a").Replace("é", "e").Replace("í", "i")
+                           .Replace("ó", "o").Replace("ú", "u");
+
+            if (limpia.StartsWith("alimentacion", StringComparison.Ordinal))
+                return "Meriendas";
+
+            return categoria.Trim();
         }
 
         /// <summary>
@@ -261,7 +279,7 @@ namespace LookScan
             Dictionary<string, decimal> gastosPorCategoria = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
 
             // Inicializar las categorías de gastos principales para que aparezcan en el gráfico
-            gastosPorCategoria["Alimentación"] = 0m;
+            gastosPorCategoria["Meriendas"] = 0m;
             gastosPorCategoria["Transporte"] = 0m;
             gastosPorCategoria["Servicios"] = 0m;
 
@@ -270,7 +288,13 @@ namespace LookScan
                 if (fila.IsNewRow) continue;
 
                 string tipo = fila.Cells["colTipo"].Value?.ToString() ?? "";
-                string categoria = fila.Cells["colCategoria"].Value?.ToString() ?? "";
+                string categoriaOriginal = fila.Cells["colCategoria"].Value?.ToString() ?? "";
+                string categoria = NormalizarCategoria(categoriaOriginal);
+
+                // Unifica en la tabla cualquier variante antigua (Alimentación/Merienda, Alimentación, etc.)
+                if (!string.Equals(categoria, categoriaOriginal, StringComparison.Ordinal))
+                    fila.Cells["colCategoria"].Value = categoria;
+
                 string montoStr = fila.Cells["colMonto"].Value?.ToString() ?? "0";
 
                 montoStr = montoStr.Replace("C$", "").Replace(",", "").Trim();
@@ -324,8 +348,8 @@ namespace LookScan
             Color colorNaranja = Color.FromArgb(220, 110, 40);
             Color colorAzul = Color.FromArgb(50, 120, 200);
 
-            // Mostrar al menos Alimentación, Transporte, Servicios en el orden visual
-            string[] categoriasOrdenadas = new[] { "Servicios", "Transporte", "Alimentación" };
+            // Mostrar al menos Meriendas, Transporte, Servicios en el orden visual
+            string[] categoriasOrdenadas = new[] { "Servicios", "Transporte", "Meriendas" };
 
             foreach (string cat in categoriasOrdenadas)
             {
@@ -338,7 +362,7 @@ namespace LookScan
                 // La etiqueta queda fuera/al lado de la barra; debe contrastar con el fondo claro.
                 punto.LabelForeColor = Color.FromArgb(30, 55, 85);
 
-                if (cat == "Alimentación") punto.Color = colorVerde;
+                if (cat == "Meriendas") punto.Color = colorVerde;
                 else if (cat == "Transporte") punto.Color = colorMorado;
                 else if (cat == "Servicios") punto.Color = colorNaranja;
                 else punto.Color = colorAzul;
