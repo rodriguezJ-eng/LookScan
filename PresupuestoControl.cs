@@ -126,6 +126,8 @@ namespace LookScan
                     tabla.BackgroundColor = Color.White;
                     tabla.DefaultCellStyle.BackColor = Color.White;
                     tabla.DefaultCellStyle.ForeColor = Color.FromArgb(35, 45, 60);
+                    tabla.DefaultCellStyle.SelectionBackColor = Color.FromArgb(225, 238, 255);
+                    tabla.DefaultCellStyle.SelectionForeColor = Color.FromArgb(20, 55, 100);
                     tabla.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(24, 72, 140);
                     tabla.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
                     tabla.GridColor = Color.FromArgb(220, 225, 235);
@@ -305,7 +307,8 @@ namespace LookScan
                 int index = serie.Points.AddXY(cat, porcentaje);
                 DataPoint punto = serie.Points[index];
                 punto.Label = string.Format("{0:0}%", porcentaje);
-                punto.LabelForeColor = Color.White;
+                // La etiqueta queda fuera/al lado de la barra; debe contrastar con el fondo claro.
+                punto.LabelForeColor = Color.FromArgb(30, 55, 85);
 
                 if (cat == "Alimentación") punto.Color = colorVerde;
                 else if (cat == "Transporte") punto.Color = colorMorado;
@@ -322,7 +325,7 @@ namespace LookScan
                 int index = serie.Points.AddXY(kvp.Key, porcentaje);
                 DataPoint punto = serie.Points[index];
                 punto.Label = string.Format("{0:0}%", porcentaje);
-                punto.LabelForeColor = Color.White;
+                punto.LabelForeColor = Color.FromArgb(30, 55, 85);
                 punto.Color = colorAzul;
             }
         }

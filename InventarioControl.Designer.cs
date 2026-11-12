@@ -363,8 +363,8 @@ namespace LookScan
             });
             this.dgvExistencias.DefaultCellStyle.BackColor = Color.White;
             this.dgvExistencias.DefaultCellStyle.ForeColor = Color.FromArgb(35, 45, 60);
-            this.dgvExistencias.DefaultCellStyle.SelectionBackColor = Color.FromArgb(50, 65, 85);
-            this.dgvExistencias.DefaultCellStyle.SelectionForeColor = Color.FromArgb(35, 45, 60);
+            this.dgvExistencias.DefaultCellStyle.SelectionBackColor = Color.FromArgb(225, 238, 255);
+            this.dgvExistencias.DefaultCellStyle.SelectionForeColor = Color.FromArgb(20, 55, 100);
             this.dgvExistencias.Dock = DockStyle.Fill;
             this.dgvExistencias.EnableHeadersVisualStyles = false;
             this.dgvExistencias.GridColor = Color.FromArgb(44, 44, 44);
@@ -530,7 +530,7 @@ namespace LookScan
             // lblAlertaReposicion
             this.lblAlertaReposicion.Dock = DockStyle.Fill;
             this.lblAlertaReposicion.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            this.lblAlertaReposicion.ForeColor = Color.FromArgb(255, 110, 110);
+            this.lblAlertaReposicion.ForeColor = Color.FromArgb(160, 65, 75);
             this.lblAlertaReposicion.Location = new Point(10, 10);
             this.lblAlertaReposicion.Name = "lblAlertaReposicion";
             this.lblAlertaReposicion.Size = new Size(576, 28);

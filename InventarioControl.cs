@@ -144,6 +144,8 @@ namespace LookScan
                     tabla.BackgroundColor = Color.White;
                     tabla.DefaultCellStyle.BackColor = Color.White;
                     tabla.DefaultCellStyle.ForeColor = Color.FromArgb(35, 45, 60);
+                    tabla.DefaultCellStyle.SelectionBackColor = Color.FromArgb(225, 238, 255);
+                    tabla.DefaultCellStyle.SelectionForeColor = Color.FromArgb(20, 55, 100);
                     tabla.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(24, 72, 140);
                     tabla.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
                     tabla.GridColor = Color.FromArgb(220, 225, 235);
@@ -336,11 +338,11 @@ namespace LookScan
 
             if (prod != null && prod.RequiereReposicion)
             {
-                // Pinta la fila de rojo cuando hay que reponer
-                e.CellStyle.BackColor = Color.FromArgb(62, 16, 20);
-                e.CellStyle.ForeColor = Color.FromArgb(255, 120, 120);
-                e.CellStyle.SelectionBackColor = Color.FromArgb(85, 20, 26);
-                e.CellStyle.SelectionForeColor = Color.White;
+                // Alerta visible pero suave: rojo pastel y texto de alto contraste.
+                e.CellStyle.BackColor = Color.FromArgb(255, 234, 236);
+                e.CellStyle.ForeColor = Color.FromArgb(150, 55, 65);
+                e.CellStyle.SelectionBackColor = Color.FromArgb(255, 215, 220);
+                e.CellStyle.SelectionForeColor = Color.FromArgb(110, 35, 45);
             }
         }
 
