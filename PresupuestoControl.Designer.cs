@@ -46,6 +46,8 @@ namespace LookScan
             this.btnAgregar = new System.Windows.Forms.Button();
             this.btnEliminar = new System.Windows.Forms.Button();
             this.btnLimpiar = new System.Windows.Forms.Button();
+            this.btnEditarMovimiento = new System.Windows.Forms.Button();
+            this.btnCargarDemo = new System.Windows.Forms.Button();
             this.grpMovimientos = new System.Windows.Forms.GroupBox();
             this.dgvMovimientos = new System.Windows.Forms.DataGridView();
             this.colTipo = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -107,6 +109,7 @@ namespace LookScan
             this.pnlEncabezado.Controls.Add(this.cmbMes);
             this.pnlEncabezado.Controls.Add(this.lblAnio);
             this.pnlEncabezado.Controls.Add(this.numAnio);
+            this.pnlEncabezado.Controls.Add(this.btnCargarDemo);
             this.pnlEncabezado.Location = new System.Drawing.Point(20, 15);
             this.pnlEncabezado.Name = "pnlEncabezado";
             this.pnlEncabezado.Size = new System.Drawing.Size(1000, 42);
@@ -200,6 +203,7 @@ namespace LookScan
             this.grpRegistro.Controls.Add(this.btnAgregar);
             this.grpRegistro.Controls.Add(this.btnEliminar);
             this.grpRegistro.Controls.Add(this.btnLimpiar);
+            this.grpRegistro.Controls.Add(this.btnEditarMovimiento);
             this.grpRegistro.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.grpRegistro.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(72)))));
             this.grpRegistro.Location = new System.Drawing.Point(20, 68);
@@ -347,6 +351,30 @@ namespace LookScan
             this.btnLimpiar.TabIndex = 7;
             this.btnLimpiar.Text = "Limpiar";
             this.btnLimpiar.UseVisualStyleBackColor = false;
+            // 
+            // btnEditarMovimiento
+            // 
+            this.btnEditarMovimiento.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnEditarMovimiento.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEditarMovimiento.ForeColor = System.Drawing.Color.White;
+            this.btnEditarMovimiento.Location = new System.Drawing.Point(815, 115);
+            this.btnEditarMovimiento.Name = "btnEditarMovimiento";
+            this.btnEditarMovimiento.Size = new System.Drawing.Size(160, 38);
+            this.btnEditarMovimiento.TabIndex = 8;
+            this.btnEditarMovimiento.Text = "Editar seleccionado";
+            this.btnEditarMovimiento.UseVisualStyleBackColor = false;
+            // 
+            // btnCargarDemo
+            // 
+            this.btnCargarDemo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(72)))), ((int)(((byte)(140)))));
+            this.btnCargarDemo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCargarDemo.ForeColor = System.Drawing.Color.White;
+            this.btnCargarDemo.Location = new System.Drawing.Point(470, 4);
+            this.btnCargarDemo.Name = "btnCargarDemo";
+            this.btnCargarDemo.Size = new System.Drawing.Size(210, 34);
+            this.btnCargarDemo.TabIndex = 3;
+            this.btnCargarDemo.Text = "Cargar demo de agosto 2026";
+            this.btnCargarDemo.UseVisualStyleBackColor = false;
             // 
             // grpMovimientos
             // 
@@ -712,6 +740,8 @@ namespace LookScan
         private Button btnAgregar;
         private Button btnEliminar;
         private Button btnLimpiar;
+        private Button btnEditarMovimiento;
+        private Button btnCargarDemo;
         private GroupBox grpMovimientos;
         private DataGridView dgvMovimientos;
         private DataGridViewTextBoxColumn colTipo;

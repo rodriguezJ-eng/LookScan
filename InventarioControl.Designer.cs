@@ -34,6 +34,8 @@ namespace LookScan
             this.lblStockMinimo = new Label();
             this.txtStockMinimo = new TextBox();
             this.btnGuardarProducto = new Button();
+            this.btnEditarProducto = new Button();
+            this.btnCargarDemo = new Button();
             this.grpRegistrarMov = new GroupBox();
             this.lblMovProducto = new Label();
             this.cmbProductoMov = new ComboBox();
@@ -105,6 +107,8 @@ namespace LookScan
             this.grpDatosProducto.Controls.Add(this.lblStockMinimo);
             this.grpDatosProducto.Controls.Add(this.txtStockMinimo);
             this.grpDatosProducto.Controls.Add(this.btnGuardarProducto);
+            this.grpDatosProducto.Controls.Add(this.btnEditarProducto);
+            this.grpDatosProducto.Controls.Add(this.btnCargarDemo);
             this.grpDatosProducto.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
             this.grpDatosProducto.ForeColor = Color.FromArgb(45, 55, 72);
             this.grpDatosProducto.Location = new Point(20, 15);
@@ -221,6 +225,30 @@ namespace LookScan
             this.btnGuardarProducto.TabIndex = 6;
             this.btnGuardarProducto.Text = "Guardar producto";
             this.btnGuardarProducto.UseVisualStyleBackColor = false;
+            // 
+            // btnEditarProducto
+            // 
+            this.btnEditarProducto.BackColor = Color.FromArgb(24, 72, 140);
+            this.btnEditarProducto.FlatStyle = FlatStyle.Flat;
+            this.btnEditarProducto.ForeColor = Color.White;
+            this.btnEditarProducto.Location = new Point(650, 120);
+            this.btnEditarProducto.Name = "btnEditarProducto";
+            this.btnEditarProducto.Size = new Size(180, 36);
+            this.btnEditarProducto.TabIndex = 7;
+            this.btnEditarProducto.Text = "Editar seleccionado";
+            this.btnEditarProducto.UseVisualStyleBackColor = false;
+            // 
+            // btnCargarDemo
+            // 
+            this.btnCargarDemo.BackColor = Color.FromArgb(24, 72, 140);
+            this.btnCargarDemo.FlatStyle = FlatStyle.Flat;
+            this.btnCargarDemo.ForeColor = Color.White;
+            this.btnCargarDemo.Location = new Point(650, 168);
+            this.btnCargarDemo.Name = "btnCargarDemo";
+            this.btnCargarDemo.Size = new Size(180, 36);
+            this.btnCargarDemo.TabIndex = 8;
+            this.btnCargarDemo.Text = "Cargar demo";
+            this.btnCargarDemo.UseVisualStyleBackColor = false;
 
             // 
             // grpRegistrarMov
@@ -579,6 +607,8 @@ namespace LookScan
         private Label lblStockMinimo;
         private TextBox txtStockMinimo;
         private Button btnGuardarProducto;
+        private Button btnEditarProducto;
+        private Button btnCargarDemo;
         private GroupBox grpRegistrarMov;
         private Label lblMovProducto;
         private ComboBox cmbProductoMov;

@@ -50,24 +50,12 @@ namespace LookScan
             btnGuardarProducto.Click += (s, e) => GuardarProducto();
             btnRegistrarMov.Click += (s, e) => RegistrarMovimiento();
             btnLimpiarMov.Click += (s, e) => LimpiarMovimiento();
-            var btnDemo = new Button
-            {
-                Text = "Cargar demo", Location = new Point(650, 168), Size = new Size(180, 36),
-                BackColor = Color.FromArgb(24, 72, 140), ForeColor = Color.White, FlatStyle = FlatStyle.Flat
-            };
-            btnDemo.Click += (s, e) => { CargarDatosFicticios(); ActualizarComboProductos(); RefrescarGrid(); CalcularResumenInventario(); };
-            grpDatosProducto.Controls.Add(btnDemo);
+            btnEditarProducto.Click += (s, e) => GuardarProducto();
+            btnCargarDemo.Click += (s, e) => { CargarDatosFicticios(); ActualizarComboProductos(); RefrescarGrid(); CalcularResumenInventario(); };
 
             // Pinta la fila de rojo cuando hay que reponer (CellFormatting / RowPrePaint)
             dgvExistencias.CellFormatting += dgvExistencias_CellFormatting;
             dgvExistencias.SelectionChanged += (s, e) => CargarProductoSeleccionado();
-            var btnEditar = new Button
-            {
-                Text = "Editar seleccionado", Location = new Point(650, 120), Size = new Size(180, 36),
-                BackColor = Color.FromArgb(24, 72, 140), ForeColor = Color.White, FlatStyle = FlatStyle.Flat
-            };
-            btnEditar.Click += (s, e) => GuardarProducto();
-            grpDatosProducto.Controls.Add(btnEditar);
 
             // Cargar el demo de inventario proporcionado.
             CargarDatosFicticios();

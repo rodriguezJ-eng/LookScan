@@ -43,22 +43,9 @@ namespace LookScan
             btnAgregar.Click += (s, e) => AgregarMovimiento();
             btnEliminar.Click += (s, e) => EliminarMovimiento();
             btnLimpiar.Click += (s, e) => LimpiarFormulario();
+            btnEditarMovimiento.Click += (s, e) => EditarMovimientoSeleccionado();
+            btnCargarDemo.Click += (s, e) => { CargarDatosFicticios(); CalcularResumen(); };
             dgvMovimientos.SelectionChanged += (s, e) => CargarMovimientoSeleccionado();
-            var btnEditar = new Button
-            {
-                Text = "Editar seleccionado", Location = new Point(815, 115), Size = new Size(160, 38),
-                BackColor = Color.FromArgb(24, 72, 140), ForeColor = Color.White, FlatStyle = FlatStyle.Flat
-            };
-            btnEditar.Click += (s, e) => EditarMovimientoSeleccionado();
-            grpRegistro.Controls.Add(btnEditar);
-            var btnDemo = new Button
-            {
-                Text = "Cargar demo de agosto 2026", AutoSize = true,
-                Location = new Point(470, 4), BackColor = Color.FromArgb(24, 72, 140), ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat
-            };
-            btnDemo.Click += (s, e) => { CargarDatosFicticios(); CalcularResumen(); };
-            pnlEncabezado.Controls.Add(btnDemo);
 
             // Demo de agosto de 2026 proporcionado para el presupuesto personal.
             CargarDatosFicticios();
