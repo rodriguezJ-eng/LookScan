@@ -13,12 +13,17 @@ namespace LookScan
     {
         private readonly string[] _categoriasGasto = new[]
         {
-            "Meriendas", "Transporte", "Copias y materiales", "Personal/Ocio", "Otros"
+            "Meriendas", "Transporte", "Copias y materiales", "Personal/Ocio","Compras","Gimnasio","Entretenimiento", "Otros"
         };
 
         private readonly string[] _categoriasIngreso = new[]
         {
-            "Apoyo familiar", "Imprevistos", "Materiales", "Personal/Ocio", "Otros"
+            "Apoyo familiar","Salario", "Ventas", "Becas", "Otros"
+        };
+
+        private readonly string[] _categoriasAhorro = new[]
+        {
+            "Ahorro", "Reserva"
         };
 
         public PresupuestoControl()
@@ -56,18 +61,31 @@ namespace LookScan
         private void ActualizarCategorias()
         {
             cmbCategoria.Items.Clear();
-            bool esGasto = cmbTipo.SelectedItem?.ToString() == "Gasto";
 
-            if (esGasto)
+            string tipo = cmbTipo.SelectedItem?.ToString() ?? "Gasto";
+            string categoriaPredeterminada;
+
+            // Cada tipo maneja su propia lista: las categorías no se mezclan.
+            switch (tipo)
             {
-                cmbCategoria.Items.AddRange(_categoriasGasto);
-                cmbCategoria.SelectedItem = "Meriendas";
+                case "Ingreso":
+                    cmbCategoria.Items.AddRange(_categoriasIngreso);
+                    categoriaPredeterminada = "Salario";
+                    break;
+                case "Ahorro":
+                    cmbCategoria.Items.AddRange(_categoriasAhorro);
+                    categoriaPredeterminada = "Ahorro";
+                    break;
+                default:
+                    cmbCategoria.Items.AddRange(_categoriasGasto);
+                    categoriaPredeterminada = "Meriendas";
+                    break;
             }
-            else
-            {
-                cmbCategoria.Items.AddRange(_categoriasIngreso);
-                cmbCategoria.SelectedItem = "Salario";
-            }
+
+            if (cmbCategoria.Items.Contains(categoriaPredeterminada))
+                cmbCategoria.SelectedItem = categoriaPredeterminada;
+            else if (cmbCategoria.Items.Count > 0)
+                cmbCategoria.SelectedIndex = 0;
         }
 
         private void CargarDatosFicticios()
@@ -78,16 +96,16 @@ namespace LookScan
                 Action<int, string, string, decimal> agregar = (dia, tipo, descripcion, monto) =>
                     dgvMovimientos.Rows.Add(tipo, descripcion, monto.ToString("N2"), new DateTime(2026, 8, dia).ToString("dd/MM/yyyy"), descripcion);
 
-                agregar(3, "Ingreso", "Apoyo familiar", 250); agregar(3, "Reserva", "Imprevistos", 55); agregar(3, "Ahorro", "Materiales", 65); agregar(3, "Gasto", "Transporte", 20);
+                agregar(3, "Ingreso", "Apoyo familiar", 250); agregar(3, "Ahorro", "Reserva", 55); agregar(3, "Ahorro", "Ahorro", 65); agregar(3, "Gasto", "Transporte", 20);
                 agregar(4, "Gasto", "Transporte", 20); agregar(4, "Gasto", "Meriendas", 15);
                 agregar(5, "Gasto", "Transporte", 20); agregar(5, "Gasto", "Meriendas", 15);
                 agregar(6, "Gasto", "Transporte", 20); agregar(6, "Gasto", "Copias y materiales", 10);
                 agregar(7, "Gasto", "Transporte", 20); agregar(7, "Gasto", "Personal/Ocio", 10); agregar(8, "Gasto", "Personal/Ocio", 5); agregar(9, "Gasto", "Personal/Ocio", 0);
-                agregar(10, "Ingreso", "Apoyo familiar", 250); agregar(10, "Reserva", "Imprevistos", 40); agregar(10, "Ahorro", "Materiales", 0); agregar(10, "Gasto", "Transporte", 20); agregar(10, "Gasto", "Personal/Ocio", 20);
+                agregar(10, "Ingreso", "Apoyo familiar", 250); agregar(10, "Ahorro", "Reserva", 40); agregar(10, "Ahorro", "Ahorro", 0); agregar(10, "Gasto", "Transporte", 20); agregar(10, "Gasto", "Personal/Ocio", 20);
                 agregar(11, "Gasto", "Transporte", 20); agregar(11, "Gasto", "Meriendas", 20); agregar(12, "Gasto", "Transporte", 20); agregar(12, "Gasto", "Personal/Ocio", 15); agregar(13, "Gasto", "Transporte", 20); agregar(13, "Gasto", "Personal/Ocio", 15); agregar(14, "Gasto", "Transporte", 20); agregar(14, "Gasto", "Personal/Ocio", 30); agregar(15, "Gasto", "Personal/Ocio", 10); agregar(16, "Gasto", "Personal/Ocio", 5);
-                agregar(17, "Ingreso", "Apoyo familiar", 250); agregar(17, "Reserva", "Imprevistos", 55); agregar(17, "Ahorro", "Materiales", 45); agregar(17, "Gasto", "Transporte", 20); agregar(18, "Gasto", "Transporte", 20); agregar(18, "Gasto", "Meriendas", 15); agregar(19, "Gasto", "Transporte", 20); agregar(20, "Gasto", "Transporte", 20); agregar(20, "Gasto", "Copias y materiales", 15); agregar(21, "Gasto", "Transporte", 20); agregar(21, "Gasto", "Personal/Ocio", 10); agregar(22, "Gasto", "Personal/Ocio", 10); agregar(23, "Gasto", "Personal/Ocio", 0);
-                agregar(24, "Ingreso", "Apoyo familiar", 250); agregar(24, "Reserva", "Imprevistos", 50); agregar(24, "Ahorro", "Personal/Ocio", 30); agregar(24, "Gasto", "Transporte", 20); agregar(25, "Gasto", "Transporte", 20); agregar(25, "Gasto", "Meriendas", 15); agregar(26, "Gasto", "Transporte", 20); agregar(26, "Gasto", "Meriendas", 10); agregar(27, "Gasto", "Transporte", 20); agregar(27, "Gasto", "Copias y materiales", 5); agregar(28, "Gasto", "Transporte", 20); agregar(28, "Gasto", "Personal/Ocio", 20); agregar(29, "Gasto", "Personal/Ocio", 10); agregar(30, "Gasto", "Personal/Ocio", 0);
-                agregar(31, "Ingreso", "Apoyo familiar", 250); agregar(31, "Gasto", "Transporte", 20); agregar(31, "Reserva", "Imprevistos", 50); agregar(31, "Ahorro", "Materiales", 50); agregar(31, "Gasto", "Personal/Ocio", 130);
+                agregar(17, "Ingreso", "Apoyo familiar", 250); agregar(17, "Ahorro", "Reserva", 55); agregar(17, "Ahorro", "Ahorro", 45); agregar(17, "Gasto", "Transporte", 20); agregar(18, "Gasto", "Transporte", 20); agregar(18, "Gasto", "Meriendas", 15); agregar(19, "Gasto", "Transporte", 20); agregar(20, "Gasto", "Transporte", 20); agregar(20, "Gasto", "Copias y materiales", 15); agregar(21, "Gasto", "Transporte", 20); agregar(21, "Gasto", "Personal/Ocio", 10); agregar(22, "Gasto", "Personal/Ocio", 10); agregar(23, "Gasto", "Personal/Ocio", 0);
+                agregar(24, "Ingreso", "Apoyo familiar", 250); agregar(24, "Ahorro", "Reserva", 50); agregar(24, "Ahorro", "Ahorro", 30); agregar(24, "Gasto", "Transporte", 20); agregar(25, "Gasto", "Transporte", 20); agregar(25, "Gasto", "Meriendas", 15); agregar(26, "Gasto", "Transporte", 20); agregar(26, "Gasto", "Meriendas", 10); agregar(27, "Gasto", "Transporte", 20); agregar(27, "Gasto", "Copias y materiales", 5); agregar(28, "Gasto", "Transporte", 20); agregar(28, "Gasto", "Personal/Ocio", 20); agregar(29, "Gasto", "Personal/Ocio", 10); agregar(30, "Gasto", "Personal/Ocio", 0);
+                agregar(31, "Ingreso", "Apoyo familiar", 250); agregar(31, "Gasto", "Transporte", 20); agregar(31, "Ahorro", "Reserva", 50); agregar(31, "Ahorro", "Ahorro", 50); agregar(31, "Gasto", "Personal/Ocio", 130);
             }
             catch (Exception ex)
             {
@@ -266,12 +284,7 @@ namespace LookScan
             return categoria.Trim();
         }
 
-        /// <summary>
-        /// Método central de cálculo requerido para la defensa individual.
-        /// Fórmulas de la guía:
-        /// 1. Saldo disponible = Total ingresos − Total gastos
-        /// 2. Capacidad de ahorro (%) = Saldo disponible ÷ Total ingresos × 100
-        /// </summary>
+        
         public void CalcularResumen()
         {
             decimal totalIngresos = 0m;

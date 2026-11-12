@@ -235,8 +235,7 @@ namespace LookScan
             this.cmbTipo.Items.AddRange(new object[] {
             "Ingreso",
             "Gasto",
-            "Ahorro",
-            "Reserva"});
+            "Ahorro"});
             this.cmbTipo.Location = new System.Drawing.Point(18, 55);
             this.cmbTipo.Name = "cmbTipo";
             this.cmbTipo.Size = new System.Drawing.Size(270, 29);
